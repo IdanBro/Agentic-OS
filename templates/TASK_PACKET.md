@@ -100,6 +100,23 @@ Do NOT paste:
 - long logs the worker can obtain directly,
 - previous worker reasoning unless it is specifically required.
 
+### Relevant Skills
+
+Include only when a reusable skill materially affects execution or review.
+
+- **Required / on-demand:** `<skill-name>` — `<why this task needs it>`
+- **Optional discovery:** `<skill-name or none>`
+
+Rules:
+
+- reference a skill by name; do not paste its full body into the Task Packet;
+- do not list broad technology skills merely because the repository uses that technology;
+- a skill does not expand the worker's authority envelope;
+- preserve Reviewer independence by avoiding unnecessary implementation-oriented skill guidance on first pass;
+- for Debugger work, do not provide a skill that treats an unproven root-cause theory as fact.
+
+If no skill materially helps, omit this subsection or write `None.`
+
 ### Role-Specific Context
 
 For a **Reviewer**, preserve independence on the first pass: provide outcome, acceptance, constraints, risk, and the actual change/artifact. Do not provide the Implementer's conclusions or confidence unless necessary.
@@ -159,6 +176,7 @@ Unless this packet says otherwise, the worker MAY:
 - choose local implementation details when its role permits changes;
 - inspect additional relevant context;
 - perform bounded diagnosis of failures;
+- invoke relevant available skills within task scope;
 - add targeted tests or validation required by the task when its role permits changes;
 - make low-impact supporting changes allowed by the supporting-change rule when its role permits changes;
 - correct an obvious local mistake introduced by its own work.
@@ -270,6 +288,7 @@ Before sending the packet, the PM should be able to answer `yes` to the relevant
 - [ ] Can the worker determine success without reconstructing hidden PM intent?
 - [ ] Are acceptance criteria observable rather than implementation-prescriptive?
 - [ ] Is required context referenced instead of unnecessarily copied?
+- [ ] Are skills omitted unless they materially improve this task?
 - [ ] Are important scope boundaries explicit?
 - [ ] Is the worker's authority sufficient to make progress without approval spam?
 - [ ] Does the packet preserve the worker role's read/write boundaries?
@@ -290,6 +309,7 @@ For small Standard-mode delegations, the full headings are optional. The semanti
 TASK: <ID>
 OBJECTIVE: <bounded outcome>
 SCOPE: <references / boundaries>
+SKILLS: <only when material>
 ACCEPTANCE: <observable criteria>
 VERIFY: <required checks>
 AUTHORITY: <only unusual limits or permissions>
