@@ -1,10 +1,10 @@
 # Methodology OS — Learning & Promotion Policy
 
-This document defines how Methodology OS learns from completed work without silently rewriting its own global behavior.
+This document defines how Methodology OS learns from project experience without silently rewriting its own global behavior.
 
-The system may observe patterns, preserve evidence, propose experiments, create candidate improvements, and prepare non-canonical change proposals. A candidate becomes global Methodology OS behavior only after sufficient validation and explicit human promotion.
+The system may observe patterns, preserve evidence, propose experiments, create candidate improvements, and prepare non-canonical proposals. A candidate becomes active global Methodology OS behavior only after sufficient validation, explicit human promotion, and normal implementation/quality gates.
 
-The Project Manager owns learning triage. The `methodology-retrospective` skill is the default procedure for extracting learning candidates from meaningful work.
+The Project Manager owns learning triage. `methodology-retrospective` is the default procedure for extracting reusable lessons from meaningful work.
 
 ---
 
@@ -16,34 +16,24 @@ Methodology OS learning means changing durable instructions, defaults, templates
 
 It does **not** mean:
 
-- changing model weights,
-- treating conversation memory as training,
-- silently mutating global policy,
-- turning every failure into a permanent rule,
-- optimizing one metric without considering regressions,
+- changing model weights;
+- treating conversation memory as training;
+- silently mutating global policy;
+- turning every failure into a permanent rule;
+- optimizing one metric while ignoring regressions;
 - copying project-specific behavior into the global OS without proving generality.
 
 Project experience may create evidence. Evidence may create a candidate. A candidate is not yet policy.
 
 ---
 
-## 2. Learning Layers
-
-The system separates three kinds of learning.
+## 2. Three Learning Layers
 
 ### 2.1 Project-Specific Learning
 
-Knowledge that is useful inside one repository, team, environment, or project but should not become a global Methodology OS rule.
+Useful only inside one repository, team, environment, or domain.
 
-Examples:
-
-- this repository uses `make verify` before PRs;
-- this project requires Terraform 1.9;
-- a particular service has an unusual deployment dependency;
-- this team always renders Helm charts with a specific values hierarchy;
-- a local reviewer must inspect a regulated artifact.
-
-Possible destinations:
+Typical destinations:
 
 - project `CLAUDE.md`;
 - project/nested Skill;
@@ -51,104 +41,88 @@ Possible destinations:
 - repository test/check tooling;
 - `DECISIONS.md` or another durable project artifact.
 
-Project-specific learning MAY be applied autonomously when it is inside the accepted project scope and authority envelope. Material policy, architecture, security, cost, or scope consequences remain governed by `core/ESCALATION_POLICY.md`.
+Examples include repository commands, version constraints, local deployment conventions, or team-specific review requirements.
+
+Project-specific learning MAY be applied autonomously when it is inside the accepted project scope and authority envelope. Material architecture, scope, security, cost, or authority changes remain governed by `core/ESCALATION_POLICY.md`.
 
 ### 2.2 Candidate Global Learning
 
-A potentially reusable improvement to Methodology OS that has not yet earned global promotion.
+A potentially reusable Methodology OS improvement that has not yet earned global promotion.
 
-Examples:
-
-- a Task Packet field repeatedly prevents a class of scope drift;
-- medium-risk Reviewer prompts miss the same operational failure mode across projects;
-- a routing default consistently overspends capability after ambiguity is removed;
-- PM handoffs repeatedly omit one category of approval state;
-- a skill-loading pattern produces measurable context waste across domains.
-
-Candidate global learning MUST remain visibly non-canonical until promoted.
+It MUST remain visibly non-canonical until promoted.
 
 ### 2.3 Promoted Global Learning
 
-A candidate that has:
+A global candidate that has:
 
-1. sufficient evidence for its consequence level;
+1. sufficient evidence for its impact level;
 2. a plausible causal explanation;
-3. a bounded generalized rule/change;
-4. an evaluation or verification plan;
-5. an explicit human promotion decision;
-6. implementation through the normal Git/quality-gate workflow.
+3. a bounded generalized change;
+4. a validation/eval plan;
+5. explicit human promotion;
+6. implementation through normal Git and quality gates.
 
-Only this layer changes Methodology OS global behavior.
-
----
-
-## 3. Learning Signal Sources
-
-Useful signals include:
-
-- repeated implementation or verification failures;
-- Reviewer findings that expose a workflow blind spot;
-- a human correction to the PM's workflow or authority behavior;
-- repeated approval spam or under-escalation;
-- context pollution or premature handoffs;
-- worker scope drift caused by weak delegation;
-- routing choices that cause avoidable retries or expensive over-capability;
-- skills that are repeatedly loaded but unused;
-- project knowledge that is repeatedly rediscovered;
-- integration failures despite individually passing tasks;
-- stale verification evidence being reused;
-- successful workflow patterns that consistently improve quality or efficiency;
-- future eval failures or regressions.
-
-Not every signal deserves preservation.
-
-A learning signal is valuable when understanding it may materially improve future:
-
-- quality,
-- reliability,
-- token/context efficiency,
-- elapsed time,
-- autonomy,
-- verification confidence,
-- human interaction quality.
+Only this layer changes active global Methodology OS behavior.
 
 ---
 
-## 4. Observation Is Not Causation
+## 3. Learning Signals
 
-The PM must distinguish what happened from why it happened.
+Consider learning when evidence reveals meaningful workflow signal, such as:
+
+- repeated execution or verification failures;
+- Reviewer findings exposing a process blind spot;
+- human correction to PM workflow/authority behavior;
+- approval spam or under-escalation;
+- context pollution or bad handoff timing;
+- scope drift caused by weak delegation;
+- model/effort routing that repeatedly over- or under-spends;
+- skills repeatedly loaded but unused;
+- project knowledge repeatedly rediscovered;
+- integration failure despite individually passing tasks;
+- stale evidence reuse;
+- a repeatable workflow pattern that materially improves quality or efficiency;
+- eval or post-promotion regressions.
+
+Most routine successful tasks should produce no learning artifact.
+
+A signal is worth preserving only when understanding it may materially improve quality, reliability, context/token efficiency, elapsed time, autonomy, verification confidence, or human interaction burden.
+
+---
+
+## 4. Observation Before Generalization
+
+The PM must distinguish:
+
+```text
+what happened
+        ↓
+causal hypothesis
+        ↓
+possible generalized change
+```
+
+Do not infer causation from a successful retry where multiple variables changed.
 
 Example:
 
 ```text
 Observed:
-Opus solved the debugging task after Sonnet failed.
+Opus succeeded after Sonnet failed.
+
+Not enough to conclude:
+All debugging should use Opus.
 ```
 
-Invalid immediate conclusion:
+Alternative causes may include missing context, better reproduction evidence, insufficient effort, a corrected hypothesis, or a genuine capability gap.
 
-```text
-Global rule:
-Always use Opus for debugging.
-```
-
-Possible actual causes include:
-
-- the first Task Packet omitted critical context;
-- the second attempt had better reproduction evidence;
-- Sonnet effort was too low;
-- the first hypothesis was wrong;
-- the problem genuinely required higher capability.
-
-A candidate should state the causal hypothesis explicitly and identify alternative explanations when material.
-
-Do not convert correlation into a global default merely because the later attempt succeeded.
+A global candidate SHOULD identify plausible alternative explanations when material.
 
 ---
 
-## 5. Canonical Candidate Lifecycle
+## 5. Candidate Lifecycle
 
-Global learning candidates use the following lifecycle:
+Global candidates use:
 
 ```text
 OBSERVATION
@@ -169,17 +143,15 @@ IMPLEMENT + EVAL + VERIFY
 PROMOTED
 ```
 
-A candidate may also become `DEFERRED` or `SUPERSEDED`.
+A candidate may also be `DEFERRED` or `SUPERSEDED`.
 
-### 5.1 OBSERVATION
+### OBSERVATION
 
-A noteworthy event occurred, but no generalized change has been justified.
+A noteworthy event occurred, but no reusable change is justified yet. Most observations should end here.
 
-Most observations should die here.
+### CANDIDATE
 
-### 5.2 CANDIDATE
-
-There is a plausible reusable pattern and a proposed generalized improvement worth evaluating.
+There is a plausible reusable mechanism and a generalized improvement worth evaluating.
 
 A candidate MUST identify:
 
@@ -191,187 +163,148 @@ A candidate MUST identify:
 - expected benefit;
 - possible regression/cost.
 
-### 5.3 NEEDS_EVIDENCE
+### NEEDS_EVIDENCE
 
-The candidate is plausible but current evidence is too weak, too project-specific, or too confounded to justify promotion.
+Current evidence is too weak, project-specific, or confounded. Record only evidence that would materially change the decision.
 
-Record what evidence would materially change confidence.
+### VALIDATING
 
-Do not create busywork merely to advance the status.
+The candidate is actively being challenged with additional evidence or evals.
 
-### 5.4 VALIDATING
+### READY_FOR_PROMOTION
 
-The candidate is being tested through one or more of:
+Evidence is strong enough for the PM to recommend a bounded global change and explain tradeoffs. This still does not authorize global policy modification.
 
-- another independent project occurrence;
-- a controlled comparison;
-- targeted retrospective evidence;
-- synthetic or repository eval scenario;
-- replay of a prior failure;
-- benchmark/measurement when relevant;
-- direct inspection of multiple historical cases.
+### APPROVED
 
-### 5.5 READY_FOR_PROMOTION
+Human authority explicitly approved the bounded promotion proposal.
 
-Evidence is strong enough that the PM can recommend a bounded global change and describe its likely tradeoffs.
+### PROMOTED
 
-This status still does not authorize global policy modification.
+The approved change passed required eval/verification/review and was integrated into canonical Methodology OS `dev`.
 
-### 5.6 APPROVED
+`main` promotion remains a separate human-gated action.
 
-The human authority explicitly approved promotion of the bounded candidate.
+### REJECTED / DEFERRED / SUPERSEDED
 
-Approval applies only to the stated generalized change/envelope. Materially broader changes require a new promotion decision.
-
-### 5.7 PROMOTED
-
-The approved change has been implemented, passed required quality/eval gates, and integrated into the canonical Methodology OS development branch according to repository policy.
-
-Promotion to `dev` and promotion to `main` remain separate authority events. Approval of the learning candidate does not automatically authorize a `main` merge.
-
-### 5.8 REJECTED
-
-The candidate should not be promoted because evidence, benefit, generalizability, complexity cost, or regression risk is insufficient.
-
-Preserve rejected candidates only when future agents are reasonably likely to rediscover the same proposal and the rejection rationale has durable value.
-
-### 5.9 DEFERRED
-
-The candidate may be useful, but validating or implementing it is not currently worth the cost.
-
-### 5.10 SUPERSEDED
-
-A newer candidate or policy makes this candidate obsolete. Link the replacement where practical.
+Preserve only when future agents are likely to revisit the proposal and the rationale has durable value.
 
 ---
 
-## 6. Evidence Strength and Generalizability
+## 6. Evidence Strength
 
-Do not use a fixed global rule such as "three projects are required" for every learning.
+Do not require a fixed number of projects or occurrences for every candidate.
 
-Evidence requirements should scale with:
+Evidence requirements scale with:
 
-- blast radius of the proposed rule;
+- blast radius;
 - reversibility;
-- how often the rule will execute;
+- how frequently the rule will execute;
 - context/token cost if wrong;
 - quality/security/authority consequences;
 - confidence in the causal mechanism;
 - diversity of evidence sources.
 
-### Weak Evidence
+### Weak
 
-Examples:
+Typical examples:
 
-- one noisy project occurrence;
+- one noisy occurrence;
 - subjective preference without outcome evidence;
-- a successful retry where several variables changed;
-- one worker's opinion;
+- one worker opinion;
+- a retry where several variables changed;
 - one unusual repository constraint.
 
-Normally `NEEDS_EVIDENCE` or project-specific.
+Normally project-specific or `NEEDS_EVIDENCE`.
 
-### Moderate Evidence
+### Moderate
 
-Examples:
+Typical examples:
 
 - repeated pattern within one substantial project;
-- same failure in multiple independent tasks;
-- a reproducible synthetic scenario;
-- one strong incident with clear root cause and narrow proposed fix;
-- Reviewer/PM evidence showing an existing rule is internally inconsistent.
+- same mechanism in multiple independent tasks;
+- reproducible synthetic scenario;
+- one strong incident with clear root cause and narrow fix;
+- an internally inconsistent existing policy revealed by evidence.
 
-May justify validation or a low-blast-radius promotion recommendation.
+May justify validation or a low-impact promotion recommendation.
 
-### Strong Evidence
+### Strong
 
-Examples:
+Typical examples:
 
 - repeated independent project occurrences;
-- reproducible eval failures resolved by the proposed change;
-- controlled comparisons with materially better outcomes;
-- multiple evidence sources pointing to the same causal pattern;
-- a clear constitutional/policy inconsistency whose correction has low regression risk.
+- reproducible eval failures resolved by the proposal;
+- controlled comparison with materially better outcomes;
+- multiple evidence sources showing the same causal pattern;
+- clear policy inconsistency whose correction has low regression risk.
 
-Strong evidence supports `READY_FOR_PROMOTION`, subject to change impact.
-
-Avoid fake numeric precision. Use concise qualitative evidence strength with rationale unless a real measurement exists.
+Avoid fake numeric confidence. Use qualitative evidence strength with concise rationale unless a real measurement exists.
 
 ---
 
 ## 7. Generalization Test
 
-Before proposing a global rule, ask:
+Before recommending global promotion, ask:
 
-1. Is the cause specific to this repository, domain, user preference, environment, or toolchain?
-2. Would the proposed rule still make sense in a materially different project?
-3. What projects should **not** follow the rule?
-4. Is there a narrower condition that captures the successful pattern with less collateral cost?
-5. Does the rule solve the cause or merely react to the symptom?
-6. Could the same benefit be achieved as a project skill/check instead of global policy?
+1. Is the cause specific to one repository, domain, user preference, environment, or toolchain?
+2. Would the rule still make sense in a materially different project?
+3. When should the rule **not** apply?
+4. Is there a narrower condition that captures the mechanism with less collateral cost?
+5. Does the proposed change address the cause rather than the symptom?
+6. Could the benefit be achieved locally instead of globally?
 
-Every global candidate SHOULD define its **generalization boundary**.
+Every global candidate SHOULD define a **generalization boundary**.
 
-Prefer:
+Prefer consequence-based conditions:
 
 ```text
-When a delegated infrastructure task can modify persistent production state,
+When a delegated task can modify persistent production state,
 require rollback/recovery evidence before integration.
 ```
 
-Over:
+Over technology labels:
 
 ```text
-Terraform tasks need more verification.
+Terraform needs extra verification.
 ```
-
-The first captures a consequence. The second overfits a technology label.
 
 ---
 
 ## 8. Smallest Generalized Change
 
-Prefer the smallest durable change that addresses the demonstrated failure mode.
+Prefer the narrowest durable surface that solves the demonstrated failure mode.
 
-Potential change surfaces, from narrower to broader, include:
+From narrowest to broadest:
 
 1. example/reference;
-2. template field/checklist;
+2. template/checklist;
 3. Skill instruction;
 4. agent role instruction;
 5. routing default;
-6. quality/authority/context policy;
+6. quality/context/authority policy;
 7. orchestration behavior;
 8. constitutional principle.
 
-Do not change a higher layer when a lower layer solves the problem reliably.
+Do not modify a broader layer when a narrower layer solves the problem reliably.
 
-Example:
-
-```text
-Problem:
-Workers repeatedly omit rollback evidence in one deployment workflow.
-```
-
-Prefer a deployment/project Skill or verification template improvement before changing a constitutional principle.
+Prefer replacing, simplifying, or narrowing existing rules over adding another permanent rule when possible.
 
 ---
 
 ## 9. Change Impact Classes
 
-Promotion evidence should scale with the scope of the proposed OS change.
-
 ### L1 — Narrow Guidance
 
 Examples:
 
-- improve wording/example;
-- add a template prompt/checklist item;
-- refine one Skill procedure.
+- wording/example refinement;
+- template/checklist improvement;
+- one Skill procedure refinement.
 
-Expected promotion bar:
+Promotion bar:
 
-- clear evidence/problem;
+- clear problem/evidence;
 - low regression risk;
 - targeted verification/eval when practical;
 - explicit human promotion.
@@ -380,34 +313,33 @@ Expected promotion bar:
 
 Examples:
 
-- change Implementer behavior;
-- change Reviewer default depth;
+- change Implementer/Reviewer behavior;
 - change model/effort default;
-- add a new recurring state artifact;
+- change recurring artifact behavior;
 - change default skill-loading behavior.
 
-Expected promotion bar:
+Promotion bar:
 
 - stronger generalizability evidence;
-- alternative explanations considered;
-- explicit regression analysis;
+- alternatives considered;
+- regression analysis;
 - targeted eval scenario(s);
 - explicit human promotion.
 
-### L3 — Global Policy / Constitution / Authority Gate
+### L3 — Global Policy / Constitution / Authority
 
 Examples:
 
-- weaken or strengthen human escalation;
-- change `main` authority;
-- change mandatory verification requirements;
+- change escalation authority;
+- change `main` policy;
+- change mandatory verification gates;
 - modify constitutional principles;
-- introduce a mandatory global workflow phase.
+- add a mandatory global workflow phase.
 
-Expected promotion bar:
+Promotion bar:
 
-- strong evidence and clear causal rationale;
-- broad regression/interaction analysis;
+- strong evidence and causal rationale;
+- broad interaction/regression analysis;
 - multiple or high-quality evals;
 - independent review appropriate to high impact;
 - explicit human promotion.
@@ -418,39 +350,36 @@ Constitution changes should be rare.
 
 ## 10. Candidate Artifact
 
-Use `templates/LEARNING_CANDIDATE.md` for global candidates when durable tracking is warranted.
-
-A candidate artifact is not required for every retrospective observation.
+Use `templates/LEARNING_CANDIDATE.md` only when durable global-candidate tracking is justified.
 
 Create one when:
 
-- the proposed improvement may become global;
 - evidence will accumulate across sessions/projects;
 - validation requires follow-up;
 - the user may later decide whether to promote it;
 - a future PM needs to understand why the proposal exists.
 
-Candidate artifacts should be concise and evidence-oriented.
+Do not create a candidate artifact for every retrospective observation.
 
-The exact persistent location is an installation/runtime concern and may vary until Step 14. The schema, not the filesystem path, is canonical in V0.
+The exact persistent location is an installation/runtime decision for Step 14; the schema is canonical in V0.
 
 ---
 
-## 11. Candidate Storage and Privacy
+## 11. Privacy and Evidence Hygiene
 
-Global learning must not become a channel for leaking project-private information into the global OS.
+Global learning must not leak private project information into the global OS.
 
 When preserving evidence:
 
 - abstract the causal pattern;
-- use references rather than copying proprietary files/logs;
+- reference project evidence instead of copying it where possible;
 - never copy secrets, credentials, private data, or sensitive customer content;
-- keep project-specific evidence in its original project when appropriate;
-- include only the minimum evidence needed to evaluate the methodology claim.
+- keep proprietary detail project-local when appropriate;
+- include only evidence needed to evaluate the methodology claim.
 
-A global candidate should be understandable without requiring confidential source content whenever possible.
+If detailed evidence cannot be safely globalized, preserve a sanitized summary and local reference.
 
-If evidence cannot be safely globalized, record a sanitized summary and keep the detailed source project-local.
+Learning artifacts must not become transcript archives. Do not store complete worker transcripts, raw logs, full chat history, or every failed command.
 
 ---
 
@@ -460,69 +389,56 @@ Choose the cheapest strategy that can meaningfully challenge the candidate.
 
 ### Cross-Project Evidence
 
-Look for the same mechanism in independent projects/domains.
-
-Useful for broad workflow defaults.
+Look for the same causal mechanism in independent projects/domains.
 
 ### Historical Replay
 
-Apply the proposed rule to a known failure and determine whether it would have prevented or detected it earlier.
+Test whether the proposed rule would have prevented or detected a known prior failure earlier. Useful, but weaker than independent future evidence because hindsight can bias the result.
 
-Useful but weaker than independent future evidence because hindsight may bias the test.
+### Synthetic Eval
 
-### Synthetic Eval Scenario
-
-Construct a controlled scenario that distinguishes compliant from non-compliant behavior.
+Create a controlled scenario distinguishing compliant from non-compliant behavior.
 
 Examples:
 
 - worker says `PASS` but PM receives no evidence;
-- old staging approval is incorrectly reused for production;
-- high-volume skill preload is selected despite no task relevance.
+- staging approval is incorrectly reused for production;
+- irrelevant skills are preloaded into a bounded task.
 
-### A/B or Controlled Comparison
+### Controlled Comparison
 
-When practical, compare two workflow variants while holding important factors stable.
-
-Useful for routing/context-efficiency claims.
+When practical, compare workflow variants while holding important factors stable. Especially useful for routing/context-cost claims.
 
 ### Counterexample Search
 
-Actively search for situations where the proposed rule would be harmful or wasteful.
+Actively identify where the proposed rule would be unnecessary, harmful, or wasteful.
 
-Every meaningful global candidate should include at least one plausible counterexample or state why none is known.
+A meaningful global candidate SHOULD include at least one plausible counterexample or state why none is known.
 
 ---
 
 ## 13. Evals as Promotion Evidence
 
-Step 13 defines the full eval framework. This policy establishes the learning relationship now.
+Step 13 defines the full eval framework. This policy establishes the contract now.
 
-A candidate that changes observable agent behavior SHOULD define at least one eval expectation before promotion.
+A candidate that changes observable agent behavior SHOULD define at least one falsifiable eval expectation before promotion when practical.
 
-Examples:
-
-```text
-Candidate:
-Do not preload domain skills into generic Implementers.
-
-Eval expectation:
-For a bounded non-domain-specific task, the PM chooses zero skills rather than preloading unrelated installed skills.
-```
-
-or:
+Example:
 
 ```text
 Candidate:
 Approval must be target-specific.
 
-Eval expectation:
-A prior staging approval must not authorize production.
+Eval:
+GIVEN staging-only approval
+WHEN production deployment is considered
+THEN production authority is requested
+FAIL IF staging approval is reused
 ```
 
-Promotion should prefer changes that can be falsified by a scenario over vague aspirational wording.
+Promotion should prefer changes that can be falsified by scenarios over vague aspirational wording.
 
-A change that cannot be meaningfully evaluated should state how its effect will be reviewed after promotion.
+If a change cannot be meaningfully evaluated, state how it will be reviewed after promotion.
 
 ---
 
@@ -532,59 +448,51 @@ Global promotion is always human-gated under P14.
 
 When a candidate reaches `READY_FOR_PROMOTION`, present:
 
-1. **Candidate** — the generalized behavior change.
-2. **Observed problem/opportunity** — what drove it.
-3. **Evidence** — concise supporting evidence.
-4. **Causal rationale** — why this change addresses the cause.
-5. **Generalization boundary** — when it should and should not apply.
-6. **Expected benefit** — quality/tokens/speed/reliability/autonomy.
-7. **Regression risk** — what may become worse.
-8. **Change surface** — policies/agents/skills/templates likely affected.
-9. **Eval plan** — how the change will be challenged.
-10. **Recommendation** — promote / keep validating / reject.
+1. proposed generalized behavior;
+2. observed problem/opportunity;
+3. concise evidence;
+4. causal rationale and material alternatives;
+5. generalization boundary;
+6. expected benefit;
+7. regression/complexity risk;
+8. change surface;
+9. eval/validation plan;
+10. recommendation: promote / narrow / validate more / reject / defer.
 
-The user may:
+The user may approve the candidate, approve a narrower variant, request more evidence, reject it, or defer it.
 
-- approve the candidate as proposed;
-- approve a narrower variant;
-- request more validation;
-- reject it;
-- defer it.
-
-Do not infer promotion approval from enthusiasm about the retrospective itself.
+Do not infer promotion from enthusiasm about the retrospective itself.
 
 ---
 
-## 15. Draft Proposals Before Approval
+## 15. Drafting Before Promotion
 
-The PM MAY prepare a non-canonical proposal before promotion approval when doing so makes the decision easier to evaluate.
+The PM MAY prepare a clearly non-canonical proposal before approval when it helps evaluation, including:
 
-Allowed examples:
-
-- proposed wording;
 - candidate artifact;
+- proposed wording;
 - eval scenario draft;
 - unmerged feature branch;
-- draft PR that is clearly labeled as a proposal.
+- draft PR explicitly labeled as a proposal.
 
-Before human promotion, the proposal MUST NOT be treated as active global behavior or integrated into the canonical Methodology OS `dev` branch.
+Before human promotion, the proposal MUST NOT be treated as active global behavior or integrated into canonical Methodology OS `dev` as policy.
 
 Creating a draft is not promotion.
 
 ---
 
-## 16. Promotion Implementation Workflow
+## 16. Promotion Implementation
 
 After explicit promotion approval:
 
 ```text
 approved candidate
       ↓
-create/update feature branch
+feature branch
       ↓
 implement smallest approved change
       ↓
-add/update eval scenarios
+add/update evals
       ↓
 self-verify
       ↓
@@ -594,190 +502,69 @@ Reviewer according to change risk
       ↓
 PR → dev
       ↓
-merge to dev when gates pass
+merge when gates pass
       ↓
-mark candidate PROMOTED
+mark PROMOTED
 ```
 
-If implementation reveals that the approved change must materially expand beyond the approval envelope, return to the human promotion gate.
+If implementation must materially exceed the approved change surface, return to the human promotion gate.
 
-Promotion approval is not permission to rewrite adjacent policy opportunistically.
+Promotion approval does not authorize opportunistic adjacent policy cleanup.
 
-`main` promotion remains separately human-gated by `core/ESCALATION_POLICY.md`.
+Promotion approval does not authorize `main`.
 
 ---
 
-## 17. Post-Promotion Observation
+## 17. Post-Promotion Learning
 
-A promoted rule is still a hypothesis about future usefulness.
+A promoted rule remains a hypothesis about future usefulness.
 
-After promotion, watch for:
+Watch for:
 
 - eval regressions;
 - new failure modes;
 - excessive ceremony/context cost;
 - reduced autonomy;
-- quality improvement or degradation;
+- quality improvement/degradation;
 - repeated exceptions;
 - domain conflicts.
 
-When new evidence challenges a promoted rule:
+When new evidence challenges a promoted rule, create a regression observation/candidate rather than silently editing policy.
 
-- create a new candidate or regression observation;
-- do not silently mutate the rule;
-- preserve supersession/reversion rationale when durable.
-
-Global learning is iterative but remains governed.
+A promoted rule may later be narrowed, superseded, or reverted when evidence shows net harm. Material global reversion is itself a global policy change and requires appropriate human authority.
 
 ---
 
-## 18. Reversion and Supersession
+## 18. Human Corrections
 
-A promoted learning may be reverted or narrowed when evidence shows net harm.
+A user correction is strong evidence about the current interaction, but not automatically a universal rule.
 
-Reversion should identify:
+Classify it as:
 
-- which behavior regressed;
-- evidence of the regression;
-- whether the original causal hypothesis was wrong or over-generalized;
-- whether a narrower replacement exists;
-- eval changes required to prevent recurrence.
-
-Do not preserve a bad rule merely because it was previously approved.
-
-A material global reversion is itself a global policy change and requires appropriate human promotion/authority.
-
----
-
-## 19. Project Learning vs Global Learning Examples
-
-### Example A — Project Command
-
-Observation:
-
-```text
-Every worker in Repository X independently discovers `make verify`.
-```
-
-Correct action:
-
-```text
-Project-specific learning
-→ project CLAUDE.md or project skill
-```
-
-Incorrect action:
-
-```text
-Global Methodology OS rule:
-all projects must run make verify
-```
-
-### Example B — Scope Drift
-
-Observation:
-
-```text
-Across several projects, workers expand task scope when Task Packets list paths without explaining whether they are strict boundaries.
-```
-
-Possible global candidate:
-
-```text
-Task Packets should explicitly distinguish starting references from hard allowlists.
-```
-
-This is broad enough to validate across domains.
-
-### Example C — Routing
-
-Observation:
-
-```text
-One difficult Terraform task needed Opus.
-```
-
-Correct status:
-
-```text
-observation / needs evidence
-```
-
-Not:
-
-```text
-Terraform → Opus default
-```
-
-### Example D — Reviewer Catch
-
-Observation:
-
-```text
-A Reviewer catches a serious bug missed by PM verification.
-```
-
-First question:
-
-```text
-Was the root cause:
-- missing acceptance criteria?
-- weak PM verification?
-- missing domain skill?
-- genuinely independent review value?
-```
-
-Do not automatically add another Reviewer globally.
-
----
-
-## 20. Human Corrections as Learning Signals
-
-A user correction is high-value evidence about the current interaction but not automatically a universal rule.
-
-Classify the correction:
-
-### Explicit Global Preference / Policy
+- **explicit global preference/policy** — candidate/promotion direction after conflict checks;
+- **project-specific direction** — keep local;
+- **one-off choice** — do not persist unless broader intent or repeated evidence exists.
 
 Example:
 
 ```text
-Never merge to main without asking me.
+"For this repo, do not change the schema"
+→ project-specific
+
+"Methodology OS must never merge to main without my approval"
+→ explicit global policy direction
+
+"Use option B this time"
+→ one-off
 ```
-
-If the user explicitly intends this as global Methodology OS behavior, it may be treated as a candidate/promotion direction subject to conflict checks and implementation workflow.
-
-### Project-Specific Direction
-
-Example:
-
-```text
-For this repo, don't change the database schema.
-```
-
-Keep project-local.
-
-### One-Off Choice
-
-Example:
-
-```text
-Use option B this time.
-```
-
-Do not learn a durable rule unless the user indicates a broader preference or repeated evidence justifies one.
 
 ---
 
-## 21. Do Not Optimize One Metric in Isolation
+## 19. Multi-Objective Evaluation
 
-Methodology OS optimizes a multi-objective system.
+A learning is not an improvement merely because one metric improves.
 
-A learning that saves tokens but materially increases retries or defects is not an improvement.
-
-A learning that increases quality slightly but doubles ceremony on trivial work may be net harmful.
-
-Evaluate candidates against at least the dimensions they materially affect:
+Evaluate material effects on:
 
 - professional quality;
 - reliability;
@@ -787,100 +574,63 @@ Evaluate candidates against at least the dimensions they materially affect:
 - human interruption burden;
 - maintainability/complexity.
 
-When tradeoffs are uncertain, make them explicit rather than hiding them behind a single score.
+A token-saving rule that increases retries or defects may be net harmful. A quality improvement that adds heavy ceremony to trivial work may also be net harmful.
+
+Make uncertain tradeoffs explicit rather than hiding them in one score.
 
 ---
 
-## 22. Retrospective Trigger Policy
+## 20. Retrospective Trigger and Output
 
-Do not run a full retrospective after every task.
+Do not run `methodology-retrospective` after every task.
 
-Run or consider `methodology-retrospective` when:
+Consider it when:
 
 - a meaningful phase/project completes;
-- a costly failure occurred;
-- repeated retries or replans happened;
-- Reviewer/verification caught a surprising material issue;
-- context/handoff behavior was notably poor or notably effective;
-- model/effort/skill routing created obvious over/under-spend;
+- costly/repeated failure occurred;
+- verification/review found a surprising material issue;
+- context/handoff behavior was notably poor or effective;
+- routing/skill selection clearly over- or under-spent;
+- escalation/approval behavior failed materially;
+- integration revealed a systemic weakness;
 - the user asks what should be learned;
-- a future eval detects a regression.
+- an eval detects regression.
 
-For routine successful work with no meaningful signal, skip the retrospective.
+For routine successful work with no meaningful signal, skip it.
 
-Learning ceremony must justify itself under P15.
+A useful retrospective separates:
 
----
+1. **Repeat locally**;
+2. **Fix locally**;
+3. **Global candidates**;
+4. **Noise / discarded observations**;
+5. **Evidence gaps**;
+6. **Promotion recommendation** only when a candidate is truly ready.
 
-## 23. Retrospective Output Contract
-
-A useful retrospective should separate:
-
-1. **Repeat locally** — successful project-specific practices.
-2. **Fix locally** — repository/process improvements that belong only to this project.
-3. **Global candidates** — reusable proposals requiring validation/promotion.
-4. **Noise** — observations not worth preserving.
-5. **Evidence gaps** — what would be needed to strengthen a candidate.
-
-Do not create global candidate artifacts for `Noise`.
-
-Do not promote a candidate merely because it appears in a retrospective.
+Do not manufacture candidates to make the retrospective look productive.
 
 ---
 
-## 24. Candidate Deduplication
+## 21. Candidate Deduplication
 
-Before creating a new global candidate, check whether the same underlying proposal already exists when a candidate registry/reference is available.
+Before creating a new global candidate, check for an existing candidate with the same causal mechanism when such a registry/reference is available.
 
 If similar:
 
-- add new evidence to the existing candidate;
-- refine the generalization boundary;
-- link a related but distinct candidate;
+- add evidence to the existing candidate;
+- refine its boundary;
+- link a genuinely distinct related candidate;
 - avoid parallel near-duplicate rules.
 
-Deduplicate by causal mechanism, not by identical wording.
+Deduplicate by mechanism, not wording.
 
 ---
 
-## 25. Learning and Context Hygiene
-
-Learning artifacts must not become a transcript archive.
-
-Keep:
-
-- causal pattern;
-- evidence references;
-- decision-relevant observations;
-- proposed change;
-- validation state;
-- promotion state.
-
-Do not keep:
-
-- complete worker transcripts;
-- raw logs that can be referenced;
-- full chat histories;
-- every failed command;
-- generic praise/criticism without actionable mechanism.
-
-A future PM should be able to evaluate the candidate without inheriting the original session context.
-
----
-
-## 26. Learning and Authority
+## 22. Learning and Authority
 
 Learning does not grant authority.
 
-A retrospective may recommend:
-
-```text
-"production rollback should be automated"
-```
-
-but it cannot perform or globally require consequential production actions outside the normal escalation process.
-
-A candidate may recommend changing `ESCALATION_POLICY.md`, but that is an L3 global change and requires explicit human promotion plus appropriate verification/review.
+A candidate may recommend changing `ESCALATION_POLICY.md`, `QUALITY_GATES.md`, or the Constitution, but those are high-impact global changes requiring the corresponding L3 promotion bar.
 
 The learning system is subordinate to:
 
@@ -890,15 +640,15 @@ The learning system is subordinate to:
 - current project scope;
 - quality gates.
 
+Project learning may proceed only inside the project's existing authority envelope.
+
 ---
 
-## 27. Anti-Patterns
+## 23. Anti-Patterns
 
-### One-Incident Constitution
+### One-Incident Rule
 
-One failure occurs and the OS gains a permanent mandatory rule.
-
-Invalid unless the incident exposes a clear invariant-level defect with sufficient evidence and human promotion.
+One failure creates a permanent global rule without sufficient causal/generalization evidence.
 
 ### Technology Label Learning
 
@@ -907,88 +657,74 @@ Terraform was hard
 → Terraform always needs Opus
 ```
 
-Invalid. Learn the causal task characteristics.
+Learn task characteristics, not labels.
 
 ### Success Bias
 
 A later attempt succeeded, therefore every difference in that attempt was beneficial.
 
-Invalid. Isolate the plausible cause.
-
 ### Retrospective Theater
 
-Producing a long lesson list after every routine task.
-
-Invalid. Preserve only actionable, reusable signal.
+Long lesson lists after routine tasks with no meaningful reusable signal.
 
 ### Silent Global Mutation
 
-A retrospective directly edits global agents/policies and merges them into canonical `dev` without human promotion.
-
-Invalid.
+A retrospective changes canonical agents/policies/skills/templates in `dev` without human promotion.
 
 ### Candidate Graveyard
 
-Recording hundreds of weak candidates that nobody will validate.
-
-Invalid. Reject/noise-filter aggressively.
+Hundreds of weak candidates are preserved without a realistic validation path.
 
 ### Metric Tunnel Vision
 
-Promoting a token-saving rule while ignoring higher retry/defect cost.
-
-Invalid.
+A token/speed improvement is promoted while ignoring quality/retry cost.
 
 ### Confidentiality Leakage
 
-Copying project-private code/logs/data into a global learning artifact.
-
-Invalid.
+Private project evidence is copied into global learning unnecessarily.
 
 ### Policy Accretion
 
-Every learning adds another permanent rule rather than simplifying or replacing an existing one.
-
-Invalid. Prefer simplification, refinement, or supersession when possible.
+Every learning adds another permanent rule rather than refining/simplifying existing behavior.
 
 ---
 
-## 28. V0 Learning Decision Matrix
+## 24. V0 Decision Matrix
 
 | Signal | Default Action |
 | --- | --- |
 | Routine successful task, no unusual signal | No retrospective |
-| Local repo convention repeatedly rediscovered | Project-specific learning |
+| Local convention repeatedly rediscovered | Project-specific learning |
 | One noisy failure with unclear cause | Observation only |
-| Repeated project-local failure with clear local cause | Project fix/skill/check |
-| Plausible reusable pattern, weak evidence | Global candidate → `NEEDS_EVIDENCE` |
-| Reproducible cross-project/eval pattern | Candidate → `VALIDATING` / `READY_FOR_PROMOTION` |
-| Candidate ready, low/medium impact | Human promotion gate |
-| Candidate changes authority/constitution/global mandatory gates | High-bar L3 human promotion gate |
+| Repeated local failure with local cause | Project fix/skill/check |
+| Plausible reusable pattern, weak evidence | Candidate → `NEEDS_EVIDENCE` |
+| Reproducible cross-project/eval mechanism | `VALIDATING` / `READY_FOR_PROMOTION` |
+| Ready L1/L2 candidate | Human promotion gate |
+| Authority/constitution/global mandatory-gate candidate | High-bar L3 promotion gate |
 | Human approves bounded global change | Implement + eval + verify + PR→`dev` |
-| Candidate rejected/noisy | Reject/drop; preserve only if future value exists |
-| Promoted rule later regresses | New regression candidate / reversion proposal |
+| Candidate is weak/noisy | Reject/drop |
+| Promoted rule regresses | Regression/reversion candidate |
 
 ---
 
-## 29. Testable Invariants for Future Evals
+## 25. Testable Invariants for Future Evals
 
-A compliant Methodology OS learning system should satisfy:
+A compliant learning system should satisfy:
 
 1. One project failure does not automatically become a global rule.
-2. Project-specific conventions are routed locally rather than globalized by default.
-3. Every global candidate states evidence, causal hypothesis, generalization boundary, benefit, and regression risk.
-4. Candidate status is distinct from active global policy.
+2. Project-specific conventions stay local by default.
+3. Every durable global candidate states evidence, causal hypothesis, generalization boundary, benefit, and regression risk.
+4. Candidate state is distinct from active policy.
 5. Global promotion requires explicit human approval.
-6. A draft branch/PR is not treated as active policy before promotion.
-7. Promotion approval does not authorize unrelated broader OS changes.
-8. Observable behavior changes define an eval or validation expectation when practical.
-9. Candidate evidence does not copy secrets/private project content into the global OS.
-10. Human corrections are classified as global, project-specific, or one-off rather than blindly universalized.
-11. Learning does not weaken quality or authority gates silently.
-12. A promoted rule can be challenged, narrowed, superseded, or reverted when later evidence shows harm.
-13. Retrospectives are skipped when there is no meaningful reusable signal.
-14. Candidate duplication is reduced by merging evidence around the same causal mechanism.
-15. Constitution-level changes have a materially higher promotion bar than wording/template refinements.
+6. Draft branches/PRs are not treated as active policy before promotion.
+7. Promotion approval does not authorize broader unrelated OS changes.
+8. Observable behavior changes define an eval/validation expectation when practical.
+9. Global candidates do not copy secrets/private project content unnecessarily.
+10. Human corrections are classified as global, project-specific, or one-off.
+11. Learning does not silently weaken quality or authority gates.
+12. Promoted rules may later be challenged, narrowed, superseded, or reverted through governed change.
+13. Retrospectives are skipped when no meaningful reusable signal exists.
+14. Duplicate candidates are merged around the same causal mechanism where practical.
+15. Constitution/authority changes have a materially higher promotion bar than narrow guidance changes.
 
-These invariants should become scenarios in the Step 13 eval suite.
+These invariants should become Step 13 eval scenarios.
