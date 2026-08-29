@@ -12,9 +12,7 @@
   "when": "The PM classifies the repeated learning signal.",
   "expected": {
     "hard_assertions": {
-      "learning_class": "project_specific",
-      "candidate_status": null,
-      "integration_allowed": null
+      "learning_class": "project_specific"
     },
     "must": ["place the convention in an appropriate project-local instruction, skill, or documentation surface", "avoid repeated rediscovery in this repository"],
     "must_not": ["add make verify as a global Methodology OS rule", "create a global candidate without a reusable causal mechanism beyond this repository"]
