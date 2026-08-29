@@ -31,10 +31,16 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Fork policy that reserves inherited full-conversation context for cases where re-packaging the required background would be more expensive or lossy.
 - Context packaging and return checklists for PM→worker and worker→PM boundaries.
 - V0 context-routing matrix and testable context invariants for later evals.
+- `templates/PROJECT_BRIEF.md` defining the stable project contract: outcome, success criteria, scope, constraints, quality bar, human gates, and durable starting context.
+- `templates/PLAN.md` defining versioned phases/tasks, stable work IDs, dependencies, acceptance criteria, verification intent, integration strategy, replanning rules, and anticipated gates without duplicating live status.
+- `templates/STATE.md` defining the canonical hot snapshot for current objective, active work, next actions, blockers, verification evidence, Git/integration state, risks, and context health.
+- `templates/DECISIONS.md` defining lightweight durable decision records with stable IDs, rationale, alternatives, consequences, evidence, approval state, and supersession links.
+- `templates/HANDOFF.md` defining a compressed PM-to-PM ownership-transfer snapshot with successor start checks, current evidence, blockers, decisions, failed approaches worth preserving, and Git freshness validation.
+- Project-state usage rules that scale artifact depth to Lite, Standard, and Full work while avoiding documentation theatre.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–6 and make Step 7 — Project State the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–7 and make Step 8 — Delegation Protocol the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -44,6 +50,9 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Defined global/project `CLAUDE.md` and preloaded skills as recurring context costs that must remain concise and task-relevant.
 - Explicitly rejected auto memory, conversation history, and automatic compaction as substitutes for canonical project state.
 - Chose qualitative context-health and handoff triggers for V0 instead of hard-coded token percentages that may become model/provider-specific.
+- Established `STATE.md` as the sole hot operational snapshot; `PLAN.md` intentionally does not maintain a second live progress tracker.
+- Defined `PROJECT_BRIEF.md` as stable contract state, `DECISIONS.md` as durable rationale, and `HANDOFF.md` as transfer-only compression rather than parallel sources of current truth.
+- Deferred `TASK_PACKET.md` and `WORK_REPORT.md` to Step 8 so delegation contracts remain separate from project-state artifacts.
 
 ## Development Milestones
 
@@ -53,4 +62,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 4 — Agent Architecture:** complete
 - **Step 5 — Model & Effort Routing:** complete
 - **Step 6 — Context Architecture:** complete
-- **Step 7 — Project State:** next
+- **Step 7 — Project State:** complete
+- **Step 8 — Delegation Protocol:** next
