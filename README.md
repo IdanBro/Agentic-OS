@@ -23,7 +23,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 7 — Project State: complete
 - Step 8 — Delegation Protocol: complete
 - Step 9 — Verification System: complete
-- Step 10 — Skills Architecture: next
+- Step 10 — Skills Architecture: complete
+- Step 11 — Escalation & Autonomy: next
 
 The current orchestration layer defines three execution depths:
 
@@ -71,7 +72,7 @@ V0 deliberately starts with four roles:
 
 | Agent | Role | Default authority |
 | --- | --- | --- |
-| `project-manager` | Owns lifecycle, planning, routing, verification, state, Git integration, and human gates | Orchestrates and integrates |
+| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, Git integration, and human gates | Orchestrates and integrates |
 | `implementer` | Executes one bounded task and self-verifies the resulting change | May modify scoped work |
 | `reviewer` | Independently checks requirements, correctness, regressions, and verification quality | Read-only |
 | `debugger` | Diagnoses non-trivial failures and returns root cause, fix direction, and validation plan | Read-only / diagnosis-first |
@@ -269,6 +270,49 @@ Evidence is state-specific: material changes after a test or review invalidate a
 
 A green CI run is evidence, not a substitute for acceptance verification. Likewise, human approval is separate from technical verification and never turns an unverified claim into `PASS`.
 
+## Skills Architecture
+
+Skill discovery and loading are centralized in `core/SKILL_POLICY.md`.
+
+The core rule is:
+
+> Skills are optional capability modules. Load the smallest relevant set, at the latest useful moment.
+
+Claude Code can discover skill descriptions without loading the full skill body. Methodology OS therefore defaults to **on-demand invocation**, not static preload. The generic PM/Implementer/Reviewer/Debugger roles do not preload domain skills in V0.
+
+Skill routing follows this pattern:
+
+```text
+Does normal role competence suffice?
+        │
+       yes → no skill
+        │
+       no
+        ↓
+project / nested skill for local behavior?
+        ↓
+narrow domain skill if materially useful
+        ↓
+methodology procedure skill if active
+        ↓
+remove overlap
+```
+
+Global Methodology OS skills use distinctive names to avoid shadowing generic project skills:
+
+- `methodology-os` — activate the Methodology OS operating pattern;
+- `methodology-planning` — create/revise proportional plans;
+- `methodology-handoff` — reconcile state and transfer PM ownership;
+- `methodology-retrospective` — capture workflow lessons and candidate OS improvements.
+
+The Task Packet may reference a relevant skill by name; it should not paste the entire skill body. Skills do not enlarge the worker's authority or bypass human gates.
+
+`context: fork` is reserved for self-contained high-volume skill workflows. The four V0 methodology skills remain inline because they need current PM/project state.
+
+Model/effort overrides are not embedded in core methodology skills; `core/ROUTING.md` remains the cost/capability source of truth.
+
+Detailed references and examples belong in supporting files rather than giant skill bodies. Global skill changes remain Methodology OS changes and require human promotion under the learning model.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -309,6 +353,7 @@ Agentic-OS/
 │   ├── ROUTING.md
 │   ├── QUALITY_GATES.md
 │   ├── CONTEXT_POLICY.md
+│   ├── SKILL_POLICY.md
 │   ├── LEARNING_POLICY.md
 │   └── ESCALATION_POLICY.md
 ├── agents/
@@ -318,9 +363,13 @@ Agentic-OS/
 │   └── debugger.md
 ├── skills/
 │   ├── methodology-os/
-│   ├── project-planning/
-│   ├── handoff/
-│   └── retrospective/
+│   │   └── SKILL.md
+│   ├── methodology-planning/
+│   │   └── SKILL.md
+│   ├── methodology-handoff/
+│   │   └── SKILL.md
+│   └── methodology-retrospective/
+│       └── SKILL.md
 ├── templates/
 │   ├── PROJECT_BRIEF.md
 │   ├── PLAN.md
@@ -339,4 +388,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the skills and escalation/autonomy policies are mature enough for safe global dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the escalation/autonomy and learning policies are mature enough for safe global dogfooding.
