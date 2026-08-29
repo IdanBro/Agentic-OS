@@ -42,10 +42,18 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Canonical execution-worker statuses: `PASS`, `PARTIAL`, `BLOCKED`, and `FAILED`, with only `PASS` eligible to proceed to independent PM verification.
 - Scope-drift handling that permits low-risk directly-required supporting changes while returning material scope/architecture/dependency/security/cost decisions to the PM.
 - Explicit compact delegation/report forms for small Standard-mode tasks so bounded delegation does not require full ceremony.
+- `core/QUALITY_GATES.md` defining the canonical verification chain from worker self-verification through PM verification, independent review, integration readiness, post-integration/system checks, and main-promotion readiness.
+- Risk-based verification depth with explicit low/medium/high gate requirements and mandatory independent review for medium/high-risk work in V0.
+- Canonical verification statuses: `PASS`, `FAIL`, `INCONCLUSIVE`, `NOT_RUN`, and `N/A`, kept separate from worker execution statuses and Reviewer verdicts.
+- Evidence-freshness rules requiring affected tests, plans, renders, and reviews to be rerun after material state changes.
+- Direct-PM execution rules preserving independent review for medium/high-risk work without adding unnecessary second-agent ceremony to low-risk Lite work.
+- Pre-integration, post-integration, parallel aggregate, and `main`-promotion quality gates.
+- Explicit separation between technical verification and human risk acceptance/approval.
+- V0 verification invariants prepared for later eval scenarios.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–8 and make Step 9 — Verification System the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–9 and make Step 10 — Skills Architecture the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -60,6 +68,10 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Deferred `TASK_PACKET.md` and `WORK_REPORT.md` from Step 7 to Step 8 so delegation contracts remain separate from project-state artifacts; both are now implemented.
 - Updated the Implementer contract to use the canonical Task Packet / Work Report schemas and the four-state execution vocabulary.
 - Clarified that worker `PASS` is an evidence-bearing claim, not PM verification, review approval, integration approval, or project completion.
+- Operationalized medium-risk review as mandatory in V0; review cost is controlled through review depth rather than silently waiving the gate.
+- Aligned `STATE.md` and `HANDOFF.md` verification snapshots with the canonical quality-gate status vocabulary.
+- Defined Reviewer `PASS / PASS_WITH_NOTES / FAIL / INCONCLUSIVE` as the canonical review-gate vocabulary; orchestration responds to those verdicts with fix, replan, or escalation decisions rather than inventing alternate Reviewer outputs.
+- Treated green CI, commits, PRs, and human approval as evidence/workflow signals rather than substitutes for acceptance verification.
 
 ## Development Milestones
 
@@ -71,4 +83,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 6 — Context Architecture:** complete
 - **Step 7 — Project State:** complete
 - **Step 8 — Delegation Protocol:** complete
-- **Step 9 — Verification System:** next
+- **Step 9 — Verification System:** complete
+- **Step 10 — Skills Architecture:** next

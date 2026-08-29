@@ -61,11 +61,15 @@ Do not classify ordinary implementation choices as human blockers.
 
 Record the evidence that materially supports the current state.
 
+Use the canonical quality-gate vocabulary from `core/QUALITY_GATES.md`.
+
 | Claim / Area | Status | Evidence |
 | --- | --- | --- |
-| `<claim>` | `<PASS / FAIL / PARTIAL / NOT RUN>` | `<command/result/reference>` |
+| `<claim>` | `<PASS / FAIL / INCONCLUSIVE / NOT_RUN / N/A>` | `<command/result/reference>` |
 
 Keep evidence compact. Full logs stay outside this file.
+
+Do not convert an unavailable check into `PASS` or `N/A`; preserve uncertainty accurately.
 
 ## 8. Git / Integration State
 
