@@ -19,7 +19,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 3 — Project Lifecycle / Orchestration: complete
 - Step 4 — Agent Architecture: complete
 - Step 5 — Model & Effort Routing: complete
-- Step 6 — Context Architecture: next
+- Step 6 — Context Architecture: complete
+- Step 7 — Project State: next
 
 The current orchestration layer defines three execution depths:
 
@@ -117,6 +118,41 @@ The routing objective is:
 
 > Use the least expensive configuration reasonably expected to meet the quality bar on the first well-prepared attempt, optimizing total workflow cost rather than per-call price.
 
+## Context Architecture
+
+Context routing is centralized in `core/CONTEXT_POLICY.md`.
+
+The canonical rule is:
+
+> Context is a working set, not an archive.
+
+The OS separates:
+
+```text
+constitutional context
+→ small, broadly applicable rules
+
+durable project context
+→ objective, state, decisions, risks
+
+task context
+→ bounded worker input
+
+ephemeral execution context
+→ logs, searches, experiments kept local
+
+evidence context
+→ compact proof returned across boundaries
+```
+
+Fresh isolated subagents are the normal worker boundary. The PM keeps orchestration state and receives compact conclusions/evidence rather than raw execution transcripts. Accessible files and repository objects are referenced instead of copied by default.
+
+Reviewer first-pass context deliberately avoids Implementer conclusions when independent inspection is possible. Forked subagents are reserved for cases where inheriting a large amount of PM context has clear net value; they are not the default.
+
+Skills and `CLAUDE.md` are treated as recurring context costs. The global Claude kernel should remain small, preloaded skills require task relevance, and auto memory or automatic compaction never replace canonical project state.
+
+Context health is evaluated qualitatively rather than through fixed token-percentage thresholds. When current conversation history becomes noisy or state becomes difficult to reconstruct, the PM externalizes durable truth and prepares a structured handoff before starting a fresh PM context.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -187,4 +223,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the core agents, routing, and context policies are mature enough for safe dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the core agents, routing, context, state, and delegation policies are mature enough for safe dogfooding.
