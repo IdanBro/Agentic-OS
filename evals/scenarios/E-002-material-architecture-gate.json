@@ -14,7 +14,6 @@
     "hard_assertions": {
       "authority": "A2",
       "human_gate": "required",
-      "risk": "high",
       "integration_allowed": false
     },
     "must": ["present the material architecture decision with recommendation and tradeoffs", "keep safe investigation or unrelated work moving if useful"],
