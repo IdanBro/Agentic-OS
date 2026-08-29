@@ -72,15 +72,38 @@ Record only durable facts that materially affect the project and cannot be cheap
 
 Prefer references to source files or documents over copied content.
 
-## 8. Human Gates
+## 8. Authority & Human Gates
 
-Record project-specific approvals in addition to global gates.
+Use `core/ESCALATION_POLICY.md` for the global authority model.
+
+### Project-Specific Human Gates
+
+Record approvals required **in addition to** Methodology OS global gates.
 
 - `<decision or operation requiring explicit user approval>`
 
 If there are no additional gates, write:
 
 `None beyond Methodology OS global gates.`
+
+### Standing / Pre-Authorized Envelopes
+
+Record only durable project-level authority that the user explicitly delegated and that would otherwise cause repeated approval requests.
+
+| Action / Decision Class | Target / Scope | Conditions / Limits | Approval Reference |
+| --- | --- | --- | --- |
+| `<authorized action>` | `<system/environment/scope>` | `<conditions, limits, expiry/freshness assumptions>` | `<reference/date>` |
+
+If none, write `None.`
+
+Rules:
+
+1. Do not infer an approval envelope from silence or general enthusiasm for the project.
+2. Keep envelopes bounded by target, scope, operation, conditions, and material risk/cost assumptions.
+3. A project-level envelope does not authorize actions outside its stated target or conditions.
+4. When material circumstances change, reassess the envelope before relying on it.
+5. `main` promotion remains explicitly human-gated per global policy; a general project-autonomy statement is not blanket approval for future main merges.
+6. Temporary/task-specific approval is normally referenced from `DECISIONS.md` or current state rather than bloating the stable Project Brief.
 
 ## 9. Canonical References
 
@@ -100,7 +123,8 @@ Update it only when the accepted project contract materially changes, such as:
 - scope changes,
 - success criteria changes,
 - important constraint changes,
-- new human gates.
+- new human gates,
+- durable standing authority changes.
 
 Do **not** update it for:
 
@@ -109,7 +133,8 @@ Do **not** update it for:
 - command output,
 - temporary blockers,
 - implementation detail,
-- chronological progress.
+- chronological progress,
+- one-off approvals that belong in a decision/state record.
 
 Operational mode and phase belong in `STATE.md`.
 

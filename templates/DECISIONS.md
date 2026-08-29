@@ -16,7 +16,8 @@ Create an entry when a decision materially affects one or more of:
 - deployment / migration strategy,
 - meaningful cost tradeoff,
 - irreversible or difficult-to-reverse behavior,
-- a plan change whose rationale will matter later.
+- a plan change whose rationale will matter later,
+- a bounded human approval/authority envelope whose scope must survive the session.
 
 Do **not** create entries for:
 
@@ -44,8 +45,11 @@ Use stable IDs: `D-001`, `D-002`, ...
 - **Date:** `<YYYY-MM-DD>`
 - **Status:** `<active | superseded | rejected>`
 - **Decision owner:** `<PM / user / project authority>`
+- **Authority class:** `<A0 | A1 | A2 | A3 from ESCALATION_POLICY.md>`
 - **Human approval required:** `<yes/no>`
 - **Human approval:** `<reference/date/n/a>`
+- **Approval scope / target:** `<exact action, environment, artifact, system, or n/a>`
+- **Approval conditions / limits:** `<verification, cost, blast radius, expiry/freshness assumptions, or n/a>`
 
 ### Context
 
@@ -84,6 +88,15 @@ Omit alternatives that were never serious candidates.
 
 - `<file / issue / benchmark / experiment / external reference>`
 
+### Approval Consumption / Freshness
+
+Use only when this decision grants bounded authority for a future consequential action.
+
+- **Current state:** `<unused | active | consumed | expired | superseded | n/a>`
+- **Revalidation trigger:** `<scope/target/risk/cost/environment change that requires reassessment, or n/a>`
+
+An approval record does not expand itself. If the contemplated action falls outside the recorded scope/conditions, obtain new authority rather than stretching the old decision.
+
 ### Supersession
 
 - **Supersedes:** `<D-### or none>`
@@ -104,4 +117,6 @@ The Project Manager owns consistency of this log.
 3. When a decision changes, mark the old entry `superseded` and link the new entry.
 4. A rejected proposal may be recorded only if future agents are likely to reconsider it and the reason for rejection has durable value.
 5. Human-gated decisions must record the approval state accurately; absence of a recorded approval is not permission.
-6. Keep each entry concise enough that a fresh PM can scan the index and read only relevant decisions.
+6. Record approval scope/conditions narrowly enough that a successor PM can tell what is and is not authorized.
+7. Do not treat an approval as permanent after material scope, target, environment, risk, or cost assumptions change.
+8. Keep each entry concise enough that a fresh PM can scan the index and read only relevant decisions.
