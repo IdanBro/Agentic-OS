@@ -22,7 +22,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 6 — Context Architecture: complete
 - Step 7 — Project State: complete
 - Step 8 — Delegation Protocol: complete
-- Step 9 — Verification System: next
+- Step 9 — Verification System: complete
+- Step 10 — Skills Architecture: next
 
 The current orchestration layer defines three execution depths:
 
@@ -228,6 +229,46 @@ Only `PASS` can proceed toward acceptance, and worker `PASS` is never equivalent
 
 For small Standard-mode work, both packet and report may use compact forms. High-risk or incomplete work keeps the richer structure.
 
+## Verification System
+
+Verification and integration gates are centralized in `core/QUALITY_GATES.md`.
+
+The core rule is:
+
+> A claim becomes project truth only when it has evidence appropriate to its risk and has passed every required gate.
+
+The normal delegated-task chain is:
+
+```text
+worker self-verification
+        ↓
+PM independent verification
+        ↓
+independent Reviewer when required
+        ↓
+integration readiness
+        ↓
+merge to dev
+        ↓
+post-integration/system verification when required
+```
+
+V0 uses this gate matrix:
+
+| Risk | Worker/Self Verify | PM Verify | Independent Reviewer | Post-Integration |
+| --- | --- | --- | --- | --- |
+| Low | Required | Required for delegated work | Normally no | Only when integration can matter |
+| Medium | Required | Required | Required | Targeted/integrated when relevant |
+| High | Required | Required, deep | Required, deep | Strong system/integration evidence when feasible |
+
+Medium-risk review is deliberately mandatory in V0. If review is genuinely unnecessary, the PM must determine that the task is actually low-risk rather than silently waiving the medium-risk gate.
+
+Verification claims use `PASS / FAIL / INCONCLUSIVE / NOT_RUN / N/A`. Worker execution statuses and Reviewer verdicts remain separate vocabularies.
+
+Evidence is state-specific: material changes after a test or review invalidate affected evidence. Reviewer `FAIL` or `INCONCLUSIVE` blocks integration, and a review of a superseded diff does not approve the final diff.
+
+A green CI run is evidence, not a substitute for acceptance verification. Likewise, human approval is separate from technical verification and never turns an unverified claim into `PASS`.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -298,4 +339,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the verification policy is mature enough for safe dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the skills and escalation/autonomy policies are mature enough for safe global dogfooding.
