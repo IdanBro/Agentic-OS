@@ -132,7 +132,7 @@ The worker may recommend a change to an acceptance criterion if evidence shows i
 
 ## 7. Required Verification
 
-List checks that the worker must actually execute or perform before claiming `PASS`.
+List checks that the worker must actually execute or perform before claiming a successful execution status or specialized verdict.
 
 ### Must Perform
 
@@ -156,12 +156,14 @@ If a required check cannot be run, the worker must report why and may not repres
 Unless this packet says otherwise, the worker MAY:
 
 - follow established repository/project conventions;
-- choose local implementation details;
+- choose local implementation details when its role permits changes;
 - inspect additional relevant context;
 - perform bounded diagnosis of failures;
-- add targeted tests or validation required by the task;
-- make low-impact supporting changes allowed by the supporting-change rule;
+- add targeted tests or validation required by the task when its role permits changes;
+- make low-impact supporting changes allowed by the supporting-change rule when its role permits changes;
 - correct an obvious local mistake introduced by its own work.
+
+Read-only roles remain read-only even when this generic packet describes permissions available to execution workers.
 
 ### Worker Must Return to PM Before
 
@@ -188,11 +190,13 @@ Do not turn every uncertainty into a clarification request.
 
 ## 9. Git / Artifact Boundaries
 
-Default engineering authority:
+Default engineering authority for change-producing workers:
 
 - work in the branch/worktree prepared by the PM;
 - modify scoped files/artifacts as needed;
 - do not commit, push, open PRs, or merge unless explicitly delegated below.
+
+Read-only roles do not gain write authority from this section.
 
 ### Explicitly Delegated Git Actions
 
@@ -206,14 +210,16 @@ Any explicit Git delegation is bounded to the stated action. It does not imply b
 
 A failed attempt should produce information.
 
-The worker SHOULD:
+Every worker SHOULD:
 
 1. preserve concise failure evidence;
-2. make a bounded attempt to identify the cause;
-3. fix the issue when the cause is clear and remains within scope;
-4. stop repeated guess-and-retry behavior when attempts stop producing new information.
+2. make a bounded attempt to identify the cause when within role scope;
+3. stop repeated guess-and-retry behavior when attempts stop producing new information;
+4. return the smallest useful next decision or evidence requirement.
 
-Use these statuses:
+### Execution-Worker Status
+
+Change-producing/execution workers use:
 
 - **PASS** — the worker believes all acceptance criteria are satisfied and required self-verification is complete. This is a worker claim, not PM approval.
 - **PARTIAL** — useful scoped progress exists, but one or more acceptance criteria are not satisfied. The task remains open.
@@ -221,6 +227,17 @@ Use these statuses:
 - **FAILED** — the attempted approach did not achieve the objective and there is no justified in-scope next attempt without diagnosis/replanning.
 
 `PARTIAL`, `BLOCKED`, and `FAILED` must never be treated as task completion.
+
+### Specialized Role Outcomes
+
+Reviewer and Debugger agents keep the outcome vocabulary defined by their role contracts, such as:
+
+- Reviewer: `PASS | PASS_WITH_NOTES | FAIL | INCONCLUSIVE`
+- Debugger: `CONFIRMED | LIKELY | INCONCLUSIVE`
+
+Do not translate those specialized outcomes into execution-worker statuses unless the PM explicitly asks for an additional execution status.
+
+The specialized vocabulary does not weaken the same requirements for bounded scope, evidence, uncertainty reporting, or PM-controlled escalation.
 
 ---
 
@@ -232,16 +249,16 @@ The PM needs conclusions and evidence, not a transcript.
 
 At minimum return:
 
-- task ID and status;
+- task ID and status/verdict/diagnosis as applicable;
 - concise outcome/change summary;
-- acceptance-criteria status;
+- acceptance-criteria status where applicable;
 - verification actually performed;
 - evidence needed for independent PM verification;
 - remaining uncertainty;
 - scope/assumption notes;
-- exact blocker or recommended next action when not `PASS`.
+- exact blocker or recommended next action when incomplete.
 
-Reviewer and Debugger role definitions may add specialized verdict/finding/diagnosis structures. Those specialized structures take precedence where they are stricter, while the same bounded-task and evidence principles still apply.
+Reviewer and Debugger role definitions add specialized verdict/finding/diagnosis structures. Those specialized structures take precedence where they are stricter, while the same bounded-task and evidence principles still apply.
 
 ---
 
@@ -255,6 +272,7 @@ Before sending the packet, the PM should be able to answer `yes` to the relevant
 - [ ] Is required context referenced instead of unnecessarily copied?
 - [ ] Are important scope boundaries explicit?
 - [ ] Is the worker's authority sufficient to make progress without approval spam?
+- [ ] Does the packet preserve the worker role's read/write boundaries?
 - [ ] Are high-impact authority limits preserved?
 - [ ] Is verification proportional to risk and feasible for this worker?
 - [ ] Is the return contract clear enough for independent PM verification?
@@ -275,7 +293,7 @@ SCOPE: <references / boundaries>
 ACCEPTANCE: <observable criteria>
 VERIFY: <required checks>
 AUTHORITY: <only unusual limits or permissions>
-RETURN: WORK_REPORT
+RETURN: <WORK_REPORT or specialized role contract>
 ```
 
 Do not use the compact form when omitted fields would force the worker to infer a material decision.
