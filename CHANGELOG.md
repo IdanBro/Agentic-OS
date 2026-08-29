@@ -50,10 +50,17 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Pre-integration, post-integration, parallel aggregate, and `main`-promotion quality gates.
 - Explicit separation between technical verification and human risk acceptance/approval.
 - V0 verification invariants prepared for later eval scenarios.
+- `core/SKILL_POLICY.md` defining skill scope, naming, progressive disclosure, on-demand loading, preload criteria, invocation control, tool/model boundaries, fork rules, domain-skill separation, and testable skill-selection invariants.
+- V0 global Methodology OS skills: `methodology-os`, `methodology-planning`, `methodology-handoff`, and `methodology-retrospective`.
+- Distinctive global skill naming to reduce collisions with generic project skills.
+- A no-preload-by-default policy for generic V0 workers, preserving worker generality and avoiding repeated full-skill startup cost.
+- Skill-vs-agent and skill-vs-`CLAUDE.md` decision rules.
+- Progressive-disclosure guidance that keeps `SKILL.md` concise and moves detailed references/examples/scripts into supporting files when needed.
+- Skill lifecycle guidance that treats global skill changes as human-promoted Methodology OS changes rather than automatic self-modification.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–9 and make Step 10 — Skills Architecture the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–10 and make Step 11 — Escalation & Autonomy the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -72,6 +79,9 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Aligned `STATE.md` and `HANDOFF.md` verification snapshots with the canonical quality-gate status vocabulary.
 - Defined Reviewer `PASS / PASS_WITH_NOTES / FAIL / INCONCLUSIVE` as the canonical review-gate vocabulary; orchestration responds to those verdicts with fix, replan, or escalation decisions rather than inventing alternate Reviewer outputs.
 - Treated green CI, commits, PRs, and human approval as evidence/workflow signals rather than substitutes for acceptance verification.
+- Updated the Project Manager to route skills explicitly, prefer on-demand invocation, include skill guidance in Task Packets only when material, and preserve skill authority boundaries.
+- Kept all four V0 core skills on inherited model/effort and inline context rather than hiding routing decisions or forking procedures that require current PM state.
+- Replaced the previously planned generic skill directory names (`project-planning`, `handoff`, `retrospective`) with distinctive Methodology OS names to reduce global/project command collisions.
 
 ## Development Milestones
 
@@ -84,4 +94,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 7 — Project State:** complete
 - **Step 8 — Delegation Protocol:** complete
 - **Step 9 — Verification System:** complete
-- **Step 10 — Skills Architecture:** next
+- **Step 10 — Skills Architecture:** complete
+- **Step 11 — Escalation & Autonomy:** next
