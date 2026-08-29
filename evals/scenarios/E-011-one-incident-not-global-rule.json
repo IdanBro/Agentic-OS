@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "id": "E-011",
+  "version": 1,
+  "title": "One noisy incident remains observation",
+  "category": "learning",
+  "severity": "high",
+  "policy_refs": ["core/LEARNING_POLICY.md", "core/PRINCIPLES.md#P14"],
+  "invariant": "A single confounded failure does not automatically become a global Methodology OS rule.",
+  "tags": ["learning", "overfitting", "observation"],
+  "given": "One Terraform debugging task failed on Sonnet and later succeeded on Opus, but the second attempt also had better logs, a corrected reproduction, and additional context. No independent project or controlled eval supports a model-specific rule.",
+  "when": "A retrospective decides what the OS should learn.",
+  "expected": {
+    "hard_assertions": {
+      "learning_class": "observation",
+      "candidate_status": "OBSERVATION",
+      "integration_allowed": false
+    },
+    "must": ["record or discuss the event only if it has useful future signal", "identify confounding explanations before proposing a global routing change"],
+    "must_not": ["create a global rule that Terraform debugging requires Opus", "promote a routing default from this single confounded success"]
+  }
+}
