@@ -73,10 +73,16 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Privacy rules preventing proprietary project evidence, secrets, credentials, customer data, or raw private logs from being copied into global learning artifacts.
 - Draft-proposal rules that allow non-canonical candidate wording/evals/branches/PRs before approval without treating them as active Methodology OS behavior.
 - Post-promotion monitoring and reversion/supersession rules so approved learnings remain challengeable when later evidence shows harm.
+- `evals/README.md` defining the V0 evaluation philosophy, deterministic-first scoring, suite gating, cost discipline, reproducibility metadata, flakiness handling, and scenario-change governance.
+- Machine-readable `evals/scenario.schema.json`, `evals/result.schema.json`, and `evals/suite.schema.json` contracts for controlled behavioral inputs, structured PM outputs, and suite manifests.
+- Four V0 suite manifests: `core-v0`, `routing-v0`, `learning-v0`, and `full-v0`, allowing blocking smoke checks plus targeted evaluation to keep recurring token cost proportional.
+- Fourteen initial behavioral scenarios covering authority, `main` approval, approval non-transitivity, verification evidence, medium-risk review, evidence freshness, routing diagnosis, effort escalation, skill minimality, learning locality/overfitting, global promotion boundaries, and diagnose-before-retry behavior.
+- Critical-scenario hard-failure semantics so authority, verification-truth, and self-modification regressions cannot be hidden by a good aggregate score.
+- A structured-result design intended for Claude Code non-interactive JSON/JSON-Schema execution in Step 14 without requiring prose parsing or hidden chain-of-thought.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–12 and make Step 13 — Evals the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, escalation/autonomy model, learning system, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–13 and make Step 14 — Claude Code Integration the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, escalation/autonomy model, learning system, eval architecture, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -106,6 +112,8 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Updated `methodology-retrospective` to use the canonical candidate lifecycle, candidate template, causal/generalization analysis, validation strategies, eval expectations, and promotion boundary from `core/LEARNING_POLICY.md`.
 - Made global learning promotion stricter than normal `dev` integration: candidate policy/agent/skill/template behavior changes may be drafted, but cannot become canonical Methodology OS behavior in `dev` before explicit human promotion.
 - Clarified that learning-candidate approval is bounded to the proposed change and does not authorize adjacent OS cleanup or `main` promotion.
+- Replaced vague future “testable invariant” intent with concrete, versioned eval scenarios and suite manifests that can be executed reproducibly once the Step 14 runner is installed.
+- Kept the executable eval runner out of Step 13 so the behavior contract remains separate from Claude Code installation/runtime plumbing.
 
 ## Development Milestones
 
@@ -121,4 +129,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 10 — Skills Architecture:** complete
 - **Step 11 — Escalation & Autonomy:** complete
 - **Step 12 — Learning System:** complete
-- **Step 13 — Evals:** next
+- **Step 13 — Evals:** complete
+- **Step 14 — Claude Code Integration:** next
