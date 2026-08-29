@@ -20,7 +20,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 4 — Agent Architecture: complete
 - Step 5 — Model & Effort Routing: complete
 - Step 6 — Context Architecture: complete
-- Step 7 — Project State: next
+- Step 7 — Project State: complete
+- Step 8 — Delegation Protocol: next
 
 The current orchestration layer defines three execution depths:
 
@@ -153,6 +154,33 @@ Skills and `CLAUDE.md` are treated as recurring context costs. The global Claude
 
 Context health is evaluated qualitatively rather than through fixed token-percentage thresholds. When current conversation history becomes noisy or state becomes difficult to reconstruct, the PM externalizes durable truth and prepares a structured handoff before starting a fresh PM context.
 
+## Project State
+
+Project continuity is externalized through five canonical artifact types:
+
+```text
+PROJECT_BRIEF.md
+→ stable outcome, scope, constraints, success criteria
+
+PLAN.md
+→ intended path, phases, task IDs, dependencies, acceptance
+
+STATE.md
+→ current operational truth and next actions
+
+DECISIONS.md
+→ material non-obvious decisions and rationale
+
+HANDOFF.md
+→ compressed ownership-transfer snapshot
+```
+
+These artifacts deliberately do not duplicate one another. `STATE.md` is the hot snapshot; `PLAN.md` describes intended structure rather than maintaining a second live task tracker; `DECISIONS.md` stores only durable rationale; and `HANDOFF.md` references canonical artifacts rather than copying them.
+
+State depth scales with workflow depth. Lite work normally avoids the full artifact set. Standard work creates only the state artifacts that materially improve recoverability. Full work uses the complete set when the project's duration, ambiguity, or risk justifies it.
+
+A fresh PM should normally begin with `PROJECT_BRIEF.md` and `STATE.md`, then read only the relevant plan and decision sections. Handoffs require the successor to verify current Git/artifact state before trusting the snapshot.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -223,4 +251,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the core agents, routing, context, state, and delegation policies are mature enough for safe dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until delegation and verification policies are mature enough for safe dogfooding.
