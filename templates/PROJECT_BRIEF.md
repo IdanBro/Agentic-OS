@@ -7,7 +7,6 @@
 - **Project:** `<name>`
 - **Created:** `<YYYY-MM-DD>`
 - **Last materially updated:** `<YYYY-MM-DD>`
-- **Lifecycle mode:** `<Lite | Standard | Full>`
 - **Primary repository/artifact:** `<path or reference>`
 
 ## 1. Outcome
@@ -105,10 +104,13 @@ Update it only when the accepted project contract materially changes, such as:
 
 Do **not** update it for:
 
+- lifecycle mode or phase changes,
 - routine task completion,
 - command output,
 - temporary blockers,
 - implementation detail,
 - chronological progress.
+
+Operational mode and phase belong in `STATE.md`.
 
 When a material brief change requires human approval, obtain that approval before treating the changed brief as canonical.
