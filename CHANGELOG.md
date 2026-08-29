@@ -64,10 +64,19 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - A Git authority matrix preserving autonomous working-branch/PR/`dev` integration while human-gating consequential shared-history rewrites and every specific `main` promotion.
 - Worker→PM decision-escalation rules that keep workers from contacting the user independently and prevent routine implementation uncertainty from becoming approval spam.
 - Human-gate communication protocol requiring a concrete decision, evidence, recommendation, meaningful alternatives, tradeoffs, and explicit approval scope.
+- `core/LEARNING_POLICY.md` defining evidence-driven project learning, global learning candidates, validation, human promotion, implementation, post-promotion observation, reversion, privacy, and learning anti-patterns.
+- A global learning lifecycle from `OBSERVATION` through `CANDIDATE`, `NEEDS_EVIDENCE` / `VALIDATING`, `READY_FOR_PROMOTION`, explicit human approval, verified implementation, and `PROMOTED`.
+- Learning impact classes `L1` narrow guidance, `L2` role/routing/workflow defaults, and `L3` global policy/constitution/authority changes so promotion evidence scales with blast radius.
+- Generalization tests that distinguish causal task characteristics from technology labels and prefer the smallest generalized change over policy accretion.
+- Validation strategies covering cross-project evidence, historical replay, synthetic evals, controlled comparisons, and counterexample search.
+- `templates/LEARNING_CANDIDATE.md` for durable global candidate tracking with observation/evidence, causal hypothesis, alternative explanations, generalization boundary, expected benefit, regression risk, validation/eval plan, human promotion state, and implementation record.
+- Privacy rules preventing proprietary project evidence, secrets, credentials, customer data, or raw private logs from being copied into global learning artifacts.
+- Draft-proposal rules that allow non-canonical candidate wording/evals/branches/PRs before approval without treating them as active Methodology OS behavior.
+- Post-promotion monitoring and reversion/supersession rules so approved learnings remain challengeable when later evidence shows harm.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–11 and make Step 12 — Learning System the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, escalation/autonomy model, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–12 and make Step 13 — Evals the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, escalation/autonomy model, learning system, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -93,6 +102,10 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Extended `PROJECT_BRIEF.md` with durable standing/pre-authorized envelopes while keeping temporary approvals out of stable project contract state.
 - Extended `DECISIONS.md` with authority class, approval target/scope, conditions/limits, freshness, consumption state, and revalidation triggers.
 - Clarified that explicit user direction can satisfy the corresponding human gate for that exact action while never weakening required verification.
+- Updated the Project Manager to treat retrospectives as signal-driven rather than mandatory, route project-specific learning locally, and keep global candidates non-canonical until explicit human promotion.
+- Updated `methodology-retrospective` to use the canonical candidate lifecycle, candidate template, causal/generalization analysis, validation strategies, eval expectations, and promotion boundary from `core/LEARNING_POLICY.md`.
+- Made global learning promotion stricter than normal `dev` integration: candidate policy/agent/skill/template behavior changes may be drafted, but cannot become canonical Methodology OS behavior in `dev` before explicit human promotion.
+- Clarified that learning-candidate approval is bounded to the proposed change and does not authorize adjacent OS cleanup or `main` promotion.
 
 ## Development Milestones
 
@@ -107,4 +120,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 9 — Verification System:** complete
 - **Step 10 — Skills Architecture:** complete
 - **Step 11 — Escalation & Autonomy:** complete
-- **Step 12 — Learning System:** next
+- **Step 12 — Learning System:** complete
+- **Step 13 — Evals:** next
