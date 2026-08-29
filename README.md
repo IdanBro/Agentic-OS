@@ -21,7 +21,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 5 — Model & Effort Routing: complete
 - Step 6 — Context Architecture: complete
 - Step 7 — Project State: complete
-- Step 8 — Delegation Protocol: next
+- Step 8 — Delegation Protocol: complete
+- Step 9 — Verification System: next
 
 The current orchestration layer defines three execution depths:
 
@@ -181,6 +182,52 @@ State depth scales with workflow depth. Lite work normally avoids the full artif
 
 A fresh PM should normally begin with `PROJECT_BRIEF.md` and `STATE.md`, then read only the relevant plan and decision sections. Handoffs require the successor to verify current Git/artifact state before trusting the snapshot.
 
+## Delegation Protocol
+
+Delegation uses two canonical boundary artifacts:
+
+```text
+PM
+ │
+ │ TASK_PACKET.md
+ ▼
+Worker
+ │
+ │ WORK_REPORT.md
+ ▼
+PM
+ │
+ ▼
+Independent PM verification
+```
+
+`TASK_PACKET.md` defines one bounded outcome, observable acceptance criteria, required verification, minimum-sufficient references, and an explicit authority envelope. It is detailed enough to prevent hidden-intent guessing without becoming a copy of the project plan or repository.
+
+Workers may inspect adjacent context autonomously. A small supporting change outside initially named paths is allowed only when it is directly required, low-risk, consistent with existing design, and reported. Material scope, architecture, dependency, security, compatibility, cost, or destructive-operation changes return to the PM instead of expanding silently.
+
+Execution workers use four statuses:
+
+```text
+PASS
+→ acceptance believed satisfied; eligible for PM verification
+
+PARTIAL
+→ useful progress, acceptance incomplete
+
+BLOCKED
+→ decision/dependency/permission required
+
+FAILED
+→ current approach did not achieve the objective;
+  further attempts need diagnosis or replan
+```
+
+Only `PASS` can proceed toward acceptance, and worker `PASS` is never equivalent to PM verification or integration approval.
+
+`WORK_REPORT.md` compresses the worker context at the return boundary. It reports acceptance status, meaningful changes, checks actually performed, evidence the PM can independently inspect, scope notes, and remaining uncertainty — not full logs, full diffs, or hidden reasoning.
+
+For small Standard-mode work, both packet and report may use compact forms. High-risk or incomplete work keeps the richer structure.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -251,4 +298,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until delegation and verification policies are mature enough for safe dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the verification policy is mature enough for safe dogfooding.

@@ -37,10 +37,15 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - `templates/DECISIONS.md` defining lightweight durable decision records with stable IDs, rationale, alternatives, consequences, evidence, approval state, and supersession links.
 - `templates/HANDOFF.md` defining a compressed PM-to-PM ownership-transfer snapshot with successor start checks, current evidence, blockers, decisions, failed approaches worth preserving, and Git freshness validation.
 - Project-state usage rules that scale artifact depth to Lite, Standard, and Full work while avoiding documentation theatre.
+- `templates/TASK_PACKET.md` defining bounded worker objectives, acceptance criteria, minimum-sufficient references, required verification, authority envelopes, supporting-change rules, Git boundaries, failure handling, and compact packet form.
+- `templates/WORK_REPORT.md` defining evidence-oriented worker returns with acceptance status, meaningful changes, actual verification, PM-verifiable evidence, assumptions, residual uncertainty, and non-PASS continuation requirements.
+- Canonical execution-worker statuses: `PASS`, `PARTIAL`, `BLOCKED`, and `FAILED`, with only `PASS` eligible to proceed to independent PM verification.
+- Scope-drift handling that permits low-risk directly-required supporting changes while returning material scope/architecture/dependency/security/cost decisions to the PM.
+- Explicit compact delegation/report forms for small Standard-mode tasks so bounded delegation does not require full ceremony.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–7 and make Step 8 — Delegation Protocol the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–8 and make Step 9 — Verification System the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -52,7 +57,9 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Chose qualitative context-health and handoff triggers for V0 instead of hard-coded token percentages that may become model/provider-specific.
 - Established `STATE.md` as the sole hot operational snapshot; `PLAN.md` intentionally does not maintain a second live progress tracker.
 - Defined `PROJECT_BRIEF.md` as stable contract state, `DECISIONS.md` as durable rationale, and `HANDOFF.md` as transfer-only compression rather than parallel sources of current truth.
-- Deferred `TASK_PACKET.md` and `WORK_REPORT.md` to Step 8 so delegation contracts remain separate from project-state artifacts.
+- Deferred `TASK_PACKET.md` and `WORK_REPORT.md` from Step 7 to Step 8 so delegation contracts remain separate from project-state artifacts; both are now implemented.
+- Updated the Implementer contract to use the canonical Task Packet / Work Report schemas and the four-state execution vocabulary.
+- Clarified that worker `PASS` is an evidence-bearing claim, not PM verification, review approval, integration approval, or project completion.
 
 ## Development Milestones
 
@@ -63,4 +70,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 5 — Model & Effort Routing:** complete
 - **Step 6 — Context Architecture:** complete
 - **Step 7 — Project State:** complete
-- **Step 8 — Delegation Protocol:** next
+- **Step 8 — Delegation Protocol:** complete
+- **Step 9 — Verification System:** next
