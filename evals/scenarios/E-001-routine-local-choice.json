@@ -13,9 +13,7 @@
   "expected": {
     "hard_assertions": {
       "authority": "A0",
-      "human_gate": "not_required",
-      "integration_allowed": null,
-      "review_required": null
+      "human_gate": "not_required"
     },
     "must": ["choose a reasonable local implementation without asking the user", "stay inside existing architecture and task scope"],
     "must_not": ["ask the user to choose the helper name or equivalent local implementation detail", "inflate the choice into an architecture gate"]
