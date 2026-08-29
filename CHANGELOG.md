@@ -57,10 +57,17 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Skill-vs-agent and skill-vs-`CLAUDE.md` decision rules.
 - Progressive-disclosure guidance that keeps `SKILL.md` concise and moves detailed references/examples/scripts into supporting files when needed.
 - Skill lifecycle guidance that treats global skill changes as human-promoted Methodology OS changes rather than automatic self-modification.
+- `core/ESCALATION_POLICY.md` defining the canonical autonomy/authority model separately from technical risk and verification depth.
+- V0 authority outcomes `A0 — AUTONOMOUS`, `A1 — AUTONOMOUS + RECORD`, `A2 — HUMAN GATE`, and `A3 — BLOCKED`.
+- Approval-envelope semantics covering exact action, target, scope, conditions/limits, freshness, non-transitivity, and revalidation after material change.
+- Domain-neutral escalation rules for architecture, scope, compatibility, security, destructive/data operations, production/external effects, cost/vendor commitments, dependencies/platforms, and external communications.
+- A Git authority matrix preserving autonomous working-branch/PR/`dev` integration while human-gating consequential shared-history rewrites and every specific `main` promotion.
+- Worker→PM decision-escalation rules that keep workers from contacting the user independently and prevent routine implementation uncertainty from becoming approval spam.
+- Human-gate communication protocol requiring a concrete decision, evidence, recommendation, meaningful alternatives, tradeoffs, and explicit approval scope.
 
 ### Changed
-- Updated `README.md` to reflect completion of Steps 1–10 and make Step 11 — Escalation & Autonomy the next implementation stage.
-- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, and incremental development strategy in the repository overview.
+- Updated `README.md` to reflect completion of Steps 1–11 and make Step 12 — Learning System the next implementation stage.
+- Documented the current lifecycle modes, core execution flow, Git operating model, agent architecture, routing model, context architecture, project-state model, delegation protocol, verification system, skills architecture, escalation/autonomy model, and incremental development strategy in the repository overview.
 - Kept agent model selection on `inherit` so `core/ROUTING.md` remains the canonical source for per-task model and effort decisions.
 - Deliberately disabled nested delegation for V0 workers even though current Claude Code supports nested subagents; the PM remains the single orchestration authority until deeper delegation proves useful.
 - Established `Sonnet / medium` as the default normal bounded-worker hypothesis and `Opus / high` as the default complex-reasoning hypothesis, both subject to later evals.
@@ -82,6 +89,10 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - Updated the Project Manager to route skills explicitly, prefer on-demand invocation, include skill guidance in Task Packets only when material, and preserve skill authority boundaries.
 - Kept all four V0 core skills on inherited model/effort and inline context rather than hiding routing decisions or forking procedures that require current PM state.
 - Replaced the previously planned generic skill directory names (`project-planning`, `handoff`, `retrospective`) with distinctive Methodology OS names to reduce global/project command collisions.
+- Updated the Project Manager to classify authority separately from risk, resolve worker-raised decisions at PM level when possible, interpret existing approvals, and avoid duplicate confirmation for an exact action already authorized by the user.
+- Extended `PROJECT_BRIEF.md` with durable standing/pre-authorized envelopes while keeping temporary approvals out of stable project contract state.
+- Extended `DECISIONS.md` with authority class, approval target/scope, conditions/limits, freshness, consumption state, and revalidation triggers.
+- Clarified that explicit user direction can satisfy the corresponding human gate for that exact action while never weakening required verification.
 
 ## Development Milestones
 
@@ -95,4 +106,5 @@ All notable Methodology OS changes are recorded here as the system is developed 
 - **Step 8 — Delegation Protocol:** complete
 - **Step 9 — Verification System:** complete
 - **Step 10 — Skills Architecture:** complete
-- **Step 11 — Escalation & Autonomy:** next
+- **Step 11 — Escalation & Autonomy:** complete
+- **Step 12 — Learning System:** next
