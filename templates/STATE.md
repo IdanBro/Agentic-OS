@@ -8,7 +8,7 @@ This file is a snapshot, not a transcript.
 
 - **Last updated:** `<YYYY-MM-DD HH:MM>`
 - **Lifecycle mode:** `<Lite | Standard | Full>`
-- **Lifecycle phase:** `<INTAKE | TRIAGE | INVESTIGATE | PLAN | PREPARE | EXECUTE | VERIFY | REVIEW | INTEGRATE | COMPLETE | BLOCKED>`
+- **Lifecycle phase:** `<INTAKE | TRIAGE | INVESTIGATE | PLAN | HUMAN_GATE | PREPARE | EXECUTE | VERIFY | REVIEW | DIAGNOSE | INTEGRATE | COMPLETE | BLOCKED>`
 - **Active plan:** `<PLAN.md version>`
 - **Repository / artifact:** `<reference>`
 - **Current branch:** `<branch or n/a>`
@@ -22,7 +22,7 @@ This file is a snapshot, not a transcript.
 
 - **Active phase/task:** `<plan ID or concise description>`
 - **Owner:** `<PM | worker type / agent reference>`
-- **Current status:** `<ready | in progress | verifying | review pending | blocked | integrating>`
+- **Current status:** `<ready | in progress | awaiting human gate | verifying | review pending | diagnosing | blocked | integrating>`
 
 ## 3. Completed Outcomes
 
