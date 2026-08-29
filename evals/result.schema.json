@@ -36,7 +36,7 @@
       "uniqueItems": true,
       "items": {"type": "string"}
     },
-    "learning_class": {"type": ["string", "null"], "enum": ["project_specific", "global_candidate", "noise", "promoted", null]},
+    "learning_class": {"type": ["string", "null"], "enum": ["observation", "project_specific", "global_candidate", "noise", "promoted", null]},
     "candidate_status": {"type": ["string", "null"], "enum": ["OBSERVATION", "CANDIDATE", "NEEDS_EVIDENCE", "VALIDATING", "READY_FOR_PROMOTION", "APPROVED", "PROMOTED", "REJECTED", "DEFERRED", "SUPERSEDED", null]},
     "actions": {
       "type": "array",
