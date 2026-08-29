@@ -145,10 +145,10 @@ For each task:
 1. Decide whether direct execution or delegation is cheaper and safer.
 2. Select the appropriate worker.
 3. Select model and effort according to routing policy.
-4. Send minimum sufficient context.
-5. Include explicit acceptance and verification criteria.
-6. Receive the worker report.
-7. Independently inspect the resulting state and verification evidence.
+4. Send minimum sufficient context using the bounded task-packet contract.
+5. Include explicit acceptance, verification, authority, and return criteria.
+6. Receive and classify the worker report or specialized role result.
+7. Independently inspect the resulting state and verification evidence when the result is eligible for acceptance.
 8. If verification fails, diagnose before retrying.
 9. Invoke independent review when risk policy requires it.
 10. Update canonical state.
@@ -195,17 +195,45 @@ Use built-in read-only exploration/planning capabilities when they are cheaper t
 
 ## Task Packet Standard
 
+Use `templates/TASK_PACKET.md` as the canonical PM→worker delegation schema.
+
 A delegated task SHOULD contain only what is needed to execute well:
 
+- **Task ID** — stable reference tied to the plan/work item.
 - **Objective** — the concrete outcome.
 - **Why** — only when purpose affects implementation choices.
-- **Scope** — files/components/artifacts in scope.
+- **Scope** — components/artifacts in scope and useful starting references.
 - **Out of scope** — when boundaries are important.
 - **Relevant context** — references and concise facts, not project history dumps.
-- **Acceptance criteria** — observable completion conditions.
+- **Acceptance criteria** — observable completion conditions with stable IDs where useful.
 - **Verification** — checks the worker must actually run or perform.
-- **Authority limits** — decisions that must return to the PM.
-- **Return contract** — concise evidence-oriented report.
+- **Authority envelope** — what may be inferred/changed autonomously and what must return to the PM.
+- **Git/artifact boundaries** — write/integration authority.
+- **Return contract** — `WORK_REPORT.md` or the specialized role contract.
+
+For small Standard-mode work, use the compact packet form when it preserves all material semantics.
+
+Do not give a worker a packet whose hidden intent is required to distinguish success from failure.
+
+## Worker Report Handling
+
+For change-producing execution workers, interpret `templates/WORK_REPORT.md` statuses as follows:
+
+- `PASS` — candidate for independent PM verification. Do not accept or integrate solely from the worker claim.
+- `PARTIAL` — preserve valid progress, keep the task open, and decide whether to reissue/refine the packet or route the remaining work separately.
+- `BLOCKED` — identify and resolve the minimum decision, permission, dependency, or external condition required to continue. Escalate to the user only if the blocker crosses a human gate.
+- `FAILED` — do not blindly retry. Use the returned evidence to diagnose, invoke the Debugger when appropriate, or replan.
+
+`PARTIAL`, `BLOCKED`, and `FAILED` never satisfy task completion.
+
+Reviewer and Debugger results retain their specialized vocabularies:
+
+- Reviewer: `PASS | PASS_WITH_NOTES | FAIL | INCONCLUSIVE`
+- Debugger: `CONFIRMED | LIKELY | INCONCLUSIVE`
+
+Do not mechanically map specialized outcomes to execution statuses. Interpret them according to the role contract and the current lifecycle gate.
+
+When a worker reports a small supporting change outside initially named paths, verify that it was directly required, low-risk, within existing design, and inside the worker's authority. Otherwise treat it as scope drift even if the implementation is technically correct.
 
 ## Verification Standard
 
