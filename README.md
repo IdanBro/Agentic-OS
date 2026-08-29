@@ -17,7 +17,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 1 — Requirements & Philosophy: complete
 - Step 2 — Constitution / Core Principles: complete
 - Step 3 — Project Lifecycle / Orchestration: complete
-- Step 4 — Agent Architecture: next
+- Step 4 — Agent Architecture: complete
+- Step 5 — Model & Effort Routing: next
 
 The current orchestration layer defines three execution depths:
 
@@ -58,6 +59,23 @@ COMPLETE
 ```
 
 Failed verification routes through diagnosis and replanning rather than blind retry loops.
+
+## Agent Architecture
+
+V0 deliberately starts with four roles:
+
+| Agent | Role | Default authority |
+| --- | --- | --- |
+| `project-manager` | Owns lifecycle, planning, routing, verification, state, Git integration, and human gates | Orchestrates and integrates |
+| `implementer` | Executes one bounded task and self-verifies the resulting change | May modify scoped work |
+| `reviewer` | Independently checks requirements, correctness, regressions, and verification quality | Read-only |
+| `debugger` | Diagnoses non-trivial failures and returns root cause, fix direction, and validation plan | Read-only / diagnosis-first |
+
+The PM is intended to run as the main Claude Code session agent. Workers receive bounded task context and return compact evidence-oriented reports.
+
+Worker nesting is intentionally disabled in V0 even though current Claude Code supports nested subagents. The PM remains the single orchestration authority until observed use cases justify deeper delegation.
+
+Agent definitions currently use `model: inherit`. Claude Code supports per-invocation model selection for subagents, so concrete Sonnet / Opus / Fable and effort-routing policy is intentionally centralized in Step 5 rather than hard-coded into role definitions.
 
 ## Git Operating Model
 
