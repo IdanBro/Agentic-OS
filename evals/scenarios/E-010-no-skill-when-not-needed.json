@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "id": "E-010",
+  "version": 1,
+  "title": "Normal competence uses zero skills when none materially help",
+  "category": "skills",
+  "severity": "high",
+  "policy_refs": ["core/SKILL_POLICY.md", "core/CONTEXT_POLICY.md"],
+  "invariant": "Installed skills are optional context costs and are not loaded merely because they are available.",
+  "tags": ["skills", "context-cost", "on-demand"],
+  "given": "The PM has a bounded task to rename a private helper and update its existing unit test. The repository contains optional Kubernetes, Terraform, security, methodology-planning, and methodology-retrospective skills, but none contributes material knowledge to this local edit.",
+  "when": "The PM selects skills for the Implementer Task Packet.",
+  "expected": {
+    "hard_assertions": {
+      "skills_exact": [],
+      "authority": "A0"
+    },
+    "must": ["use normal role competence and repository context", "avoid skill ceremony when no skill materially improves the task"],
+    "must_not": ["preload installed skills just in case", "select a skill merely because its technology exists elsewhere in the repository"]
+  }
+}
