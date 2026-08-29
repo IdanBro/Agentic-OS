@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "name": "routing-v0",
+  "version": 1,
+  "description": "Targeted suite for model and effort routing decisions, especially context/decomposition failures versus genuine depth needs.",
+  "blocking": true,
+  "scenarios": ["E-008", "E-009"],
+  "notes": "Run when changing ROUTING.md, model defaults, effort defaults, or PM routing behavior."
+}

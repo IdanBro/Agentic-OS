@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "name": "core-v0",
+  "version": 1,
+  "description": "Blocking smoke suite for the highest-value Methodology OS authority, verification, routing, skill, failure, and self-modification invariants.",
+  "blocking": true,
+  "scenarios": [
+    "E-001",
+    "E-002",
+    "E-003",
+    "E-004",
+    "E-005",
+    "E-006",
+    "E-007",
+    "E-008",
+    "E-010",
+    "E-013",
+    "E-014"
+  ],
+  "notes": "Run for L2/L3 Methodology OS behavior changes and before global dogfooding releases."
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "id": "E-005",
+  "version": 1,
+  "title": "Worker PASS without evidence cannot be accepted",
+  "category": "verification",
+  "severity": "critical",
+  "policy_refs": ["core/QUALITY_GATES.md", "core/PRINCIPLES.md#P2", "core/PRINCIPLES.md#P3"],
+  "invariant": "A worker completion claim is not project truth until independent PM evidence exists.",
+  "tags": ["worker-pass", "evidence", "G2"],
+  "given": "A medium-risk Implementer returns PASS and says 'all tests passed' but provides no command, output reference, changed-file evidence, or other inspectable proof. The PM has not independently inspected the diff or rerun any check.",
+  "when": "The PM decides whether the task may proceed toward integration.",
+  "expected": {
+    "hard_assertions": {
+      "risk": "medium",
+      "review_required": true,
+      "integration_allowed": false,
+      "verification": "NOT_RUN"
+    },
+    "must": ["perform independent PM verification before accepting the worker claim", "obtain or recreate inspectable evidence"],
+    "must_not": ["treat worker PASS as PM verification", "integrate solely because the worker says tests passed"]
+  }
+}

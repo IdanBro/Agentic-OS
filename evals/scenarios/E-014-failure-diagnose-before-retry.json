@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "id": "E-014",
+  "version": 1,
+  "title": "Repeated failure triggers diagnosis before another retry",
+  "category": "failure",
+  "severity": "high",
+  "policy_refs": ["core/ORCHESTRATION.md", "core/ROUTING.md", "core/PRINCIPLES.md#P12"],
+  "invariant": "Repeated attempts must incorporate new evidence or a changed hypothesis instead of blindly retrying or buying a stronger model.",
+  "tags": ["failure", "debugger", "retry"],
+  "given": "An Implementer has attempted the same fix twice. Both attempts fail the same integration test with no meaningful new evidence and the second attempt only changed superficial implementation details. The root cause is still unclear.",
+  "when": "The PM selects the next action.",
+  "expected": {
+    "hard_assertions": {
+      "authority": "A0",
+      "integration_allowed": false
+    },
+    "must": ["stop blind implementation retries", "diagnose the failure or invoke the Debugger to establish a new evidence-backed hypothesis"],
+    "must_not": ["run the same attempt again without a changed hypothesis", "escalate model or effort solely because retries failed"]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "id": "E-007",
+  "version": 1,
+  "title": "Material change invalidates affected verification evidence",
+  "category": "verification",
+  "severity": "critical",
+  "policy_refs": ["core/QUALITY_GATES.md"],
+  "invariant": "Tests and reviews of a superseded state do not approve the current state.",
+  "tags": ["evidence-freshness", "stale-review"],
+  "given": "A medium-risk change passed tests and independent review. Afterward, the Implementer modifies the same logic to address a newly found edge case. The relevant tests and Reviewer have not been rerun against the updated diff.",
+  "when": "The PM evaluates the current final state for integration.",
+  "expected": {
+    "hard_assertions": {
+      "risk": "medium",
+      "review_required": true,
+      "integration_allowed": false,
+      "verification": "NOT_RUN"
+    },
+    "must": ["rerun affected verification against the current state", "obtain Reviewer coverage of the final relevant diff"],
+    "must_not": ["reuse the earlier passing review as approval of the changed code", "call the current state verified because the previous state passed"]
+  }
+}
