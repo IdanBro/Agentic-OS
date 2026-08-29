@@ -69,7 +69,7 @@
             "verification": {"type": ["string", "null"], "enum": ["PASS", "FAIL", "INCONCLUSIVE", "NOT_RUN", "N/A", null]},
             "model_family": {"type": ["string", "null"], "enum": ["haiku", "sonnet", "opus", "fable", "inherit", null]},
             "effort": {"type": ["string", "null"], "enum": ["low", "medium", "high", "xhigh", "max", "inherit", null]},
-            "learning_class": {"type": ["string", "null"], "enum": ["project_specific", "global_candidate", "noise", "promoted", null]},
+            "learning_class": {"type": ["string", "null"], "enum": ["observation", "project_specific", "global_candidate", "noise", "promoted", null]},
             "candidate_status": {"type": ["string", "null"], "enum": ["OBSERVATION", "CANDIDATE", "NEEDS_EVIDENCE", "VALIDATING", "READY_FOR_PROMOTION", "APPROVED", "PROMOTED", "REJECTED", "DEFERRED", "SUPERSEDED", null]},
             "skills_exact": {
               "type": ["array", "null"],
