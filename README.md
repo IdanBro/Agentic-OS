@@ -25,7 +25,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 9 — Verification System: complete
 - Step 10 — Skills Architecture: complete
 - Step 11 — Escalation & Autonomy: complete
-- Step 12 — Learning System: next
+- Step 12 — Learning System: complete
+- Step 13 — Evals: next
 
 The current orchestration layer defines three execution depths:
 
@@ -73,7 +74,7 @@ V0 deliberately starts with four roles:
 
 | Agent | Role | Default authority |
 | --- | --- | --- |
-| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, authority, Git integration, and human gates | Orchestrates and integrates |
+| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, authority, learning, Git integration, and human gates | Orchestrates and integrates |
 | `implementer` | Executes one bounded task and self-verifies the resulting change | May modify scoped work |
 | `reviewer` | Independently checks requirements, correctness, regressions, and verification quality | Read-only |
 | `debugger` | Diagnoses non-trivial failures and returns root cause, fix direction, and validation plan | Read-only / diagnosis-first |
@@ -304,7 +305,7 @@ Global Methodology OS skills use distinctive names to avoid shadowing generic pr
 - `methodology-os` — activate the Methodology OS operating pattern;
 - `methodology-planning` — create/revise proportional plans;
 - `methodology-handoff` — reconcile state and transfer PM ownership;
-- `methodology-retrospective` — capture workflow lessons and candidate OS improvements.
+- `methodology-retrospective` — classify project lessons and global learning candidates.
 
 The Task Packet may reference a relevant skill by name; it should not paste the entire skill body. Skills do not enlarge the worker's authority or bypass human gates.
 
@@ -360,6 +361,76 @@ merge/promote → main
 ```
 
 Human approval never launders verification: accepted residual risk remains `FAIL`, `NOT_RUN`, or `INCONCLUSIVE` where that is the truthful evidence state.
+
+## Learning System
+
+Learning and global promotion are centralized in `core/LEARNING_POLICY.md`.
+
+The core rule is:
+
+> Learn from evidence, generalize cautiously, and promote globally only with explicit human approval.
+
+The OS separates three layers:
+
+```text
+Project-specific learning
+→ local repository/team/domain improvement
+→ may be applied inside project authority
+
+Candidate global learning
+→ potentially reusable
+→ evidence + causal hypothesis + validation
+→ NOT active global policy
+
+Promoted global learning
+→ explicitly human-approved
+→ implemented + evaled + verified + integrated
+```
+
+Global candidates follow this lifecycle:
+
+```text
+OBSERVATION
+    ↓
+CANDIDATE
+    ↓
+NEEDS_EVIDENCE / VALIDATING
+    ↓
+READY_FOR_PROMOTION
+    ↓
+HUMAN PROMOTION GATE
+   ┌───────────────┴───────────────┐
+   ↓                               ↓
+APPROVED                         REJECTED
+   ↓
+IMPLEMENT + EVAL + VERIFY
+   ↓
+PROMOTED
+```
+
+The system deliberately avoids fixed evidence-count rules such as “three projects required.” Promotion evidence scales with the blast radius, reversibility, frequency, causal confidence, and regression risk of the proposed OS change.
+
+Candidates should learn causal characteristics rather than technology labels. One difficult Terraform task does not imply a global `Terraform → Opus` rule; first distinguish capability, effort, context, decomposition, environment, and verification causes.
+
+`templates/LEARNING_CANDIDATE.md` is used only when a global candidate deserves durable follow-up. It records observation, evidence, causal hypothesis, alternative explanations, generalization boundary, smallest proposed change, expected benefit, regression risk, validation/eval plan, and promotion state.
+
+Change impact scales the promotion bar:
+
+```text
+L1 — narrow guidance/template/skill refinement
+L2 — role/routing/workflow default
+L3 — global policy/constitution/authority gate
+```
+
+Constitution and authority changes require the strongest evidence/review discipline.
+
+A non-canonical draft proposal or eval may be prepared before promotion approval, but the change MUST NOT become active global Methodology OS behavior in canonical `dev` until explicit human promotion.
+
+Promotion approval is bounded to the proposed change; it does not authorize adjacent policy cleanup or a `main` merge. After approval, the change still passes normal implementation, eval, verification, review, and PR→`dev` gates.
+
+Learning artifacts must not leak project-private content into the global OS. Preserve sanitized causal summaries and references; keep proprietary evidence project-local when needed.
+
+Retrospectives are signal-driven, not mandatory ceremony. Routine successful work with no reusable signal should not generate a retrospective or candidate artifact.
 
 ## Git Operating Model
 
@@ -425,7 +496,8 @@ Agentic-OS/
 │   ├── TASK_PACKET.md
 │   ├── WORK_REPORT.md
 │   ├── DECISIONS.md
-│   └── HANDOFF.md
+│   ├── HANDOFF.md
+│   └── LEARNING_CANDIDATE.md
 └── evals/
     └── scenarios/
 ```
@@ -436,4 +508,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the learning and eval policies are mature enough for safe global dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the eval framework is mature enough to test the global runtime before dogfooding.
