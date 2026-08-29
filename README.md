@@ -24,7 +24,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 8 — Delegation Protocol: complete
 - Step 9 — Verification System: complete
 - Step 10 — Skills Architecture: complete
-- Step 11 — Escalation & Autonomy: next
+- Step 11 — Escalation & Autonomy: complete
+- Step 12 — Learning System: next
 
 The current orchestration layer defines three execution depths:
 
@@ -72,7 +73,7 @@ V0 deliberately starts with four roles:
 
 | Agent | Role | Default authority |
 | --- | --- | --- |
-| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, Git integration, and human gates | Orchestrates and integrates |
+| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, authority, Git integration, and human gates | Orchestrates and integrates |
 | `implementer` | Executes one bounded task and self-verifies the resulting change | May modify scoped work |
 | `reviewer` | Independently checks requirements, correctness, regressions, and verification quality | Read-only |
 | `debugger` | Diagnoses non-trivial failures and returns root cause, fix direction, and validation plan | Read-only / diagnosis-first |
@@ -163,7 +164,7 @@ Project continuity is externalized through five canonical artifact types:
 
 ```text
 PROJECT_BRIEF.md
-→ stable outcome, scope, constraints, success criteria
+→ stable outcome, scope, constraints, success criteria, standing authority
 
 PLAN.md
 → intended path, phases, task IDs, dependencies, acceptance
@@ -172,17 +173,17 @@ STATE.md
 → current operational truth and next actions
 
 DECISIONS.md
-→ material non-obvious decisions and rationale
+→ material non-obvious decisions, rationale, bounded approvals
 
 HANDOFF.md
 → compressed ownership-transfer snapshot
 ```
 
-These artifacts deliberately do not duplicate one another. `STATE.md` is the hot snapshot; `PLAN.md` describes intended structure rather than maintaining a second live task tracker; `DECISIONS.md` stores only durable rationale; and `HANDOFF.md` references canonical artifacts rather than copying them.
+These artifacts deliberately do not duplicate one another. `STATE.md` is the hot snapshot; `PLAN.md` describes intended structure rather than maintaining a second live task tracker; `DECISIONS.md` stores durable rationale and bounded authority when needed; and `HANDOFF.md` references canonical artifacts rather than copying them.
 
 State depth scales with workflow depth. Lite work normally avoids the full artifact set. Standard work creates only the state artifacts that materially improve recoverability. Full work uses the complete set when the project's duration, ambiguity, or risk justifies it.
 
-A fresh PM should normally begin with `PROJECT_BRIEF.md` and `STATE.md`, then read only the relevant plan and decision sections. Handoffs require the successor to verify current Git/artifact state before trusting the snapshot.
+A fresh PM should normally begin with `PROJECT_BRIEF.md` and `STATE.md`, then read only the relevant plan and decision sections. Handoffs require the successor to verify current Git/artifact state and approval scope before trusting the snapshot.
 
 ## Delegation Protocol
 
@@ -313,6 +314,53 @@ Model/effort overrides are not embedded in core methodology skills; `core/ROUTIN
 
 Detailed references and examples belong in supporting files rather than giant skill bodies. Global skill changes remain Methodology OS changes and require human promotion under the learning model.
 
+## Escalation & Autonomy
+
+Authority routing is centralized in `core/ESCALATION_POLICY.md`.
+
+The core rule is:
+
+> Continue autonomously through routine, reversible, evidence-supported work. Escalate only when an unapproved decision or action would create a materially different outcome, commitment, risk, cost, or irreversible effect for the user/project.
+
+Risk and authority are separate axes. A high-risk production operation can be authorized but still require deep verification; a technically trivial external commitment may require user authority.
+
+V0 uses four authority outcomes:
+
+```text
+A0 — AUTONOMOUS
+→ proceed without interrupting the user
+
+A1 — AUTONOMOUS + RECORD
+→ proceed, preserve durable rationale/authority context
+
+A2 — HUMAN GATE
+→ obtain required authority before consequential action
+
+A3 — BLOCKED
+→ required authority/input/access unavailable
+```
+
+Human gates are based on **material consequence**, not labels. Significant architecture, material scope changes, breaking contracts, meaningful security tradeoffs, destructive/irreversible operations, material production effects, substantial cost/vendor commitments, consequential external commitments, and `main` promotion are gated when not already authorized.
+
+Approval envelopes prevent repeated prompts. A valid approval is bounded by action, target, scope, conditions, limits, and freshness. Approval is neither transitive nor permanent by default.
+
+A clear current user instruction can itself satisfy the gate for that exact action. The OS should not ask for duplicate confirmation merely for ceremony. If the target or consequence is ambiguous, resolve that ambiguity before execution.
+
+Global Git authority remains:
+
+```text
+working branch / commit / push / PR → dev / verified merge → dev
+→ normally autonomous
+
+force-rewrite consequential shared history
+→ human-gated when destructive
+
+merge/promote → main
+→ explicit specific user approval required
+```
+
+Human approval never launders verification: accepted residual risk remains `FAIL`, `NOT_RUN`, or `INCONCLUSIVE` where that is the truthful evidence state.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -338,7 +386,7 @@ dev
         main
 ```
 
-`main` is human-gated. The OS must never merge to `main` without explicit user approval.
+`main` is human-gated. The OS must never merge to `main` without explicit user approval for that promotion.
 
 ## Repository Layout
 
@@ -388,4 +436,4 @@ Some files are intentionally placeholders until their design stage is completed.
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the escalation/autonomy and learning policies are mature enough for safe global dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until the learning and eval policies are mature enough for safe global dogfooding.
