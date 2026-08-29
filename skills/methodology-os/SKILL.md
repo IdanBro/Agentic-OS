@@ -1,6 +1,6 @@
 ---
 name: methodology-os
-description: Activate Methodology OS for complex, multi-stage, medium/high-risk, long-running, or context-heavy work. Use proportional planning, bounded delegation, evidence-based verification, durable state, Git integration, and human gates. Do not use for trivial one-step work.
+description: Activate Methodology OS for complex, multi-stage, medium/high-risk, long-running, or context-heavy work. Use proportional planning, bounded delegation, evidence-based verification, durable state, selective skills, authority gates, and governed learning. Do not use for trivial one-step work.
 ---
 
 # Methodology OS
@@ -41,8 +41,8 @@ Policy map:
 - context packaging / handoff triggers → `core/CONTEXT_POLICY.md`
 - skill selection / loading → `core/SKILL_POLICY.md`
 - verification / review / integration gates → `core/QUALITY_GATES.md`
-- escalation / autonomy → `core/ESCALATION_POLICY.md` once implemented
-- learning / global promotion → `core/LEARNING_POLICY.md` once implemented
+- escalation / autonomy → `core/ESCALATION_POLICY.md`
+- learning / global promotion → `core/LEARNING_POLICY.md`
 
 The global installation layer should provide access to the canonical Methodology OS source. Do not copy whole policy files into the current prompt merely to be thorough.
 
@@ -113,13 +113,44 @@ When PM context degrades, use `methodology-handoff` rather than carrying an incr
 
 ## 9. Preserve Human Authority
 
-Continue autonomously through routine execution.
+Use `core/ESCALATION_POLICY.md`.
 
-Stop at defined high-impact gates, especially significant architecture, scope, breaking interfaces, security tradeoffs, destructive operations, material cost, irreversible behavior, and promotion to `main`.
+Continue autonomously through routine execution and decisions already inside a valid approval envelope.
 
-Never merge to `main` without explicit user approval.
+Stop at unapproved consequential gates such as significant architecture, material scope, breaking interfaces, security tradeoffs, destructive/irreversible operations, material production effects, substantial cost/vendor commitments, consequential external commitments, and promotion to `main`.
 
-## 10. Completion
+A clear specific user instruction can satisfy the gate for that exact action; do not ask for duplicate confirmation merely for ceremony.
+
+Never stretch an approval to a different target/scope/risk, and never merge to `main` without explicit approval for that promotion.
+
+## 10. Learn Without Silent Self-Modification
+
+Use `core/LEARNING_POLICY.md` and `methodology-retrospective` only when meaningful reusable signal exists.
+
+Classify learning as:
+
+```text
+project-specific
+→ improve this project when authorized
+
+global candidate
+→ preserve / validate
+→ NOT active policy
+
+promoted global learning
+→ explicit human promotion
+→ eval + verify + review + PR→dev
+```
+
+Do not turn one failure into a permanent global rule.
+
+Learn the causal condition rather than a technology label. State the generalization boundary and regression risk before recommending promotion.
+
+A draft candidate, eval, branch, or PR may help evaluate a proposal, but it is not active Methodology OS behavior until explicitly promoted and integrated.
+
+Never copy secrets or unnecessary private project evidence into global learning artifacts.
+
+## 11. Completion
 
 Do not declare the task/project complete until:
 
@@ -130,4 +161,4 @@ Do not declare the task/project complete until:
 - important project state/decisions are current;
 - pending human-gated actions are clearly separated from completed work.
 
-After a meaningful milestone, `methodology-retrospective` may be used to capture learning candidates without silently changing global policy.
+After a meaningful milestone, use `methodology-retrospective` only when there is enough signal to justify the learning cost.
