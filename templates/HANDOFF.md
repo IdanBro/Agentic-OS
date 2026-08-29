@@ -62,11 +62,15 @@ If a next action depends on a human gate, say so explicitly.
 
 Summarize only the evidence needed to avoid false assumptions.
 
+Use the canonical verification-gate vocabulary from `core/QUALITY_GATES.md`.
+
 | Area / Claim | Status | Evidence / Reference |
 | --- | --- | --- |
-| `<area>` | `<PASS / FAIL / PARTIAL / NOT RUN>` | `<compact evidence>` |
+| `<area>` | `<PASS / FAIL / INCONCLUSIVE / NOT_RUN / N/A>` | `<compact evidence>` |
 
 Do not paste full logs.
+
+Do not convert missing or stale evidence into `PASS`; preserve residual uncertainty explicitly.
 
 ## 7. Open Blockers / Human Gates
 
