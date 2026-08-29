@@ -18,7 +18,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 2 — Constitution / Core Principles: complete
 - Step 3 — Project Lifecycle / Orchestration: complete
 - Step 4 — Agent Architecture: complete
-- Step 5 — Model & Effort Routing: next
+- Step 5 — Model & Effort Routing: complete
+- Step 6 — Context Architecture: next
 
 The current orchestration layer defines three execution depths:
 
@@ -75,7 +76,46 @@ The PM is intended to run as the main Claude Code session agent. Workers receive
 
 Worker nesting is intentionally disabled in V0 even though current Claude Code supports nested subagents. The PM remains the single orchestration authority until observed use cases justify deeper delegation.
 
-Agent definitions currently use `model: inherit`. Claude Code supports per-invocation model selection for subagents, so concrete Sonnet / Opus / Fable and effort-routing policy is intentionally centralized in Step 5 rather than hard-coded into role definitions.
+## Model & Effort Routing
+
+Model routing is centralized in `core/ROUTING.md` instead of being duplicated across agent definitions.
+
+V0 uses the following capability semantics:
+
+```text
+Haiku  → very simple, short, low-risk work
+Sonnet → default bounded execution / daily coding
+Opus   → complex reasoning, difficult debugging, high-risk review
+Fable  → hardest long-horizon and highly ambiguous autonomous work
+```
+
+Effort is routed separately from model capability:
+
+```text
+low    → obvious, tightly scoped
+medium → bounded cost-conscious execution
+high   → intelligence-sensitive work
+xhigh  → extended agentic/coding depth
+max    → exceptional, explicitly justified
+```
+
+Default worker baseline:
+
+```text
+Implementer → Sonnet / medium
+```
+
+Default complex reasoning baseline:
+
+```text
+Opus / high
+```
+
+The PM diagnoses failures before escalating. Missing context, bad decomposition, or environment failures should be fixed directly rather than buying a stronger model. Insufficient depth generally raises effort; genuine capability gaps raise the model family.
+
+The routing objective is:
+
+> Use the least expensive configuration reasonably expected to meet the quality bar on the first well-prepared attempt, optimizing total workflow cost rather than per-call price.
 
 ## Git Operating Model
 
