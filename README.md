@@ -26,7 +26,8 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 - Step 10 — Skills Architecture: complete
 - Step 11 — Escalation & Autonomy: complete
 - Step 12 — Learning System: complete
-- Step 13 — Evals: next
+- Step 13 — Evals: complete
+- Step 14 — Claude Code Integration: next
 
 The current orchestration layer defines three execution depths:
 
@@ -432,6 +433,68 @@ Learning artifacts must not leak project-private content into the global OS. Pre
 
 Retrospectives are signal-driven, not mandatory ceremony. Routine successful work with no reusable signal should not generate a retrospective or candidate artifact.
 
+## Evals
+
+The behavioral eval contract lives under `evals/`.
+
+The core rule is:
+
+> Evaluate observable Methodology OS decisions against falsifiable invariants, using deterministic structured checks wherever possible.
+
+V0 separates:
+
+```text
+static contract checks
+→ validate files, schemas, frontmatter, forbidden permissions
+
+behavioral scenarios
+→ controlled PM situations with structured results
+
+replay/regression scenarios
+→ sanitized reproductions of real methodology failures
+
+real-project evidence
+→ Step 15 dogfooding and learning signals
+```
+
+Scenario inputs conform to `evals/scenario.schema.json`; agent outputs conform to `evals/result.schema.json`. This keeps authority, risk, model/effort, skill selection, verification state, Reviewer requirements, integration permission, and learning state machine-readable.
+
+The initial V0 suite contains 14 scenarios covering:
+
+- routine autonomy vs architecture gates;
+- exact `main` approval without duplicate confirmation;
+- staging/production approval boundaries;
+- worker `PASS` without evidence;
+- mandatory medium-risk review;
+- evidence freshness after material changes;
+- context defects vs model escalation;
+- effort escalation before model-family escalation;
+- zero-skill selection when normal competence is enough;
+- one-incident learning overfit;
+- project-local learning;
+- global-learning promotion boundaries;
+- diagnose-before-retry behavior.
+
+Suite manifests keep recurring evaluation cost proportional:
+
+```text
+core-v0
+→ blocking smoke suite for high-value cross-policy invariants
+
+routing-v0
+→ targeted routing/effort checks
+
+learning-v0
+→ targeted learning/promotion checks
+
+full-v0
+→ all initial scenarios
+```
+
+A critical hard assertion blocks the suite regardless of aggregate score. The future runner should prefer exact structured assertions first and use semantic judging only where behavior cannot be represented deterministically.
+
+The executable runner is intentionally deferred to Step 14, where it can use Claude Code non-interactive structured output, turn limits, and budget caps while recording model/version/cost metadata for reproducibility.
+
 ## Git Operating Model
 
 For engineering work, normal development happens on task branches and integrates into `dev`.
@@ -499,13 +562,23 @@ Agentic-OS/
 │   ├── HANDOFF.md
 │   └── LEARNING_CANDIDATE.md
 └── evals/
-    └── scenarios/
+    ├── README.md
+    ├── scenario.schema.json
+    ├── result.schema.json
+    ├── suite.schema.json
+    ├── scenarios/
+    │   └── E-*.json
+    └── suites/
+        ├── core-v0.json
+        ├── routing-v0.json
+        ├── learning-v0.json
+        └── full-v0.json
 ```
 
-Some files are intentionally placeholders until their design stage is completed.
+Some runtime/install files are intentionally deferred until their design stage is completed.
 
 ## Development Model
 
 The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until the eval framework is mature enough to test the global runtime before dogfooding.
+Global Claude Code installation and `~/.claude` integration are intentionally deferred until Step 14, where the runtime will be installed and validated against the eval framework before real-project dogfooding.
