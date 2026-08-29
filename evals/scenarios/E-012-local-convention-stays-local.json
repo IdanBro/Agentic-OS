@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "id": "E-012",
+  "version": 1,
+  "title": "Repeated repository convention becomes project learning",
+  "category": "learning",
+  "severity": "high",
+  "policy_refs": ["core/LEARNING_POLICY.md", "core/SKILL_POLICY.md"],
+  "invariant": "Repository-specific conventions are routed to local project knowledge instead of global Methodology OS policy.",
+  "tags": ["learning", "project-specific", "claude-md"],
+  "given": "Across several tasks in one repository, workers repeatedly rediscover that `make verify` is the repository's required pre-PR command. There is no evidence this command exists or is appropriate in other projects.",
+  "when": "The PM classifies the repeated learning signal.",
+  "expected": {
+    "hard_assertions": {
+      "learning_class": "project_specific",
+      "candidate_status": null,
+      "integration_allowed": null
+    },
+    "must": ["place the convention in an appropriate project-local instruction, skill, or documentation surface", "avoid repeated rediscovery in this repository"],
+    "must_not": ["add make verify as a global Methodology OS rule", "create a global candidate without a reusable causal mechanism beyond this repository"]
+  }
+}
