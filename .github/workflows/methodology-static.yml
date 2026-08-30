@@ -1,0 +1,59 @@
+name: Methodology OS Static Validation
+
+on:
+  pull_request:
+    paths:
+      - 'install.sh'
+      - 'runtime/**'
+      - 'scripts/**'
+      - 'evals/**'
+      - 'agents/**'
+      - 'skills/**'
+      - 'core/**'
+      - '.github/workflows/methodology-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate script syntax
+        run: |
+          bash -n install.sh
+          python3 -m py_compile scripts/run_evals.py
+
+      - name: Validate Methodology OS contracts
+        run: python3 scripts/run_evals.py --static-only
+
+      - name: Exercise installer lifecycle in isolated Claude home
+        shell: bash
+        run: |
+          set -euo pipefail
+          export CLAUDE_HOME="$RUNNER_TEMP/claude-home"
+
+          mkdir -p "$CLAUDE_HOME"
+          printf '# Existing user instructions\n\nKeep this line.\n' > "$CLAUDE_HOME/CLAUDE.md"
+
+          bash install.sh
+          bash install.sh --check
+
+          grep -Fqx 'Keep this line.' "$CLAUDE_HOME/CLAUDE.md"
+          test -L "$CLAUDE_HOME/methodology-os"
+          test -L "$CLAUDE_HOME/agents/methodology-project-manager.md"
+          test -L "$CLAUDE_HOME/skills/methodology-os"
+
+          bash install.sh --uninstall
+
+          grep -Fqx 'Keep this line.' "$CLAUDE_HOME/CLAUDE.md"
+          ! grep -Fq 'METHODOLOGY-OS MANAGED BLOCK' "$CLAUDE_HOME/CLAUDE.md"
+          test ! -e "$CLAUDE_HOME/methodology-os"
+          test ! -e "$CLAUDE_HOME/agents/methodology-project-manager.md"
+          test ! -e "$CLAUDE_HOME/skills/methodology-os"
