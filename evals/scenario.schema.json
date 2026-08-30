@@ -71,6 +71,7 @@
             "effort": {"type": ["string", "null"], "enum": ["low", "medium", "high", "xhigh", "max", "inherit", null]},
             "learning_class": {"type": ["string", "null"], "enum": ["observation", "project_specific", "global_candidate", "noise", "promoted", null]},
             "candidate_status": {"type": ["string", "null"], "enum": ["OBSERVATION", "CANDIDATE", "NEEDS_EVIDENCE", "VALIDATING", "READY_FOR_PROMOTION", "APPROVED", "PROMOTED", "REJECTED", "DEFERRED", "SUPERSEDED", null]},
+            "failure_response": {"type": ["string", "null"], "enum": ["repair_context", "increase_effort", "increase_model", "diagnose", "retry", "replan", "none", null]},
             "skills_exact": {
               "type": ["array", "null"],
               "items": {"type": "string"},

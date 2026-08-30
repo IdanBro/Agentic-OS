@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "id": "E-009",
-  "version": 1,
+  "version": 2,
   "title": "Insufficient depth raises effort before model family",
   "category": "routing",
   "severity": "high",
@@ -14,6 +14,7 @@
     "hard_assertions": {
       "model_family": "sonnet",
       "effort": "high",
+      "failure_response": "increase_effort",
       "integration_allowed": false
     },
     "must": ["increase reasoning/verification depth while keeping the model family", "strengthen acceptance or verification instructions if needed"],

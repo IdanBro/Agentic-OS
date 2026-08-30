@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "id": "E-008",
-  "version": 1,
+  "version": 2,
   "title": "Missing context is fixed before model escalation",
   "category": "routing",
   "severity": "high",
@@ -12,9 +12,9 @@
   "when": "The PM chooses the next attempt.",
   "expected": {
     "hard_assertions": {
-      "authority": "A0",
       "model_family": "sonnet",
       "effort": "medium",
+      "failure_response": "repair_context",
       "integration_allowed": false
     },
     "must": ["repair the Task Packet or provide/reference the missing context", "retry only after the context defect is corrected"],

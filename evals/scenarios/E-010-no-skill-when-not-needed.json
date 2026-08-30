@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "id": "E-010",
-  "version": 1,
+  "version": 2,
   "title": "Normal competence uses zero skills when none materially help",
   "category": "skills",
   "severity": "high",
@@ -12,8 +12,7 @@
   "when": "The PM selects skills for the Implementer Task Packet.",
   "expected": {
     "hard_assertions": {
-      "skills_exact": [],
-      "authority": "A0"
+      "skills_exact": []
     },
     "must": ["use normal role competence and repository context", "avoid skill ceremony when no skill materially improves the task"],
     "must_not": ["preload installed skills just in case", "select a skill merely because its technology exists elsewhere in the repository"]
