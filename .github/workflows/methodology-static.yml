@@ -36,6 +36,14 @@ jobs:
       - name: Validate Methodology OS contracts
         run: python3 scripts/run_evals.py --static-only
 
+      - name: Validate Claude CLI schema compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Claude Code 2.1.214+ currently rejects an explicit draft-2020-12
+          # meta-schema declaration passed through --json-schema (upstream #80402).
+          ! grep -Fq '"$schema"' evals/result.schema.json
+
       - name: Exercise installer lifecycle in isolated Claude home
         shell: bash
         run: |
