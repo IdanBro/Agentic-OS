@@ -35,7 +35,7 @@
     "verification": {
       "type": ["string", "null"],
       "enum": ["PASS", "FAIL", "INCONCLUSIVE", "NOT_RUN", "N/A", null],
-      "description": "Status of G2 Project Manager independent verification against the current artifact/state. Do not use this field for overall gate-chain completeness or Reviewer/G3 status. If PM verification passed but required review is still pending, verification is PASS while integration_allowed remains false."
+      "description": "Status of G2 Project Manager independent verification against the current artifact/state. Do not use this field for overall gate-chain completeness or Reviewer/G3 status. If PM verification passed but required review is still pending, verification is PASS while integration_allowed remains false. If the PM inspects the current state but material evidence is stale, insufficient, or conflicting, verification is INCONCLUSIVE. Use NOT_RUN only when the expected G2 verification/check was not executed at all for the current state."
     },
     "model_family": {"type": ["string", "null"], "enum": ["haiku", "sonnet", "opus", "fable", "inherit", null]},
     "effort": {"type": ["string", "null"], "enum": ["low", "medium", "high", "xhigh", "max", "inherit", null]},
