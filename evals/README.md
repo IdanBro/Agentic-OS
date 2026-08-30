@@ -36,20 +36,28 @@ Validate artifacts without invoking an agent.
 Examples:
 
 - JSON scenario/schema validity;
-- required agent frontmatter;
+- required runtime-agent frontmatter;
 - forbidden worker tools;
 - core skill naming conventions;
-- `main` human-gate wording still present.
+- suite references and scenario IDs;
+- `main` human-gate wording still present;
+- global-learning human-promotion wording still present.
 
-The runnable static checker is implemented in Step 14.
+The runnable static checker is implemented in `scripts/run_evals.py`:
+
+```bash
+python3 scripts/run_evals.py --static-only
+```
 
 ### 2. Behavioral Scenarios
 
-Give the Methodology OS PM a controlled situation and require structured output.
+Give the installed Methodology OS PM a controlled situation and require structured output.
 
 Scenarios live in `evals/scenarios/` and conform to `scenario.schema.json`.
 
-The runner should request output conforming to `result.schema.json` so important fields can be scored deterministically.
+The runner requests output conforming to `result.schema.json` so important fields can be scored deterministically.
+
+Each behavioral scenario runs in a fresh non-persistent Claude Code session. The scenario's expected answer is **not** included in the PM prompt; expectations are graded separately after the structured result returns.
 
 ### 3. Replay / Regression Scenarios
 
@@ -98,13 +106,12 @@ Run before integrating a Methodology OS change that can affect PM behavior.
 
 ### Targeted suites
 
-Future suites may group scenarios such as:
+Current targeted suites include:
 
 - `routing-v0`;
-- `authority-v0`;
-- `verification-v0`;
-- `context-v0`;
 - `learning-v0`.
+
+`full-v0` runs every current V0 scenario. Additional authority/verification/context suites should be added only when they reduce useful eval cost or make change-surface selection clearer.
 
 A change should run the smallest suite set that meaningfully covers its blast radius, plus `core-v0` for L2/L3 behavior changes.
 
@@ -118,14 +125,14 @@ A critical hard failure blocks the suite regardless of aggregate score.
 
 ## Structured Result Contract
 
-The future runner should ask Claude Code for JSON matching `result.schema.json`.
+The runner asks Claude Code for JSON matching `result.schema.json` using `--output-format json` and `--json-schema`.
 
 Important fields include:
 
 - authority classification;
 - human-gate state;
 - risk;
-- selected role/model/effort;
+- selected model/effort;
 - selected skills;
 - Reviewer requirement;
 - verification state;
@@ -156,6 +163,8 @@ skills = []
 
 Any mismatch on a scenario-defined hard assertion fails that assertion.
 
+The default runner uses these deterministic assertions only, which keeps routine eval cost low and makes failures easy to inspect.
+
 ### Behavioral Expectations
 
 Short requirements that may need a lightweight evaluator when they cannot be represented by exact fields.
@@ -166,20 +175,64 @@ Examples:
 - PM should diagnose before retrying;
 - worker result should summarize logs instead of reproducing them.
 
-The runner should prefer deterministic signals first and use a judge only for remaining semantic checks.
+Use the optional semantic judge when this extra confidence is worth the additional model call:
+
+```bash
+python3 scripts/run_evals.py core-v0 --semantic-judge
+```
+
+The semantic judge runs separately in bare mode and does not receive authority to modify the repository.
 
 ## Suite Outcome
 
-Recommended V0 gate:
+V0 runner gate:
 
 ```text
 FAIL if:
-- any critical scenario has a hard failure; OR
-- any scenario violates an explicit forbidden behavior; OR
-- suite pass rate is below the configured threshold.
+- any scenario execution errors; OR
+- any critical scenario fails; OR
+- suite pass rate is below --min-pass-rate.
 ```
 
-The exact numeric threshold belongs to the Step 14 runner configuration rather than this policy. Avoid pretending a universal percentage has meaning before baseline data exists.
+The current default is `--min-pass-rate 1.0` because the V0 suites are small and blocking. Treat that as a runner default, not a constitutional truth. Change it only with baseline evidence that a different threshold improves signal without hiding real regressions.
+
+When `--semantic-judge` is disabled, pass rate reflects hard assertions only. The report records that semantic expectations were skipped.
+
+## Runner Usage
+
+Static validation:
+
+```bash
+python3 scripts/run_evals.py --static-only
+```
+
+Core suite:
+
+```bash
+python3 scripts/run_evals.py core-v0
+```
+
+Targeted suites:
+
+```bash
+python3 scripts/run_evals.py routing-v0
+python3 scripts/run_evals.py learning-v0
+python3 scripts/run_evals.py full-v0
+```
+
+Single-scenario diagnosis:
+
+```bash
+python3 scripts/run_evals.py core-v0 --scenario E-004
+```
+
+Optional JSON report:
+
+```bash
+python3 scripts/run_evals.py core-v0 --report /tmp/agentic-os-core.json
+```
+
+The behavioral runner requires the local Claude Code runtime installed by `install.sh`, because it launches the namespaced `methodology-project-manager` main agent.
 
 ## Cost Discipline
 
@@ -192,24 +245,26 @@ Therefore:
 - cap turns and budget in the runner;
 - run targeted suites by changed policy surface;
 - do not run expensive long-horizon scenarios when a static or short behavioral check can falsify the same claim;
-- record model/version/effort for reproducibility.
+- record model/version/effort for reproducibility;
+- keep semantic judging opt-in for routine development.
 
-Current Claude Code non-interactive mode supports structured JSON output, JSON Schema validation, turn limits, and budget caps; Step 14 will use those capabilities in the executable harness.
+The executable harness uses Claude Code structured JSON output, JSON Schema validation, turn limits, budget caps, restricted built-in tools, plan permission mode, and non-persistent sessions.
 
 ## Reproducibility Metadata
 
-Each run should eventually record:
+Each runner report records or attempts to record:
 
 - Agentic-OS commit SHA;
 - Claude Code version;
-- model alias/full model;
+- runner version;
+- model alias;
 - effort;
-- scenario ID/version;
+- suite/scenario configuration;
 - timestamp;
-- result;
-- token/cost metadata when available;
-- evaluator version;
-- retries, if any.
+- structured result;
+- hard/semantic grading outcome;
+- reported cost metadata when available;
+- turn and budget limits.
 
 Do not compare cost/quality runs without preserving material configuration differences.
 
@@ -245,6 +300,8 @@ Every scenario should identify:
 - forbidden outcomes;
 - why the scenario belongs globally rather than in one project.
 
+After adding or changing scenarios, run the static checker before behavioral evaluation.
+
 ## Change Workflow
 
 For a Methodology OS behavior change:
@@ -253,6 +310,8 @@ For a Methodology OS behavior change:
 proposed change
      ↓
 identify affected invariants
+     ↓
+static checks
      ↓
 run/update relevant scenarios
      ↓

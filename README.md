@@ -1,8 +1,8 @@
-# Methodology OS
+# Agentic OS / Methodology OS
 
-A reusable operating methodology for running complex Claude-based work with high autonomy, professional quality, strong verification, and efficient context/token usage.
+A reusable operating system for running complex Claude Code work with high autonomy, professional-quality output, independent verification, durable state, controlled context, and explicit human authority over consequential decisions.
 
-The OS is designed as a global, project-agnostic core that can be specialized for engineering, DevOps, research, planning, writing, and other multi-stage work.
+The repository is the **source of truth**. Claude Code receives a thin global runtime through symlinks and a small `CLAUDE.md` kernel; detailed policies are loaded only when relevant.
 
 ## Design Priorities
 
@@ -12,492 +12,287 @@ The OS is designed as a global, project-agnostic core that can be specialized fo
 4. Human control over high-impact decisions.
 5. Evidence-based completion and independent verification.
 
-## Current Status
-
-- Step 1 — Requirements & Philosophy: complete
-- Step 2 — Constitution / Core Principles: complete
-- Step 3 — Project Lifecycle / Orchestration: complete
-- Step 4 — Agent Architecture: complete
-- Step 5 — Model & Effort Routing: complete
-- Step 6 — Context Architecture: complete
-- Step 7 — Project State: complete
-- Step 8 — Delegation Protocol: complete
-- Step 9 — Verification System: complete
-- Step 10 — Skills Architecture: complete
-- Step 11 — Escalation & Autonomy: complete
-- Step 12 — Learning System: complete
-- Step 13 — Evals: complete
-- Step 14 — Claude Code Integration: next
-
-The current orchestration layer defines three execution depths:
-
-- **Lite** — small, low-risk, well-understood work with minimal ceremony.
-- **Standard** — normal multi-step work with planning, bounded execution, and verification.
-- **Full** — large, ambiguous, high-risk, long-running, or highly parallel work with structured investigation, review, integration, and handoff behavior.
-
-The guiding rule is:
+The governing rule is:
 
 > Use the lightest workflow that still protects the required quality bar.
 
-## Core Lifecycle
+## Status
+
+- ✅ Step 1 — Requirements & Philosophy
+- ✅ Step 2 — Constitution / Core Principles
+- ✅ Step 3 — Project Lifecycle / Orchestration
+- ✅ Step 4 — Agent Architecture
+- ✅ Step 5 — Model & Effort Routing
+- ✅ Step 6 — Context Architecture
+- ✅ Step 7 — Project State
+- ✅ Step 8 — Delegation Protocol
+- ✅ Step 9 — Verification System
+- ✅ Step 10 — Skills Architecture
+- ✅ Step 11 — Escalation & Autonomy
+- ✅ Step 12 — Learning System
+- ✅ Step 13 — Evals
+- ✅ Step 14 — Claude Code Integration (repository/runtime implementation)
+- ➡️ Step 15 — Real Project Trial
+
+Step 14's repository-side implementation is complete. A real local Claude Code smoke/eval run is still required after pulling `dev` onto the target machine; Step 15 begins once that runtime check passes.
+
+## Architecture
 
 ```text
-INTAKE
-  ↓
-TRIAGE
-  ↓
-[INVESTIGATE]
-  ↓
-PLAN
-  ↓
-[HUMAN GATE]
-  ↓
-PREPARE
-  ↓
-EXECUTE TASK
-  ↓
-VERIFY
-  ↓
-[REVIEW]
-  ↓
-INTEGRATE
-  ↓
-SYSTEM CHECK
-  ↓
-COMPLETE
+User
+ ↓
+Methodology Project Manager
+ ├── Implementer   — bounded change + self-verification
+ ├── Reviewer      — independent, read-only review
+ └── Debugger      — diagnosis-first, read-only investigation
+
+PM
+ ↓
+independent verification
+ ↓
+quality / authority gates
+ ↓
+working branch → PR → dev
+ ↓
+explicit user approval
+ ↓
+main
 ```
 
-Failed verification routes through diagnosis and replanning rather than blind retry loops.
+V0 deliberately keeps orchestration shallow: workers do not recursively manage other workers. Complexity is added only when evidence shows a real benefit.
 
-## Agent Architecture
+## Lifecycle
 
-V0 deliberately starts with four roles:
+Three execution depths are available:
 
-| Agent | Role | Default authority |
+- **Lite** — small, low-risk, well-understood work.
+- **Standard** — normal multi-step or medium-risk work.
+- **Full** — large, high-risk, ambiguous, long-running, or coordination-heavy work.
+
+Canonical lifecycle:
+
+```text
+INTAKE → TRIAGE → [INVESTIGATE] → PLAN → [HUMAN GATE] → PREPARE
+                                                        ↓
+                                                   EXECUTE
+                                                        ↓
+                                                     VERIFY
+                                                        ↓
+                                                    [REVIEW]
+                                                        ↓
+                                                    INTEGRATE
+                                                        ↓
+                                                  SYSTEM CHECK
+                                                        ↓
+                                                    COMPLETE
+```
+
+Verification failure routes through diagnosis/replanning rather than blind retry.
+
+## Core Runtime Rules
+
+### Delegation
+
+PM→worker work is bounded by `templates/TASK_PACKET.md`; execution workers return `templates/WORK_REPORT.md`.
+
+Worker execution states:
+
+```text
+PASS | PARTIAL | BLOCKED | FAILED
+```
+
+Worker `PASS` is only a claim eligible for PM verification — never project truth by itself.
+
+### Verification
+
+`core/QUALITY_GATES.md` is canonical.
+
+| Risk | PM verification | Independent Reviewer |
 | --- | --- | --- |
-| `project-manager` | Owns lifecycle, planning, routing, verification, state, skills, authority, learning, Git integration, and human gates | Orchestrates and integrates |
-| `implementer` | Executes one bounded task and self-verifies the resulting change | May modify scoped work |
-| `reviewer` | Independently checks requirements, correctness, regressions, and verification quality | Read-only |
-| `debugger` | Diagnoses non-trivial failures and returns root cause, fix direction, and validation plan | Read-only / diagnosis-first |
+| Low | required for delegated work | normally no |
+| Medium | required | required |
+| High | deep | required, deep |
 
-The PM is intended to run as the main Claude Code session agent. Workers receive bounded task context and return compact evidence-oriented reports.
-
-Worker nesting is intentionally disabled in V0 even though current Claude Code supports nested subagents. The PM remains the single orchestration authority until observed use cases justify deeper delegation.
-
-## Model & Effort Routing
-
-Model routing is centralized in `core/ROUTING.md` instead of being duplicated across agent definitions.
-
-V0 uses the following capability semantics:
+Verification states:
 
 ```text
-Haiku  → very simple, short, low-risk work
-Sonnet → default bounded execution / daily coding
-Opus   → complex reasoning, difficult debugging, high-risk review
-Fable  → hardest long-horizon and highly ambiguous autonomous work
+PASS | FAIL | INCONCLUSIVE | NOT_RUN | N/A
 ```
 
-Effort is routed separately from model capability:
+Human approval never converts missing/failed technical evidence into `PASS`.
 
-```text
-low    → obvious, tightly scoped
-medium → bounded cost-conscious execution
-high   → intelligence-sensitive work
-xhigh  → extended agentic/coding depth
-max    → exceptional, explicitly justified
-```
+### Authority
 
-Default worker baseline:
-
-```text
-Implementer → Sonnet / medium
-```
-
-Default complex reasoning baseline:
-
-```text
-Opus / high
-```
-
-The PM diagnoses failures before escalating. Missing context, bad decomposition, or environment failures should be fixed directly rather than buying a stronger model. Insufficient depth generally raises effort; genuine capability gaps raise the model family.
-
-The routing objective is:
-
-> Use the least expensive configuration reasonably expected to meet the quality bar on the first well-prepared attempt, optimizing total workflow cost rather than per-call price.
-
-## Context Architecture
-
-Context routing is centralized in `core/CONTEXT_POLICY.md`.
-
-The canonical rule is:
-
-> Context is a working set, not an archive.
-
-The OS separates:
-
-```text
-constitutional context
-→ small, broadly applicable rules
-
-durable project context
-→ objective, state, decisions, risks
-
-task context
-→ bounded worker input
-
-ephemeral execution context
-→ logs, searches, experiments kept local
-
-evidence context
-→ compact proof returned across boundaries
-```
-
-Fresh isolated subagents are the normal worker boundary. The PM keeps orchestration state and receives compact conclusions/evidence rather than raw execution transcripts. Accessible files and repository objects are referenced instead of copied by default.
-
-Reviewer first-pass context deliberately avoids Implementer conclusions when independent inspection is possible. Forked subagents are reserved for cases where inheriting a large amount of PM context has clear net value; they are not the default.
-
-Skills and `CLAUDE.md` are treated as recurring context costs. The global Claude kernel should remain small, preloaded skills require task relevance, and auto memory or automatic compaction never replace canonical project state.
-
-Context health is evaluated qualitatively rather than through fixed token-percentage thresholds. When current conversation history becomes noisy or state becomes difficult to reconstruct, the PM externalizes durable truth and prepares a structured handoff before starting a fresh PM context.
-
-## Project State
-
-Project continuity is externalized through five canonical artifact types:
-
-```text
-PROJECT_BRIEF.md
-→ stable outcome, scope, constraints, success criteria, standing authority
-
-PLAN.md
-→ intended path, phases, task IDs, dependencies, acceptance
-
-STATE.md
-→ current operational truth and next actions
-
-DECISIONS.md
-→ material non-obvious decisions, rationale, bounded approvals
-
-HANDOFF.md
-→ compressed ownership-transfer snapshot
-```
-
-These artifacts deliberately do not duplicate one another. `STATE.md` is the hot snapshot; `PLAN.md` describes intended structure rather than maintaining a second live task tracker; `DECISIONS.md` stores durable rationale and bounded authority when needed; and `HANDOFF.md` references canonical artifacts rather than copying them.
-
-State depth scales with workflow depth. Lite work normally avoids the full artifact set. Standard work creates only the state artifacts that materially improve recoverability. Full work uses the complete set when the project's duration, ambiguity, or risk justifies it.
-
-A fresh PM should normally begin with `PROJECT_BRIEF.md` and `STATE.md`, then read only the relevant plan and decision sections. Handoffs require the successor to verify current Git/artifact state and approval scope before trusting the snapshot.
-
-## Delegation Protocol
-
-Delegation uses two canonical boundary artifacts:
-
-```text
-PM
- │
- │ TASK_PACKET.md
- ▼
-Worker
- │
- │ WORK_REPORT.md
- ▼
-PM
- │
- ▼
-Independent PM verification
-```
-
-`TASK_PACKET.md` defines one bounded outcome, observable acceptance criteria, required verification, minimum-sufficient references, and an explicit authority envelope. It is detailed enough to prevent hidden-intent guessing without becoming a copy of the project plan or repository.
-
-Workers may inspect adjacent context autonomously. A small supporting change outside initially named paths is allowed only when it is directly required, low-risk, consistent with existing design, and reported. Material scope, architecture, dependency, security, compatibility, cost, or destructive-operation changes return to the PM instead of expanding silently.
-
-Execution workers use four statuses:
-
-```text
-PASS
-→ acceptance believed satisfied; eligible for PM verification
-
-PARTIAL
-→ useful progress, acceptance incomplete
-
-BLOCKED
-→ decision/dependency/permission required
-
-FAILED
-→ current approach did not achieve the objective;
-  further attempts need diagnosis or replan
-```
-
-Only `PASS` can proceed toward acceptance, and worker `PASS` is never equivalent to PM verification or integration approval.
-
-`WORK_REPORT.md` compresses the worker context at the return boundary. It reports acceptance status, meaningful changes, checks actually performed, evidence the PM can independently inspect, scope notes, and remaining uncertainty — not full logs, full diffs, or hidden reasoning.
-
-For small Standard-mode work, both packet and report may use compact forms. High-risk or incomplete work keeps the richer structure.
-
-## Verification System
-
-Verification and integration gates are centralized in `core/QUALITY_GATES.md`.
-
-The core rule is:
-
-> A claim becomes project truth only when it has evidence appropriate to its risk and has passed every required gate.
-
-The normal delegated-task chain is:
-
-```text
-worker self-verification
-        ↓
-PM independent verification
-        ↓
-independent Reviewer when required
-        ↓
-integration readiness
-        ↓
-merge to dev
-        ↓
-post-integration/system verification when required
-```
-
-V0 uses this gate matrix:
-
-| Risk | Worker/Self Verify | PM Verify | Independent Reviewer | Post-Integration |
-| --- | --- | --- | --- | --- |
-| Low | Required | Required for delegated work | Normally no | Only when integration can matter |
-| Medium | Required | Required | Required | Targeted/integrated when relevant |
-| High | Required | Required, deep | Required, deep | Strong system/integration evidence when feasible |
-
-Medium-risk review is deliberately mandatory in V0. If review is genuinely unnecessary, the PM must determine that the task is actually low-risk rather than silently waiving the medium-risk gate.
-
-Verification claims use `PASS / FAIL / INCONCLUSIVE / NOT_RUN / N/A`. Worker execution statuses and Reviewer verdicts remain separate vocabularies.
-
-Evidence is state-specific: material changes after a test or review invalidate affected evidence. Reviewer `FAIL` or `INCONCLUSIVE` blocks integration, and a review of a superseded diff does not approve the final diff.
-
-A green CI run is evidence, not a substitute for acceptance verification. Likewise, human approval is separate from technical verification and never turns an unverified claim into `PASS`.
-
-## Skills Architecture
-
-Skill discovery and loading are centralized in `core/SKILL_POLICY.md`.
-
-The core rule is:
-
-> Skills are optional capability modules. Load the smallest relevant set, at the latest useful moment.
-
-Claude Code can discover skill descriptions without loading the full skill body. Methodology OS therefore defaults to **on-demand invocation**, not static preload. The generic PM/Implementer/Reviewer/Debugger roles do not preload domain skills in V0.
-
-Skill routing follows this pattern:
-
-```text
-Does normal role competence suffice?
-        │
-       yes → no skill
-        │
-       no
-        ↓
-project / nested skill for local behavior?
-        ↓
-narrow domain skill if materially useful
-        ↓
-methodology procedure skill if active
-        ↓
-remove overlap
-```
-
-Global Methodology OS skills use distinctive names to avoid shadowing generic project skills:
-
-- `methodology-os` — activate the Methodology OS operating pattern;
-- `methodology-planning` — create/revise proportional plans;
-- `methodology-handoff` — reconcile state and transfer PM ownership;
-- `methodology-retrospective` — classify project lessons and global learning candidates.
-
-The Task Packet may reference a relevant skill by name; it should not paste the entire skill body. Skills do not enlarge the worker's authority or bypass human gates.
-
-`context: fork` is reserved for self-contained high-volume skill workflows. The four V0 methodology skills remain inline because they need current PM/project state.
-
-Model/effort overrides are not embedded in core methodology skills; `core/ROUTING.md` remains the cost/capability source of truth.
-
-Detailed references and examples belong in supporting files rather than giant skill bodies. Global skill changes remain Methodology OS changes and require human promotion under the learning model.
-
-## Escalation & Autonomy
-
-Authority routing is centralized in `core/ESCALATION_POLICY.md`.
-
-The core rule is:
-
-> Continue autonomously through routine, reversible, evidence-supported work. Escalate only when an unapproved decision or action would create a materially different outcome, commitment, risk, cost, or irreversible effect for the user/project.
-
-Risk and authority are separate axes. A high-risk production operation can be authorized but still require deep verification; a technically trivial external commitment may require user authority.
-
-V0 uses four authority outcomes:
+`core/ESCALATION_POLICY.md` separates authority from technical risk:
 
 ```text
 A0 — AUTONOMOUS
-→ proceed without interrupting the user
-
 A1 — AUTONOMOUS + RECORD
-→ proceed, preserve durable rationale/authority context
-
 A2 — HUMAN GATE
-→ obtain required authority before consequential action
-
 A3 — BLOCKED
-→ required authority/input/access unavailable
 ```
 
-Human gates are based on **material consequence**, not labels. Significant architecture, material scope changes, breaking contracts, meaningful security tradeoffs, destructive/irreversible operations, material production effects, substantial cost/vendor commitments, consequential external commitments, and `main` promotion are gated when not already authorized.
+Approval envelopes are bounded by action, target, scope, conditions, limits, and freshness. Approval is not transitive.
 
-Approval envelopes prevent repeated prompts. A valid approval is bounded by action, target, scope, conditions, limits, and freshness. Approval is neither transitive nor permanent by default.
+A clear current request can itself satisfy the gate for that exact action; duplicate confirmation is discouraged.
 
-A clear current user instruction can itself satisfy the gate for that exact action. The OS should not ask for duplicate confirmation merely for ceremony. If the target or consequence is ambiguous, resolve that ambiguity before execution.
+`main` remains specifically human-gated.
 
-Global Git authority remains:
+### Context
+
+`core/CONTEXT_POLICY.md` treats context as a working set, not an archive.
+
+Keep durable truth in project artifacts; keep high-volume logs/searches local to workers; return compact evidence to the PM. Prefer references to copied history.
+
+### Routing
+
+`core/ROUTING.md` routes model capability separately from effort.
 
 ```text
-working branch / commit / push / PR → dev / verified merge → dev
-→ normally autonomous
-
-force-rewrite consequential shared history
-→ human-gated when destructive
-
-merge/promote → main
-→ explicit specific user approval required
+Haiku  → tiny/mechanical
+Sonnet → normal bounded execution
+Opus   → complex reasoning / difficult debugging / high-risk review
+Fable  → hardest long-horizon, highly ambiguous work
 ```
 
-Human approval never launders verification: accepted residual risk remains `FAIL`, `NOT_RUN`, or `INCONCLUSIVE` where that is the truthful evidence state.
+Missing context, bad decomposition, or environment failures are fixed directly. Insufficient reasoning depth normally raises effort before model family; genuine capability gaps raise model capability.
 
-## Learning System
+### Skills
 
-Learning and global promotion are centralized in `core/LEARNING_POLICY.md`.
+Skills are optional capability modules and are loaded on demand. Generic workers preload none in V0.
 
-The core rule is:
+Global Methodology OS skills:
 
-> Learn from evidence, generalize cautiously, and promote globally only with explicit human approval.
+- `methodology-os`
+- `methodology-planning`
+- `methodology-handoff`
+- `methodology-retrospective`
 
-The OS separates three layers:
+Skill availability never expands authority.
 
-```text
-Project-specific learning
-→ local repository/team/domain improvement
-→ may be applied inside project authority
+### Learning
 
-Candidate global learning
-→ potentially reusable
-→ evidence + causal hypothesis + validation
-→ NOT active global policy
-
-Promoted global learning
-→ explicitly human-approved
-→ implemented + evaled + verified + integrated
-```
-
-Global candidates follow this lifecycle:
+Global learning is governed by `core/LEARNING_POLICY.md`:
 
 ```text
 OBSERVATION
-    ↓
+   ↓
 CANDIDATE
-    ↓
+   ↓
 NEEDS_EVIDENCE / VALIDATING
-    ↓
+   ↓
 READY_FOR_PROMOTION
-    ↓
+   ↓
 HUMAN PROMOTION GATE
-   ┌───────────────┴───────────────┐
-   ↓                               ↓
-APPROVED                         REJECTED
    ↓
 IMPLEMENT + EVAL + VERIFY
    ↓
 PROMOTED
 ```
 
-The system deliberately avoids fixed evidence-count rules such as “three projects required.” Promotion evidence scales with the blast radius, reversibility, frequency, causal confidence, and regression risk of the proposed OS change.
+Project-specific learning stays local. A global candidate is never active policy until explicitly promoted and integrated through normal quality gates.
 
-Candidates should learn causal characteristics rather than technology labels. One difficult Terraform task does not imply a global `Terraform → Opus` rule; first distinguish capability, effort, context, decomposition, environment, and verification causes.
+## Project State
 
-`templates/LEARNING_CANDIDATE.md` is used only when a global candidate deserves durable follow-up. It records observation, evidence, causal hypothesis, alternative explanations, generalization boundary, smallest proposed change, expected benefit, regression risk, validation/eval plan, and promotion state.
+Canonical durable artifacts:
 
-Change impact scales the promotion bar:
+| Artifact | Purpose |
+| --- | --- |
+| `PROJECT_BRIEF.md` | stable outcome, scope, constraints, success criteria |
+| `PLAN.md` | intended path, tasks, dependencies, acceptance |
+| `STATE.md` | current operational truth |
+| `DECISIONS.md` | durable material decisions and bounded approvals |
+| `HANDOFF.md` | compressed ownership transfer |
+| `LEARNING_CANDIDATE.md` | durable global-learning candidate when warranted |
 
-```text
-L1 — narrow guidance/template/skill refinement
-L2 — role/routing/workflow default
-L3 — global policy/constitution/authority gate
+`STATE.md` is the sole hot operational snapshot. The other artifacts should not become parallel status trackers.
+
+## Claude Code Installation
+
+The repository remains canonical. The installer creates only a thin global runtime under `~/.claude`.
+
+From the repository root:
+
+```bash
+bash install.sh
+bash install.sh --check
 ```
 
-Constitution and authority changes require the strongest evidence/review discipline.
+Installed layout:
 
-A non-canonical draft proposal or eval may be prepared before promotion approval, but the change MUST NOT become active global Methodology OS behavior in canonical `dev` until explicit human promotion.
+```text
+~/.claude/
+├── methodology-os -> <this checkout>
+├── CLAUDE.md
+│    └── managed import → runtime/CLAUDE.md
+├── agents/
+│    ├── methodology-project-manager.md
+│    ├── methodology-implementer.md
+│    ├── methodology-reviewer.md
+│    └── methodology-debugger.md
+└── skills/
+     ├── methodology-os
+     ├── methodology-planning
+     ├── methodology-handoff
+     └── methodology-retrospective
+```
 
-Promotion approval is bounded to the proposed change; it does not authorize adjacent policy cleanup or a `main` merge. After approval, the change still passes normal implementation, eval, verification, review, and PR→`dev` gates.
+Global agent names are intentionally namespaced to avoid collisions with project-specific agents. Runtime adapters load the canonical role contracts from this repository instead of duplicating them.
 
-Learning artifacts must not leak project-private content into the global OS. Preserve sanitized causal summaries and references; keep proprietary evidence project-local when needed.
+The installer:
 
-Retrospectives are signal-driven, not mandatory ceremony. Routine successful work with no reusable signal should not generate a retrospective or candidate artifact.
+- is idempotent in installed state;
+- preserves existing user `CLAUDE.md` content;
+- manages only a clearly marked import block;
+- backs up regular `CLAUDE.md` before editing;
+- refuses to overwrite conflicting agent/skill paths unless `--force` is explicit;
+- removes only paths it owns during `--uninstall`.
+
+Full Methodology OS session:
+
+```bash
+claude --agent methodology-project-manager
+```
+
+Lightweight use from a normal Claude Code session:
+
+```text
+/methodology-os
+```
+
+Detailed runtime documentation: `runtime/README.md`.
 
 ## Evals
 
-The behavioral eval contract lives under `evals/`.
+The V0 eval framework protects behavioral invariants rather than raw coding intelligence.
 
-The core rule is:
+Static validation requires no Claude model calls:
 
-> Evaluate observable Methodology OS decisions against falsifiable invariants, using deterministic structured checks wherever possible.
-
-V0 separates:
-
-```text
-static contract checks
-→ validate files, schemas, frontmatter, forbidden permissions
-
-behavioral scenarios
-→ controlled PM situations with structured results
-
-replay/regression scenarios
-→ sanitized reproductions of real methodology failures
-
-real-project evidence
-→ Step 15 dogfooding and learning signals
+```bash
+python3 scripts/run_evals.py --static-only
 ```
 
-Scenario inputs conform to `evals/scenario.schema.json`; agent outputs conform to `evals/result.schema.json`. This keeps authority, risk, model/effort, skill selection, verification state, Reviewer requirements, integration permission, and learning state machine-readable.
+Blocking core behavioral suite:
 
-The initial V0 suite contains 14 scenarios covering:
-
-- routine autonomy vs architecture gates;
-- exact `main` approval without duplicate confirmation;
-- staging/production approval boundaries;
-- worker `PASS` without evidence;
-- mandatory medium-risk review;
-- evidence freshness after material changes;
-- context defects vs model escalation;
-- effort escalation before model-family escalation;
-- zero-skill selection when normal competence is enough;
-- one-incident learning overfit;
-- project-local learning;
-- global-learning promotion boundaries;
-- diagnose-before-retry behavior.
-
-Suite manifests keep recurring evaluation cost proportional:
-
-```text
-core-v0
-→ blocking smoke suite for high-value cross-policy invariants
-
-routing-v0
-→ targeted routing/effort checks
-
-learning-v0
-→ targeted learning/promotion checks
-
-full-v0
-→ all initial scenarios
+```bash
+python3 scripts/run_evals.py core-v0
 ```
 
-A critical hard assertion blocks the suite regardless of aggregate score. The future runner should prefer exact structured assertions first and use semantic judging only where behavior cannot be represented deterministically.
+Optional deeper semantic evaluation:
 
-The executable runner is intentionally deferred to Step 14, where it can use Claude Code non-interactive structured output, turn limits, and budget caps while recording model/version/cost metadata for reproducibility.
+```bash
+python3 scripts/run_evals.py core-v0 --semantic-judge
+```
+
+Targeted suites include `routing-v0` and `learning-v0`; `full-v0` runs all current scenarios.
+
+Behavioral runs use structured JSON, read-only tools, plan permission mode, fresh non-persistent sessions, turn caps, and budget caps. Critical authority/verification/self-modification failures block regardless of aggregate score.
+
+GitHub Actions runs syntax, static-contract, and isolated installer lifecycle checks without consuming Claude tokens.
+
+See `evals/README.md` for the complete eval contract.
 
 ## Git Operating Model
-
-For engineering work, normal development happens on task branches and integrates into `dev`.
 
 ```text
 dev
@@ -505,9 +300,7 @@ dev
           ↓
       implementation
           ↓
-      verification
-          ↓
-        review
+      verification / review
           ↓
        PR → dev
           ↓
@@ -515,70 +308,64 @@ dev
           ↓
    prepare promotion
           ↓
-   USER APPROVAL
+   EXPLICIT USER APPROVAL
           ↓
         main
 ```
 
-`main` is human-gated. The OS must never merge to `main` without explicit user approval for that promotion.
+Routine verified integration into `dev` is autonomous unless repository-specific policy is stricter. Direct development on `main` is prohibited.
+
+## Policy Map
+
+Detailed behavior belongs in canonical policy files, not this README:
+
+| Concern | Canonical source |
+| --- | --- |
+| Requirements | `OS_REQUIREMENTS.md` |
+| Constitutional invariants | `core/PRINCIPLES.md` |
+| Lifecycle / orchestration | `core/ORCHESTRATION.md` |
+| Model / effort routing | `core/ROUTING.md` |
+| Context | `core/CONTEXT_POLICY.md` |
+| Verification / review | `core/QUALITY_GATES.md` |
+| Skills | `core/SKILL_POLICY.md` |
+| Human authority | `core/ESCALATION_POLICY.md` |
+| Learning / promotion | `core/LEARNING_POLICY.md` |
+| Eval framework | `evals/README.md` |
+| Claude Code runtime | `runtime/README.md` |
 
 ## Repository Layout
 
 ```text
 Agentic-OS/
-├── README.md
 ├── OS_REQUIREMENTS.md
+├── README.md
 ├── CHANGELOG.md
 ├── core/
-│   ├── PRINCIPLES.md
-│   ├── ORCHESTRATION.md
-│   ├── ROUTING.md
-│   ├── QUALITY_GATES.md
-│   ├── CONTEXT_POLICY.md
-│   ├── SKILL_POLICY.md
-│   ├── LEARNING_POLICY.md
-│   └── ESCALATION_POLICY.md
 ├── agents/
-│   ├── project-manager.md
-│   ├── implementer.md
-│   ├── reviewer.md
-│   └── debugger.md
 ├── skills/
-│   ├── methodology-os/
-│   │   └── SKILL.md
-│   ├── methodology-planning/
-│   │   └── SKILL.md
-│   ├── methodology-handoff/
-│   │   └── SKILL.md
-│   └── methodology-retrospective/
-│       └── SKILL.md
 ├── templates/
-│   ├── PROJECT_BRIEF.md
-│   ├── PLAN.md
-│   ├── STATE.md
-│   ├── TASK_PACKET.md
-│   ├── WORK_REPORT.md
-│   ├── DECISIONS.md
-│   ├── HANDOFF.md
-│   └── LEARNING_CANDIDATE.md
-└── evals/
-    ├── README.md
-    ├── scenario.schema.json
-    ├── result.schema.json
-    ├── suite.schema.json
-    ├── scenarios/
-    │   └── E-*.json
-    └── suites/
-        ├── core-v0.json
-        ├── routing-v0.json
-        ├── learning-v0.json
-        └── full-v0.json
+├── evals/
+│   ├── scenarios/
+│   └── suites/
+├── runtime/
+│   ├── CLAUDE.md
+│   └── agents/
+├── scripts/
+│   └── run_evals.py
+├── install.sh
+└── .github/workflows/methodology-static.yml
 ```
 
-Some runtime/install files are intentionally deferred until their design stage is completed.
+## Next: Step 15 — Real Project Trial
 
-## Development Model
+After pulling the Step 14 changes onto a real Claude Code machine:
 
-The Methodology OS is being built incrementally. Each stage should introduce only the complexity required to solve a defined orchestration problem.
+1. install/check the global runtime;
+2. confirm Claude sees the global kernel and namespaced PM;
+3. run static checks;
+4. run `core-v0` and inspect the baseline;
+5. use the OS on one meaningful real project;
+6. record quality, token/context behavior, friction, failures, and any learning candidates;
+7. revise only from observed evidence.
 
-Global Claude Code installation and `~/.claude` integration are intentionally deferred until Step 14, where the runtime will be installed and validated against the eval framework before real-project dogfooding.
+The goal of V0 is not maximum ceremony. It is a small, inspectable operating system that can prove when additional complexity is worth adding.
