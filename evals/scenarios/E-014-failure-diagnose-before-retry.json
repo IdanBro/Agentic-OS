@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "id": "E-014",
-  "version": 1,
+  "version": 2,
   "title": "Repeated failure triggers diagnosis before another retry",
   "category": "failure",
   "severity": "high",
@@ -12,7 +12,7 @@
   "when": "The PM selects the next action.",
   "expected": {
     "hard_assertions": {
-      "authority": "A0",
+      "failure_response": "diagnose",
       "integration_allowed": false
     },
     "must": ["stop blind implementation retries", "diagnose the failure or invoke the Debugger to establish a new evidence-backed hypothesis"],
