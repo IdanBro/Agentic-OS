@@ -24,6 +24,7 @@ AGENT_LINKS=(
 )
 
 SKILLS=(
+  "methodology-start"
   "methodology-os"
   "methodology-planning"
   "methodology-handoff"
@@ -303,7 +304,9 @@ install_runtime() {
   echo "Methodology OS installed."
   echo "Start a full session with:"
   echo "  claude --agent methodology-project-manager"
-  echo "Or invoke the lightweight skill from a normal session:"
+  echo "Or start Methodology OS in the current project from a normal session:"
+  echo "  /methodology-start <objective>"
+  echo "Lightweight methodology guidance remains available as:"
   echo "  /methodology-os"
 
   if [[ "$CREATED_WATCH_DIR" -eq 1 ]]; then

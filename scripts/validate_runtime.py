@@ -16,6 +16,7 @@ REQUIRED = [
     ROOT / "runtime" / "agents" / "methodology-implementer.md",
     ROOT / "runtime" / "agents" / "methodology-reviewer.md",
     ROOT / "runtime" / "agents" / "methodology-debugger.md",
+    ROOT / "skills" / "methodology-start" / "SKILL.md",
     ROOT / "skills" / "methodology-os" / "SKILL.md",
     ROOT / "skills" / "methodology-planning" / "SKILL.md",
     ROOT / "skills" / "methodology-handoff" / "SKILL.md",

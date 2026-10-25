@@ -93,6 +93,7 @@ Global Methodology OS skills MUST use distinctive names so they do not accidenta
 
 V0 core names:
 
+- `methodology-start`
 - `methodology-os`
 - `methodology-planning`
 - `methodology-handoff`
@@ -501,6 +502,10 @@ The global `~/.claude/CLAUDE.md` Methodology OS kernel should remain small and r
 ---
 
 ## 20. V0 Core Skill Set
+
+### `methodology-start`
+
+User-facing launcher for starting a full Methodology OS project workflow from the current repository. It bootstraps local context, establishes the objective, then routes execution through the PM operating model without requiring the user to choose agents, workflow depth, routing, or verification strategy manually.
 
 ### `methodology-os`
 

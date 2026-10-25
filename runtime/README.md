@@ -25,6 +25,7 @@ Agentic-OS Git checkout
 │    ├── methodology-reviewer.md -> runtime adapter
 │    └── methodology-debugger.md -> runtime adapter
 └── skills/
+     ├── methodology-start -> project launcher skill
      ├── methodology-os -> source skill
      ├── methodology-planning -> source skill
      ├── methodology-handoff -> source skill
@@ -54,7 +55,15 @@ claude --agent methodology-project-manager
 
 Claude Code runs that agent as the main session, while the PM can delegate to the namespaced Methodology OS workers.
 
-For ordinary Claude Code sessions where the complete PM lifecycle is unnecessary, use the lightweight skill:
+For the normal workflow, start Methodology OS in the current project with:
+
+```text
+/methodology-start <objective>
+```
+
+If no objective is supplied, the launcher bootstraps the repository and asks one concise outcome question.
+
+For lightweight methodology guidance without handing over the full project lifecycle, use:
 
 ```text
 /methodology-os

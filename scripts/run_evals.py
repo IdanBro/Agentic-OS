@@ -194,7 +194,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
         if "~/.claude/methodology-os/agents/" not in text:
             failures.append(f"{rel}: adapter does not point to canonical role source")
 
-    for skill in ("methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
+    for skill in ("methodology-start", "methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
         if not (ROOT / "skills" / skill / "SKILL.md").is_file():
             failures.append(f"missing core skill: {skill}")
 
