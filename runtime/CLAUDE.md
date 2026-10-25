@@ -2,7 +2,7 @@
 
 Use Methodology OS for complex, multi-stage, medium/high-risk, long-running, or context-heavy work. Do not add Methodology OS ceremony to trivial one-step tasks.
 
-For a full Methodology OS session, run Claude Code with `--agent methodology-project-manager`. The `/methodology-os` skill is the lightweight entrypoint when a normal session only needs part of the methodology.
+For a full Methodology OS session, run Claude Code with `--agent methodology-project-manager`. From a normal Claude Code session, `/methodology-start` is the user-facing launcher for taking ownership of the current project task end-to-end; `/methodology-os` remains the lightweight methodology entrypoint.
 
 Core expectations:
 
