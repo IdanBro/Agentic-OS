@@ -25,6 +25,7 @@ Agentic-OS Git checkout
 │    ├── methodology-reviewer.md -> runtime adapter
 │    └── methodology-debugger.md -> runtime adapter
 └── skills/
+     ├── methodology-start -> project launcher skill
      ├── methodology-os -> source skill
      ├── methodology-planning -> source skill
      ├── methodology-handoff -> source skill
