@@ -57,8 +57,9 @@ def main() -> int:
     start = (ROOT / "skills" / "methodology-start" / "SKILL.md").read_text(encoding="utf-8")
     if "${CLAUDE_PLUGIN_ROOT}" not in start:
         return fail("methodology-start must use CLAUDE_PLUGIN_ROOT")
-    if "~/.claude" in start or "gh api" in start:
-        return fail("methodology-start must not depend on local install or runtime GitHub fetching")
+    remote_loader_markers = ["gh api", "METHODOLOGY_OS_REPO=", "GITHUB_TOKEN", "GH_TOKEN"]
+    if any(marker in start for marker in remote_loader_markers):
+        return fail("methodology-start must not perform runtime GitHub control-plane fetching")
 
     agent_expectations = {
         "implementer.md": ["Agent", "AskUserQuestion"],
