@@ -121,3 +121,13 @@ Do not introduce an agent, skill, workflow step, document, reviewer, parallel te
 Start simple and add structure based on observed need.
 
 **Test:** Every permanent OS component should have a concrete failure mode or recurring need that justifies its existence.
+
+## P16 — The PM Orchestrates Standard/Full Work
+
+In Standard and Full modes, the Project Manager is the orchestrator, not the primary implementation worker.
+
+Substantive execution that satisfies a planned task's main acceptance criteria MUST be delegated to an execution worker. The PM MAY directly perform inspection, planning, Git preparation, integration, independent verification, and tiny glue/follow-up fixes whose coordination cost would exceed their execution cost.
+
+A direct PM fix must remain narrow and supporting; it MUST NOT become a back door for the PM to implement an entire feature, workstream, or project that should have been delegated.
+
+**Test:** For any Standard/Full engineering run with substantive implementation, the PM must be able to identify at least one bounded worker-owned execution task. If the PM itself produced the main implementation, the orchestration is invalid.

@@ -76,13 +76,23 @@ The user should not need to manually choose:
 
 Those are PM responsibilities.
 
-Use the plugin-provided specialized subagents when delegation materially helps:
+Use the plugin-provided specialized subagents as the normal execution path for Standard/Full substantive work:
 
 - `implementer`
 - `reviewer`
 - `debugger`
 
 Do not manually reconstruct or inject their role prompts from files unless plugin agent discovery is actually broken. Their definitions are native plugin components.
+
+**Delegation invariant:**
+
+- Lite work may stay in the main session when truly small and cheap to verify.
+- Standard work that includes substantive implementation MUST delegate at least one bounded implementation task.
+- Full work MUST delegate substantive implementation workstreams; the PM must not act as the primary coder/author.
+- The PM may directly perform only narrow supporting glue, integration, verification, or localized follow-up fixes.
+- A strong model being capable of doing everything itself is not a reason to bypass workers.
+
+Before the first substantive change-producing action in Standard/Full mode, identify the worker-owned task(s) and dispatch the first ready task.
 
 ## 5. Git Defaults
 

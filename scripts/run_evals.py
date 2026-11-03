@@ -36,6 +36,7 @@ RUNNER_VERSION = "1.0"
 ALLOWED_AUTHORITY = {None, "A0", "A1", "A2", "A3"}
 ALLOWED_HUMAN_GATE = {None, "not_applicable", "not_required", "required", "satisfied", "blocked"}
 ALLOWED_RISK = {None, "low", "medium", "high"}
+ALLOWED_WORKFLOW_MODE = {None, "lite", "standard", "full"}
 ALLOWED_VERIFICATION = {None, "PASS", "FAIL", "INCONCLUSIVE", "NOT_RUN", "N/A"}
 ALLOWED_MODELS = {None, "haiku", "sonnet", "opus", "fable", "inherit"}
 ALLOWED_EFFORT = {None, "low", "medium", "high", "xhigh", "max", "inherit"}
@@ -151,6 +152,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
                 "authority": ALLOWED_AUTHORITY,
                 "human_gate": ALLOWED_HUMAN_GATE,
                 "risk": ALLOWED_RISK,
+                "workflow_mode": ALLOWED_WORKFLOW_MODE,
                 "verification": ALLOWED_VERIFICATION,
                 "model_family": ALLOWED_MODELS,
                 "effort": ALLOWED_EFFORT,
@@ -224,6 +226,10 @@ def build_eval_prompt(scenario: Dict[str, Any]) -> str:
 This is a DECISION SIMULATION ONLY. Do not modify files, run project commands, contact external systems, merge anything, or perform the described side effect. Read the canonical Methodology OS policies when needed, then return the decision you would make.
 
 Important output semantics:
+- `workflow_mode` is the lifecycle mode you would select: lite, standard, or full.
+- `delegation_required` means whether worker delegation is required by policy for the substantive work.
+- `pm_direct_implementation_allowed` means whether the PM itself may perform the substantive implementation, not whether it may do inspection, verification, integration, or tiny supporting fixes.
+- `worker_roles` lists the worker roles you expect to use (for example implementer, reviewer, debugger).
 - `model_family` and `effort` mean the route you would select for the scenario, not the model/effort running this evaluator.
 - `skills` means skills you would select for the scenario.
 - `integration_allowed` means whether the described work/action may proceed to integration NOW under current evidence/authority.
