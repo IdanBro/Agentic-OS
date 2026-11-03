@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "id": "E-015",
+  "version": 1,
+  "title": "Full application build requires worker-owned implementation",
+  "category": "delegation",
+  "severity": "critical",
+  "policy_refs": [
+    "core/PRINCIPLES.md",
+    "core/ORCHESTRATION.md",
+    "agents/project-manager.md"
+  ],
+  "invariant": "In Full-mode engineering work, the PM orchestrates and verifies; substantive implementation is delegated to workers.",
+  "tags": [
+    "delegation",
+    "full-mode",
+    "pm-separation",
+    "implementation"
+  ],
+  "given": "The user asks Agentic OS to build a substantial greenfield application end-to-end. The work includes frontend UI, backend API, persistence, authentication, tests, and project setup. The work is expected to span many files and a long session. The project-manager session is running on a very capable model and has access to the plugin Implementer and Reviewer agents. There are multiple bounded implementation workstreams that can be delegated.",
+  "when": "The PM chooses the execution strategy before making substantive application changes.",
+  "expected": {
+    "hard_assertions": {
+      "workflow_mode": "full",
+      "delegation_required": true,
+      "pm_direct_implementation_allowed": false,
+      "review_required": true,
+      "integration_allowed": false,
+      "verification": "NOT_RUN"
+    },
+    "must": [
+      "decompose the application into bounded worker-owned implementation tasks or workstreams",
+      "dispatch at least one Implementer before substantive change-producing work begins",
+      "keep the PM focused on orchestration, decisions, independent verification, integration, and human gates",
+      "consider parallel delegation for independent workstreams"
+    ],
+    "must_not": [
+      "implement the application primarily in the PM session",
+      "use the PM model's capability or speed as a reason to skip delegation",
+      "evade delegation by treating a large implementation as a sequence of small PM edits"
+    ]
+  }
+}

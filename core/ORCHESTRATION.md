@@ -20,6 +20,7 @@ The orchestration layer MUST:
 6. Keep `main` human-gated.
 7. Recover deliberately from failures instead of blindly retrying.
 8. Support both engineering and non-engineering work.
+9. Keep the PM focused on orchestration in Standard/Full work instead of allowing the main session to absorb substantive implementation.
 
 The default philosophy is:
 
@@ -100,6 +101,12 @@ COMPLETE
 
 This is the default Methodology OS workflow for most engineering project work.
 
+Standard Mode delegation rule:
+
+- at least one substantive execution task MUST be delegated when the requested outcome requires substantive implementation;
+- the PM MUST NOT implement the main body of a planned Standard task itself;
+- direct PM changes are limited to narrow glue, integration, conflict resolution, or follow-up fixes that do not themselves satisfy the task's primary acceptance criteria.
+
 ---
 
 ### 2.3 Full Mode
@@ -142,7 +149,11 @@ INTEGRATE
 COMPLETE OR PREPARE MAIN PROMOTION
 ```
 
-Full Mode MAY use multiple workers or coordinated parallel execution when task independence and expected benefit justify the added complexity.
+Full Mode MUST delegate substantive implementation work.
+
+When two or more ready workstreams have clear non-overlapping boundaries, the PM SHOULD use multiple workers and SHOULD parallelize when the elapsed-time/context benefit exceeds coordination cost. Serial execution remains valid when dependencies or shared mutable state make parallel work unsafe.
+
+The PM MUST NOT become the implementation worker for a Full-mode workstream.
 
 ---
 
@@ -423,25 +434,48 @@ Detailed schema is defined by `templates/TASK_PACKET.md`.
 
 ### 6.3 Select Execution Strategy
 
-The PM chooses among:
+Execution strategy depends on lifecycle mode.
 
-- execute directly in the PM session,
-- delegate to one specialized worker,
-- delegate independent tasks in parallel,
-- invoke a debugger/investigator,
-- use a coordinated team only when the coordination benefit exceeds its overhead.
+**Lite Mode**
 
-Delegation is a tool, not a requirement.
+The PM MAY execute directly when the task is genuinely small, low-risk, localized, and cheap to verify.
 
-The PM SHOULD delegate when one or more of the following are true:
+**Standard Mode**
 
-- execution would add substantial disposable context,
-- a specialized prompt/skill materially improves results,
-- independent context reduces anchoring,
-- parallel execution provides meaningful value,
-- the PM should preserve its context for orchestration.
+For substantive implementation, delegation is mandatory. The PM MUST assign at least one bounded execution task to an appropriate worker and MUST NOT personally implement the main body of a planned task.
 
-The PM SHOULD execute directly when delegation would add unnecessary coordination overhead to a small bounded task.
+**Full Mode**
+
+All substantive implementation work MUST be delegated. The PM decomposes the outcome into worker-owned tasks/workstreams and preserves the main session for orchestration, decisions, verification, integration, and human gates.
+
+The PM MAY directly perform only supporting work such as:
+
+- repository inspection and planning;
+- branch/worktree preparation;
+- integration and conflict resolution;
+- independent verification;
+- tiny mechanical glue or follow-up fixes where a delegation round-trip would clearly cost more than the change.
+
+A direct PM fix in Standard/Full mode is valid only when all are true:
+
+1. it is narrow and localized;
+2. it introduces no material new design decision;
+3. it is supporting work rather than a planned workstream;
+4. it does not by itself satisfy the main acceptance criteria of a substantive task;
+5. required independent final review still covers it.
+
+The PM MUST NOT split a large implementation into a sequence of self-executed "small" edits to evade delegation.
+
+The PM SHOULD choose one or more workers when:
+
+- execution would add substantial disposable context;
+- a specialized role materially improves results;
+- independent context reduces anchoring;
+- parallel execution provides meaningful value;
+- multiple components/workstreams can be bounded cleanly;
+- preserving PM context improves later verification/integration.
+
+When two or more ready tasks are independent and do not contend for the same mutable state, Standard/Full work SHOULD consider parallel delegation before serializing everything in the PM session.
 
 ---
 
@@ -826,7 +860,7 @@ At every lifecycle transition, the PM SHOULD reason in this order:
 1. **What outcome must be true next?**
 2. **What evidence will prove it?**
 3. **What is the smallest safe unit of work?**
-4. **Does this need delegation?**
+4. **Which worker should own this execution?** (For Standard/Full substantive work, delegation is required.)
 5. **What context is actually required?**
 6. **What capability/effort is justified?**
 7. **What could make this unsafe or require human authority?**
@@ -842,6 +876,9 @@ The PM MUST avoid the following patterns:
 
 ### Ceremony-First Orchestration
 Creating a plan, worker, reviewer, task file, and handoff for a trivial task.
+
+### Monolithic PM Implementation
+Using the main PM session as the primary coder/author for Standard or Full work, even when the work can be decomposed into bounded worker-owned tasks.
 
 ### Vague Delegation
 Sending a worker a broad responsibility with no bounded outcome or acceptance criteria.
@@ -886,6 +923,7 @@ A valid Methodology OS run must preserve all of the following:
 8. High-impact decisions remain human-gated.
 9. `main` remains human-gated.
 10. Added orchestration complexity has a concrete purpose.
+11. Standard/Full substantive implementation is worker-owned rather than PM-owned.
 
 ---
 

@@ -72,9 +72,16 @@ Specific policies may add detail but must not violate higher-level principles.
 
 ## You Do Not Own
 
-Do not turn the PM into the default implementation worker.
+Do not turn the PM into the implementation worker for Standard or Full work.
 
-In Standard and Full modes, prefer delegation when it materially improves context isolation, specialization, independence, or parallelism.
+**Mandatory separation of responsibilities:**
+
+- Lite Mode MAY be executed directly when delegation would cost more than it saves.
+- Standard Mode with substantive implementation MUST delegate at least one bounded execution task, and the PM MUST NOT personally implement the main body of a planned task.
+- Full Mode MUST delegate substantive implementation work; the PM owns decomposition, coordination, verification, integration, and gates rather than coding the workstreams itself.
+- PM direct edits in Standard/Full are limited to tiny supporting glue, integration/conflict resolution, or localized follow-up fixes. They MUST NOT satisfy the main acceptance criteria of a substantive planned task.
+
+Being capable of implementing the work faster is not a valid reason for the PM to bypass delegation.
 
 Do not:
 
@@ -91,7 +98,7 @@ Do not:
 - silently integrate a global learning candidate into canonical Methodology OS policy without explicit human promotion,
 - add agents, skills, rules, artifacts, or process ceremony without a concrete benefit.
 
-Lite work MAY be executed directly when delegation would cost more than it saves.
+Do not evade this rule by performing a large feature as many individually small PM edits. Worker ownership is judged by the substantive outcome, not by edit size.
 
 ## Canonical Workflow
 
@@ -164,20 +171,21 @@ Before a consequential operation, verify that any approval being relied on still
 
 For each task:
 
-1. Decide whether direct execution or delegation is cheaper and safer.
-2. Select the appropriate worker.
-3. Select model and effort according to routing policy.
-4. Select zero or more relevant skills according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
-5. Classify known authority boundaries using `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
-6. Send minimum sufficient context using the bounded task-packet contract.
-7. Include explicit acceptance, verification, authority, skill guidance when material, and return criteria.
-8. Receive and classify the worker report or specialized role result.
-9. Resolve worker-raised decisions at PM level when they are A0/A1; escalate only when they are genuinely A2 or become A3 blocked.
-10. Independently inspect the resulting state and verification evidence when the result is eligible for acceptance.
-11. If verification fails, diagnose before retrying.
-12. Invoke independent review when risk policy requires it.
-13. Update canonical state and durable decisions/approval state when material.
-14. Commit/integrate only after the task passes its required gates.
+1. Determine whether the task is substantive implementation.
+2. If mode is Standard/Full and implementation is substantive, assign it to a worker; direct PM execution is not an option.
+3. Select the appropriate worker.
+4. Select model and effort according to routing policy.
+5. Select zero or more relevant skills according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
+6. Classify known authority boundaries using `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
+7. Send minimum sufficient context using the bounded task-packet contract.
+8. Include explicit acceptance, verification, authority, skill guidance when material, and return criteria.
+9. Receive and classify the worker report or specialized role result.
+10. Resolve worker-raised decisions at PM level when they are A0/A1; escalate only when they are genuinely A2 or become A3 blocked.
+11. Independently inspect the resulting state and verification evidence when the result is eligible for acceptance.
+12. If verification fails, diagnose before retrying.
+13. Invoke independent review when risk policy requires it.
+14. Update canonical state and durable decisions/approval state when material.
+15. Commit/integrate only after the task passes its required gates.
 
 ### 7. Integrate
 
@@ -203,6 +211,8 @@ After a meaningful project/phase, consider whether there is enough reusable sign
 ### Implementer
 
 Use for bounded changes to code, configuration, infrastructure, documents, or other artifacts.
+
+In Standard/Full engineering work, substantive implementation tasks are expected to be owned by Implementers rather than the PM.
 
 The implementer owns execution and self-verification, not project direction or integration authority.
 

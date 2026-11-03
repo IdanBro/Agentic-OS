@@ -1,5 +1,15 @@
 # Changelog
 
+
+## 0.2.0 — PM delegation enforcement
+
+- Standard/Full substantive implementation is now worker-owned by policy.
+- The Project Manager may no longer use model capability/speed as a reason to implement a full feature or project itself.
+- Direct PM edits in Standard/Full are limited to narrow supporting glue, integration, verification, conflict resolution, and localized follow-up fixes.
+- Full-mode work must delegate substantive workstreams and should parallelize independent ready tasks when coordination cost is justified.
+- Added blocking eval E-015 to catch monolithic PM implementation of a full application.
+- SessionStart routing now reinforces PM/worker separation.
+
 ## Plugin-native distribution
 
 Replaced the local symlink/runtime installation model with a native Claude Code plugin:
