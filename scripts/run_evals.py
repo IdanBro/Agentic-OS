@@ -448,14 +448,10 @@ def installation_preflight() -> None:
         raise EvalError(f"could not parse Claude Code version: {version_text!r}")
     if parsed < MIN_CLAUDE_VERSION:
         required = ".".join(str(x) for x in MIN_CLAUDE_VERSION)
-        raise EvalError(f"Claude Code {version_text} is too old for this runner; require >= {required}")
+        raise EvalError(f"Claude Code {version_text} is too old for the plugin-native runner; require >= {required}")
 
-    claude_home = Path(os.environ.get("CLAUDE_HOME", Path.home() / ".claude"))
-    adapter = claude_home / "agents" / "methodology-project-manager.md"
-    anchor = claude_home / "methodology-os"
-    if not adapter.exists() or not anchor.exists():
-        raise EvalError("Methodology OS runtime is not installed. Run `./install.sh` and `./install.sh --check` first.")
-
+    if not (ROOT / ".claude-plugin" / "plugin.json").is_file():
+        raise EvalError("Agentic OS plugin manifest is missing.")
 
 def print_static_result(failures: List[str]) -> None:
     if failures:
