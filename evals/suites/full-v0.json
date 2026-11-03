@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "name": "full-v0",
+  "version": 1,
+  "description": "Complete initial Methodology OS behavioral scenario suite for broad regression checks before releases or major integration changes.",
+  "blocking": true,
+  "scenarios": [
+    "E-001",
+    "E-002",
+    "E-003",
+    "E-004",
+    "E-005",
+    "E-006",
+    "E-007",
+    "E-008",
+    "E-009",
+    "E-010",
+    "E-011",
+    "E-012",
+    "E-013",
+    "E-014"
+  ],
+  "notes": "Run selectively because agentic evals have recurring cost. Step 14 implements the executable runner and baseline capture."
+}

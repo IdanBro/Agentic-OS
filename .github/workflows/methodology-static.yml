@@ -1,0 +1,50 @@
+name: Agentic OS Plugin Validation
+
+on:
+  pull_request:
+    paths:
+      - '.claude-plugin/**'
+      - 'agents/**'
+      - 'skills/**'
+      - 'hooks/**'
+      - 'scripts/**'
+      - 'evals/**'
+      - 'core/**'
+      - 'templates/**'
+      - '.github/workflows/methodology-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate script syntax
+        run: |
+          bash -n scripts/session-start.sh
+          python3 -m py_compile scripts/run_evals.py scripts/validate_runtime.py
+
+      - name: Validate JSON manifests
+        run: |
+          python3 -m json.tool .claude-plugin/plugin.json >/dev/null
+          python3 -m json.tool .claude-plugin/marketplace.json >/dev/null
+          python3 -m json.tool hooks/hooks.json >/dev/null
+
+      - name: Validate plugin runtime surface
+        run: python3 scripts/validate_runtime.py
+
+      - name: Validate Agentic OS contracts
+        run: python3 scripts/run_evals.py --static-only
+
+      - name: Validate Claude CLI schema compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Fq '"$schema"' evals/result.schema.json

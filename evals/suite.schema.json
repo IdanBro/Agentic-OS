@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-os.local/evals/suite.schema.json",
+  "title": "Methodology OS Eval Suite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "name", "version", "description", "scenarios"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "name": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "version": {"type": "integer", "minimum": 1},
+    "description": {"type": "string", "minLength": 10},
+    "blocking": {"type": "boolean"},
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^E-[0-9]{3}$"}
+    },
+    "notes": {"type": "string"}
+  }
+}

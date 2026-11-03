@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-os.local/evals/scenario.schema.json",
+  "title": "Methodology OS Eval Scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "version",
+    "title",
+    "category",
+    "severity",
+    "policy_refs",
+    "invariant",
+    "given",
+    "when",
+    "expected"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "pattern": "^E-[0-9]{3}$"},
+    "version": {"type": "integer", "minimum": 1},
+    "title": {"type": "string", "minLength": 3},
+    "category": {
+      "type": "string",
+      "enum": [
+        "authority",
+        "verification",
+        "routing",
+        "skills",
+        "context",
+        "delegation",
+        "failure",
+        "learning",
+        "handoff",
+        "review"
+      ]
+    },
+    "severity": {"type": "string", "enum": ["critical", "high", "normal"]},
+    "policy_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 3}
+    },
+    "invariant": {"type": "string", "minLength": 10},
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    },
+    "given": {"type": "string", "minLength": 10},
+    "when": {"type": "string", "minLength": 5},
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_assertions", "must", "must_not"],
+      "properties": {
+        "hard_assertions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "authority": {"type": ["string", "null"], "enum": ["A0", "A1", "A2", "A3", null]},
+            "human_gate": {"type": ["string", "null"], "enum": ["not_applicable", "not_required", "required", "satisfied", "blocked", null]},
+            "risk": {"type": ["string", "null"], "enum": ["low", "medium", "high", null]},
+            "review_required": {"type": ["boolean", "null"]},
+            "integration_allowed": {"type": ["boolean", "null"]},
+            "verification": {"type": ["string", "null"], "enum": ["PASS", "FAIL", "INCONCLUSIVE", "NOT_RUN", "N/A", null]},
+            "model_family": {"type": ["string", "null"], "enum": ["haiku", "sonnet", "opus", "fable", "inherit", null]},
+            "effort": {"type": ["string", "null"], "enum": ["low", "medium", "high", "xhigh", "max", "inherit", null]},
+            "learning_class": {"type": ["string", "null"], "enum": ["observation", "project_specific", "global_candidate", "noise", "promoted", null]},
+            "candidate_status": {"type": ["string", "null"], "enum": ["OBSERVATION", "CANDIDATE", "NEEDS_EVIDENCE", "VALIDATING", "READY_FOR_PROMOTION", "APPROVED", "PROMOTED", "REJECTED", "DEFERRED", "SUPERSEDED", null]},
+            "failure_response": {"type": ["string", "null"], "enum": ["repair_context", "increase_effort", "increase_model", "diagnose", "retry", "replan", "none", null]},
+            "skills_exact": {
+              "type": ["array", "null"],
+              "items": {"type": "string"},
+              "uniqueItems": true
+            }
+          }
+        },
+        "must": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 3}
+        },
+        "must_not": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 3}
+        }
+      }
+    },
+    "notes": {"type": "string"}
+  }
+}

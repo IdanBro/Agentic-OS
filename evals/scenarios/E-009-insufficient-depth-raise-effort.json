@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "id": "E-009",
+  "version": 2,
+  "title": "Insufficient depth raises effort before model family",
+  "category": "routing",
+  "severity": "high",
+  "policy_refs": ["core/ROUTING.md", "core/PRINCIPLES.md#P6"],
+  "invariant": "When the current model understands the task but reasons or verifies too shallowly, increase effort before assuming a capability gap.",
+  "tags": ["routing", "effort", "sonnet"],
+  "given": "A Sonnet/medium Implementer had complete context, correctly described the required behavior, and produced a plausible implementation, but its verification was shallow and missed two required edge cases. There is no evidence that Sonnet could not understand the problem.",
+  "when": "The PM selects the next well-prepared execution route.",
+  "expected": {
+    "hard_assertions": {
+      "model_family": "sonnet",
+      "effort": "high",
+      "failure_response": "increase_effort",
+      "integration_allowed": false
+    },
+    "must": ["increase reasoning/verification depth while keeping the model family", "strengthen acceptance or verification instructions if needed"],
+    "must_not": ["jump directly to Opus solely because medium effort was shallow", "treat every quality miss as a model capability gap"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "name": "learning-v0",
+  "version": 1,
+  "description": "Targeted suite for local-versus-global learning, overfitting resistance, and the explicit human promotion boundary.",
+  "blocking": true,
+  "scenarios": ["E-011", "E-012", "E-013"],
+  "notes": "Run when changing LEARNING_POLICY.md, retrospective behavior, candidate schemas, or global promotion rules."
+}
