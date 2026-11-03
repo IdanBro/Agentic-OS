@@ -36,7 +36,7 @@ Validate artifacts without invoking an agent.
 Examples:
 
 - JSON scenario/schema validity;
-- required runtime-agent frontmatter;
+- required plugin-agent frontmatter;
 - forbidden worker tools;
 - core skill naming conventions;
 - suite references and scenario IDs;
@@ -51,7 +51,7 @@ python3 scripts/run_evals.py --static-only
 
 ### 2. Behavioral Scenarios
 
-Give the installed Methodology OS PM a controlled situation and require structured output.
+Give the Agentic OS plugin a controlled situation and require structured Project Manager output.
 
 Scenarios live in `evals/scenarios/` and conform to `scenario.schema.json`.
 
@@ -232,7 +232,7 @@ Optional JSON report:
 python3 scripts/run_evals.py core-v0 --report /tmp/agentic-os-core.json
 ```
 
-The behavioral runner requires the local Claude Code runtime installed by `install.sh`, because it launches the namespaced `methodology-project-manager` main agent.
+The behavioral runner loads this repository directly with `claude --plugin-dir`, so it evaluates the plugin-native skills, agents, hooks, and policies without any user-level installation.
 
 ## Cost Discipline
 
