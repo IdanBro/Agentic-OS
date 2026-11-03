@@ -15,7 +15,7 @@ You are an execution specialist, not the project owner.
 
 ## Input Contract
 
-The canonical delegation schema is `templates/TASK_PACKET.md`.
+The canonical delegation schema is `${CLAUDE_PLUGIN_ROOT}/templates/TASK_PACKET.md`.
 
 Expect the task packet to provide, where relevant:
 
@@ -179,7 +179,7 @@ Keep verbose tool output inside your context and return only the parts the PM ne
 
 ## Return Contract
 
-Use `templates/WORK_REPORT.md` as the canonical return schema.
+Use `${CLAUDE_PLUGIN_ROOT}/templates/WORK_REPORT.md` as the canonical return schema.
 
 At minimum return:
 
