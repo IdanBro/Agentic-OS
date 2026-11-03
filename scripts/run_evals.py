@@ -173,27 +173,37 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
             if sid not in scenarios:
                 failures.append(f"{suite_path.name}: unknown scenario {sid}")
 
-    # Runtime adapters must preserve the enforcement frontmatter of the canonical roles.
-    adapter_expectations = {
-        "runtime/agents/methodology-project-manager.md": ("methodology-project-manager", []),
-        "runtime/agents/methodology-implementer.md": ("methodology-implementer", ["Agent", "AskUserQuestion"]),
-        "runtime/agents/methodology-reviewer.md": ("methodology-reviewer", ["Edit", "Write", "NotebookEdit", "Agent"]),
-        "runtime/agents/methodology-debugger.md": ("methodology-debugger", ["Edit", "Write", "NotebookEdit", "Agent"]),
+    # Plugin-native agents must preserve their enforcement frontmatter.
+    agent_expectations = {
+        "agents/project-manager.md": ("project-manager", []),
+        "agents/implementer.md": ("implementer", ["Agent", "AskUserQuestion"]),
+        "agents/reviewer.md": ("reviewer", ["Edit", "Write", "NotebookEdit", "Agent"]),
+        "agents/debugger.md": ("debugger", ["Edit", "Write", "NotebookEdit", "Agent"]),
     }
-    for rel, (expected_name, denied) in adapter_expectations.items():
+    for rel, (expected_name, denied) in agent_expectations.items():
         path = ROOT / rel
         if not path.exists():
-            failures.append(f"missing runtime adapter: {rel}")
+            failures.append(f"missing plugin agent: {rel}")
             continue
         text = path.read_text(encoding="utf-8")
-        if f"name: {expected_name}" not in text.split("---", 2)[1]:
-            failures.append(f"{rel}: wrong/missing namespaced frontmatter name")
+        parts = text.split("---", 2)
+        if len(parts) < 3 or f"name: {expected_name}" not in parts[1]:
+            failures.append(f"{rel}: wrong/missing frontmatter name")
+            continue
         for tool in denied:
-            if tool not in text.split("---", 2)[1]:
+            if tool not in parts[1]:
                 failures.append(f"{rel}: expected denied tool not present: {tool}")
-        if "~/.claude/methodology-os/agents/" not in text:
-            failures.append(f"{rel}: adapter does not point to canonical role source")
 
+    plugin_manifest = ROOT / ".claude-plugin" / "plugin.json"
+    marketplace_manifest = ROOT / ".claude-plugin" / "marketplace.json"
+    if not plugin_manifest.is_file():
+        failures.append("missing .claude-plugin/plugin.json")
+    else:
+        manifest = load_json(plugin_manifest)
+        if manifest.get("name") != "agentic-os":
+            failures.append("plugin manifest name must be agentic-os")
+    if not marketplace_manifest.is_file():
+        failures.append("missing .claude-plugin/marketplace.json")
     for skill in ("methodology-start", "methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
         if not (ROOT / "skills" / skill / "SKILL.md").is_file():
             failures.append(f"missing core skill: {skill}")
