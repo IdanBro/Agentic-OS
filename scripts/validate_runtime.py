@@ -78,6 +78,12 @@ def main() -> int:
         return fail("main human-gate invariant missing")
     if "Global Learning Requires Human Promotion" not in principles:
         return fail("global-learning human-promotion invariant missing")
+    if "The PM Orchestrates Standard/Full Work" not in principles:
+        return fail("PM delegation invariant missing")
+
+    scenario = ROOT / "evals" / "scenarios" / "E-015-full-build-requires-delegation.json"
+    if not scenario.is_file():
+        return fail("delegation regression scenario E-015 is missing")
 
     print("Plugin runtime sanity: PASS")
     return 0
