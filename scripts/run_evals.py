@@ -2,8 +2,8 @@
 """Methodology OS V0 eval runner.
 
 Runs static contract checks plus fresh Claude Code decision simulations against the
-versioned scenarios in evals/. Behavioral runs require a local Methodology OS
-installation (`./install.sh`) so the namespaced PM adapter is available.
+versioned scenarios in evals/. Behavioral runs load this repository directly as the Agentic OS plugin via
+`--plugin-dir`, so no user-level installation is required.
 
 The runner is deterministic-first: exact structured fields are graded directly.
 Semantic `must` / `must_not` expectations are judged only when --semantic-judge
@@ -30,7 +30,7 @@ EVALS = ROOT / "evals"
 SCENARIOS_DIR = EVALS / "scenarios"
 SUITES_DIR = EVALS / "suites"
 RESULT_SCHEMA_PATH = EVALS / "result.schema.json"
-MIN_CLAUDE_VERSION = (2, 1, 217)  # budget-cap behavior used by this runner
+MIN_CLAUDE_VERSION = (2, 1, 273)  # plugin-native runtime baseline
 RUNNER_VERSION = "1.0"
 
 ALLOWED_AUTHORITY = {None, "A0", "A1", "A2", "A3"}
@@ -209,7 +209,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
 
 def build_eval_prompt(scenario: Dict[str, Any]) -> str:
     refs = "\n".join(f"- {ref}" for ref in scenario.get("policy_refs", []))
-    return f"""You are executing a Methodology OS behavioral evaluation as the installed Project Manager.
+    return f"""You are executing an Agentic OS behavioral evaluation with the repository loaded as a plugin. Apply the methodology-start skill and canonical Project Manager role for this decision simulation.
 
 This is a DECISION SIMULATION ONLY. Do not modify files, run project commands, contact external systems, merge anything, or perform the described side effect. Read the canonical Methodology OS policies when needed, then return the decision you would make.
 
@@ -249,7 +249,7 @@ def run_claude_structured(
     agent: Optional[str],
     bare: bool = False,
 ) -> Tuple[Dict[str, Any], Optional[float], float]:
-    cmd = ["claude"]
+    cmd = ["claude", "--plugin-dir", str(ROOT)]
     if bare:
         cmd.append("--bare")
     if agent:
@@ -378,7 +378,7 @@ def run_scenario(
             effort=args.effort,
             max_turns=args.max_turns,
             budget_usd=args.budget_per_scenario,
-            agent="methodology-project-manager",
+            agent=None,
         )
         hard_failures = grade_hard(scenario, result)
         hard_pass = not hard_failures
