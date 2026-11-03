@@ -55,6 +55,8 @@ claude --agent methodology-project-manager
 
 Claude Code runs that agent as the main session, while the PM can delegate to the namespaced Methodology OS workers.
 
+Cloud note: `/methodology-start` is portable. It loads the Methodology OS control plane from the private `IdanBro/Agentic-OS` GitHub repository using authenticated GitHub access, then falls back to the local installation only when remote access is unavailable. If custom Methodology OS agents are not installed in the cloud environment, it fetches their canonical role contracts from GitHub and uses general-purpose subagents with those contracts.
+
 For the normal workflow, start Methodology OS in the current project with:
 
 ```text
