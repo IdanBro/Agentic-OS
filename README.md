@@ -21,7 +21,7 @@ open Claude Code
 For explicit activation:
 
 ```text
-/methodology-start <objective>
+/agentic-os:methodology-start <objective>
 ```
 
 The SessionStart hook also tells Claude when Agentic OS is appropriate, so complex project work can route into the methodology automatically.
@@ -70,7 +70,7 @@ In Claude Code:
 
 Because the repository is private, the environment/account adding the marketplace must have access to `IdanBro/Agentic-OS`.
 
-Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on supported Claude Code versions. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
+Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on Claude Code v2.1.273 or later. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
 
 ## Normal Usage
 
@@ -84,7 +84,7 @@ claude
 Then either give Claude a complex project goal normally, or invoke Agentic OS explicitly:
 
 ```text
-/methodology-start Implement the authentication feature end-to-end
+/agentic-os:methodology-start Implement the authentication feature end-to-end
 ```
 
 Agentic OS is responsible for deciding:
