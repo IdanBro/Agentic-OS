@@ -1,27 +1,37 @@
 #!/usr/bin/env python3
-"""Small zero-model runtime sanity checker.
-
-This checker complements `run_evals.py --static-only` with a deliberately tiny
-surface that can be executed independently when debugging installation/CI.
-"""
+"""Zero-model sanity checker for the Agentic OS Claude Code plugin."""
 
 from pathlib import Path
+import json
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED = [
-    ROOT / "runtime" / "CLAUDE.md",
-    ROOT / "runtime" / "agents" / "methodology-project-manager.md",
-    ROOT / "runtime" / "agents" / "methodology-implementer.md",
-    ROOT / "runtime" / "agents" / "methodology-reviewer.md",
-    ROOT / "runtime" / "agents" / "methodology-debugger.md",
+    ROOT / ".claude-plugin" / "plugin.json",
+    ROOT / ".claude-plugin" / "marketplace.json",
+    ROOT / "hooks" / "hooks.json",
+    ROOT / "scripts" / "session-start.sh",
+    ROOT / "agents" / "project-manager.md",
+    ROOT / "agents" / "implementer.md",
+    ROOT / "agents" / "reviewer.md",
+    ROOT / "agents" / "debugger.md",
     ROOT / "skills" / "methodology-start" / "SKILL.md",
     ROOT / "skills" / "methodology-os" / "SKILL.md",
     ROOT / "skills" / "methodology-planning" / "SKILL.md",
     ROOT / "skills" / "methodology-handoff" / "SKILL.md",
     ROOT / "skills" / "methodology-retrospective" / "SKILL.md",
+    ROOT / "core" / "PRINCIPLES.md",
+    ROOT / "core" / "QUALITY_GATES.md",
+    ROOT / "core" / "ESCALATION_POLICY.md",
+    ROOT / "templates" / "TASK_PACKET.md",
+    ROOT / "templates" / "WORK_REPORT.md",
 ]
+
+
+def fail(message: str) -> int:
+    print(f"FAIL: {message}", file=sys.stderr)
+    return 1
 
 
 def main() -> int:
@@ -31,15 +41,45 @@ def main() -> int:
             print(f"MISSING: {path}", file=sys.stderr)
         return 1
 
-    kernel = (ROOT / "runtime" / "CLAUDE.md").read_text(encoding="utf-8")
-    if "Never merge/promote to `main` without explicit approval" not in kernel:
-        print("MISSING: runtime main human-gate rule", file=sys.stderr)
-        return 1
-    if "global OS learning as a proposal" not in kernel:
-        print("MISSING: runtime global-learning promotion rule", file=sys.stderr)
-        return 1
+    plugin = json.loads((ROOT / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+    if plugin.get("name") != "agentic-os":
+        return fail("plugin manifest name must be agentic-os")
 
-    print("Runtime sanity: PASS")
+    marketplace = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+    matches = [p for p in marketplace.get("plugins", []) if p.get("name") == "agentic-os"]
+    if len(matches) != 1 or matches[0].get("source") != "./":
+        return fail("marketplace must expose exactly one root agentic-os plugin")
+
+    hook = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
+    if "SessionStart" not in hook:
+        return fail("SessionStart routing hook is required")
+
+    start = (ROOT / "skills" / "methodology-start" / "SKILL.md").read_text(encoding="utf-8")
+    if "${CLAUDE_PLUGIN_ROOT}" not in start:
+        return fail("methodology-start must use CLAUDE_PLUGIN_ROOT")
+    remote_loader_markers = ["gh api", "METHODOLOGY_OS_REPO=", "GITHUB_TOKEN", "GH_TOKEN"]
+    if any(marker in start for marker in remote_loader_markers):
+        return fail("methodology-start must not perform runtime GitHub control-plane fetching")
+
+    agent_expectations = {
+        "implementer.md": ["Agent", "AskUserQuestion"],
+        "reviewer.md": ["Edit", "Write", "NotebookEdit", "Agent"],
+        "debugger.md": ["Edit", "Write", "NotebookEdit", "Agent"],
+    }
+    for filename, denied in agent_expectations.items():
+        text = (ROOT / "agents" / filename).read_text(encoding="utf-8")
+        frontmatter = text.split("---", 2)[1]
+        for tool in denied:
+            if tool not in frontmatter:
+                return fail(f"{filename}: missing denied tool {tool}")
+
+    principles = (ROOT / "core" / "PRINCIPLES.md").read_text(encoding="utf-8")
+    if "Main Is Human-Gated" not in principles:
+        return fail("main human-gate invariant missing")
+    if "Global Learning Requires Human Promotion" not in principles:
+        return fail("global-learning human-promotion invariant missing")
+
+    print("Plugin runtime sanity: PASS")
     return 0
 
 

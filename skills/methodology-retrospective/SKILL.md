@@ -7,7 +7,7 @@ description: Review a meaningful completed Methodology OS phase or project for r
 
 Extract useful learning from completed work without turning one experience into a global rule.
 
-Follow `core/LEARNING_POLICY.md` for learning classification, validation, candidate lifecycle, privacy, and promotion requirements.
+Follow `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md` for learning classification, validation, candidate lifecycle, privacy, and promotion requirements.
 
 ## When to Use
 
@@ -158,7 +158,7 @@ Project-local changes may be applied when they are inside the current project au
 
 Potentially reusable across Methodology OS projects, but not yet global policy.
 
-If durable tracking is warranted, use `templates/LEARNING_CANDIDATE.md`.
+If durable tracking is warranted, use `${CLAUDE_PLUGIN_ROOT}/templates/LEARNING_CANDIDATE.md`.
 
 ### Noise / One-Off
 
@@ -185,7 +185,7 @@ Do not use fake numeric confidence when no measured probability exists.
 
 ## Candidate Lifecycle
 
-Use the lifecycle from `core/LEARNING_POLICY.md`:
+Use the lifecycle from `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md`:
 
 ```text
 OBSERVATION
@@ -253,7 +253,7 @@ You MAY prepare:
 - an eval scenario draft;
 - a clearly non-canonical draft branch/PR proposal when useful.
 
-A global rule, agent behavior, template, routing default, quality/authority rule, or global skill change remains a proposal until explicitly promoted by the user according to `core/LEARNING_POLICY.md`.
+A global rule, agent behavior, template, routing default, quality/authority rule, or global skill change remains a proposal until explicitly promoted by the user according to `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md`.
 
 ## Output
 

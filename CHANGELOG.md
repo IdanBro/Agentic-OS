@@ -1,5 +1,19 @@
 # Changelog
 
+## Plugin-native distribution
+
+Replaced the local symlink/runtime installation model with a native Claude Code plugin:
+
+- repository root is now the `agentic-os` plugin;
+- added plugin and marketplace manifests under `.claude-plugin/`;
+- existing `agents/` and `skills/` are auto-discovered as native plugin components;
+- added a SessionStart routing hook for automatic methodology activation on appropriate project work;
+- canonical policy/template references use `${CLAUDE_PLUGIN_ROOT}`;
+- removed `install.sh`, global `CLAUDE.md` kernel, runtime adapters, and runtime GitHub fetching;
+- behavioral evals load the repository directly with `--plugin-dir`;
+- `main` is intended to serve as the stable marketplace/release surface after explicit promotion approval.
+
+
 Notable Methodology OS changes are recorded here by development milestone. Detailed behavior belongs in the canonical policy, agent, skill, template, eval, and runtime files rather than in duplicated changelog prose.
 
 ## Unreleased

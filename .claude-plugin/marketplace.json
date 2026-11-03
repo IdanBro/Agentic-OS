@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "idanbro-agentic-os",
+  "version": "1.0.0",
+  "description": "Private marketplace for the Agentic OS Claude Code plugin.",
+  "owner": {
+    "name": "IdanBro"
+  },
+  "plugins": [
+    {
+      "name": "agentic-os",
+      "description": "Methodology OS for autonomous, verified Claude Code project execution.",
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}

@@ -1,117 +1,153 @@
-# Agentic OS / Methodology OS
+# Agentic OS
 
-A reusable operating system for running complex Claude Code work with high autonomy, professional-quality output, independent verification, durable state, controlled context, and explicit human authority over consequential decisions.
+Agentic OS is a Claude Code plugin for running complex project work with high autonomy, professional-quality output, bounded delegation, independent verification, durable state, efficient context use, and explicit human authority over consequential decisions.
 
-The repository is the **source of truth**. Claude Code receives a thin global runtime through symlinks and a small `CLAUDE.md` kernel; detailed policies are loaded only when relevant.
+The repository itself is the plugin source of truth.
 
-## Design Priorities
+## Goal
 
-1. Professional-quality output.
-2. Efficient token and context usage.
-3. High autonomy for routine execution.
-4. Human control over high-impact decisions.
-5. Evidence-based completion and independent verification.
+Install Agentic OS once, then use it from any Claude Code project without relying on local `~/.claude` configuration, symlinks, copied prompts, or runtime GitHub fetching.
 
-The governing rule is:
+The intended user experience is:
 
-> Use the lightest workflow that still protects the required quality bar.
+```text
+open Claude Code
+→ Agentic OS plugin is already available
+→ open/connect any project repository
+→ give Claude the outcome you want
+→ Agentic OS automatically selects the workflow, skills, agents, verification, and review strategy
+```
 
-## Status
+For explicit activation:
 
-- ✅ Step 1 — Requirements & Philosophy
-- ✅ Step 2 — Constitution / Core Principles
-- ✅ Step 3 — Project Lifecycle / Orchestration
-- ✅ Step 4 — Agent Architecture
-- ✅ Step 5 — Model & Effort Routing
-- ✅ Step 6 — Context Architecture
-- ✅ Step 7 — Project State
-- ✅ Step 8 — Delegation Protocol
-- ✅ Step 9 — Verification System
-- ✅ Step 10 — Skills Architecture
-- ✅ Step 11 — Escalation & Autonomy
-- ✅ Step 12 — Learning System
-- ✅ Step 13 — Evals
-- ✅ Step 14 — Claude Code Integration (repository/runtime implementation)
-- ➡️ Step 15 — Real Project Trial
+```text
+/agentic-os:methodology-start <objective>
+```
 
-Step 14's repository-side implementation is complete. A real local Claude Code smoke/eval run is still required after pulling `dev` onto the target machine; Step 15 begins once that runtime check passes.
+The SessionStart hook also tells Claude when Agentic OS is appropriate, so complex project work can route into the methodology automatically.
+
+## Plugin Architecture
+
+```text
+Agentic-OS/
+├── .claude-plugin/
+│   ├── plugin.json
+│   └── marketplace.json
+├── agents/
+│   ├── project-manager.md
+│   ├── implementer.md
+│   ├── reviewer.md
+│   └── debugger.md
+├── skills/
+│   ├── methodology-start/
+│   ├── methodology-os/
+│   ├── methodology-planning/
+│   ├── methodology-handoff/
+│   └── methodology-retrospective/
+├── hooks/
+│   └── hooks.json
+├── core/
+├── templates/
+├── evals/
+├── trials/
+└── scripts/
+```
+
+Claude Code auto-discovers the plugin's agents, skills, and hooks. Canonical policies and templates stay in the same plugin package and are loaded on demand through `${CLAUDE_PLUGIN_ROOT}`.
+
+There is no separate local runtime layer.
+
+## Install from GitHub
+
+Agentic OS is exposed as a private Claude plugin marketplace from this repository.
+
+In Claude Code:
+
+```text
+/plugin marketplace add IdanBro/Agentic-OS
+/plugin install agentic-os@idanbro-agentic-os
+```
+
+Because the repository is private, the environment/account adding the marketplace must have access to `IdanBro/Agentic-OS`.
+
+Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on Claude Code v2.1.273 or later. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
+
+## Normal Usage
+
+Open any project:
+
+```bash
+cd ~/projects/my-project
+claude
+```
+
+Then either give Claude a complex project goal normally, or invoke Agentic OS explicitly:
+
+```text
+/agentic-os:methodology-start Implement the authentication feature end-to-end
+```
+
+Agentic OS is responsible for deciding:
+
+- Lite / Standard / Full workflow depth;
+- repository investigation depth;
+- planning and decomposition;
+- Implementer / Reviewer / Debugger use;
+- model and effort routing;
+- skill selection;
+- state artifacts;
+- verification depth;
+- independent review requirements;
+- Git workflow;
+- human escalation.
+
+The user should not have to manually orchestrate those pieces.
 
 ## Architecture
 
 ```text
-User
- ↓
-Methodology Project Manager
- ├── Implementer   — bounded change + self-verification
- ├── Reviewer      — independent, read-only review
- └── Debugger      — diagnosis-first, read-only investigation
-
-PM
- ↓
-independent verification
- ↓
+User objective
+      ↓
+Project Manager
+      ├── Implementer — bounded execution + self-verification
+      ├── Reviewer    — independent review
+      └── Debugger    — diagnosis-first investigation
+      ↓
+PM independent verification
+      ↓
 quality / authority gates
- ↓
-working branch → PR → dev
- ↓
-explicit user approval
- ↓
-main
+      ↓
+working branch / PR / integration
+      ↓
+explicit human gate for main
 ```
 
-V0 deliberately keeps orchestration shallow: workers do not recursively manage other workers. Complexity is added only when evidence shows a real benefit.
+V0 deliberately keeps orchestration shallow: workers do not recursively orchestrate other workers.
 
-## Lifecycle
+## Core Rules
 
-Three execution depths are available:
+The governing rule is:
 
-- **Lite** — small, low-risk, well-understood work.
-- **Standard** — normal multi-step or medium-risk work.
-- **Full** — large, high-risk, ambiguous, long-running, or coordination-heavy work.
+> Use the lightest workflow that still protects the required professional quality bar.
 
-Canonical lifecycle:
+Priority order:
 
-```text
-INTAKE → TRIAGE → [INVESTIGATE] → PLAN → [HUMAN GATE] → PREPARE
-                                                        ↓
-                                                   EXECUTE
-                                                        ↓
-                                                     VERIFY
-                                                        ↓
-                                                    [REVIEW]
-                                                        ↓
-                                                    INTEGRATE
-                                                        ↓
-                                                  SYSTEM CHECK
-                                                        ↓
-                                                    COMPLETE
-```
-
-Verification failure routes through diagnosis/replanning rather than blind retry.
-
-## Core Runtime Rules
-
-### Delegation
-
-PM→worker work is bounded by `templates/TASK_PACKET.md`; execution workers return `templates/WORK_REPORT.md`.
-
-Worker execution states:
-
-```text
-PASS | PARTIAL | BLOCKED | FAILED
-```
-
-Worker `PASS` is only a claim eligible for PM verification — never project truth by itself.
+1. professional-quality output;
+2. efficient token/context use;
+3. high autonomy for routine work;
+4. evidence-based completion;
+5. human control over consequential decisions.
 
 ### Verification
 
-`core/QUALITY_GATES.md` is canonical.
+Worker `PASS` is never project truth by itself.
 
-| Risk | PM verification | Independent Reviewer |
-| --- | --- | --- |
-| Low | required for delegated work | normally no |
-| Medium | required | required |
-| High | deep | required, deep |
+```text
+worker self-verification
+→ PM independent verification
+→ independent Reviewer for medium/high risk
+→ integration readiness
+```
 
 Verification states:
 
@@ -119,11 +155,7 @@ Verification states:
 PASS | FAIL | INCONCLUSIVE | NOT_RUN | N/A
 ```
 
-Human approval never converts missing/failed technical evidence into `PASS`.
-
 ### Authority
-
-`core/ESCALATION_POLICY.md` separates authority from technical risk:
 
 ```text
 A0 — AUTONOMOUS
@@ -132,197 +164,22 @@ A2 — HUMAN GATE
 A3 — BLOCKED
 ```
 
-Approval envelopes are bounded by action, target, scope, conditions, limits, and freshness. Approval is not transitive.
-
-A clear current request can itself satisfy the gate for that exact action; duplicate confirmation is discouraged.
-
-`main` remains specifically human-gated.
+`main` remains explicitly human-gated.
 
 ### Context
 
-`core/CONTEXT_POLICY.md` treats context as a working set, not an archive.
-
-Keep durable truth in project artifacts; keep high-volume logs/searches local to workers; return compact evidence to the PM. Prefer references to copied history.
-
-### Routing
-
-`core/ROUTING.md` routes model capability separately from effort.
-
-```text
-Haiku  → tiny/mechanical
-Sonnet → normal bounded execution
-Opus   → complex reasoning / difficult debugging / high-risk review
-Fable  → hardest long-horizon, highly ambiguous work
-```
-
-Missing context, bad decomposition, or environment failures are fixed directly. Insufficient reasoning depth normally raises effort before model family; genuine capability gaps raise model capability.
-
-### Skills
-
-Skills are optional capability modules and are loaded on demand. Generic workers preload none in V0.
-
-Global Methodology OS skills:
-
-- `methodology-os`
-- `methodology-planning`
-- `methodology-handoff`
-- `methodology-retrospective`
-
-Skill availability never expands authority.
+Context is a working set, not an archive. High-volume exploration belongs in bounded workers; the PM retains compact conclusions and evidence.
 
 ### Learning
 
-Global learning is governed by `core/LEARNING_POLICY.md`:
-
-```text
-OBSERVATION
-   ↓
-CANDIDATE
-   ↓
-NEEDS_EVIDENCE / VALIDATING
-   ↓
-READY_FOR_PROMOTION
-   ↓
-HUMAN PROMOTION GATE
-   ↓
-IMPLEMENT + EVAL + VERIFY
-   ↓
-PROMOTED
-```
-
-Project-specific learning stays local. A global candidate is never active policy until explicitly promoted and integrated through normal quality gates.
-
-## Project State
-
-Canonical durable artifacts:
-
-| Artifact | Purpose |
-| --- | --- |
-| `PROJECT_BRIEF.md` | stable outcome, scope, constraints, success criteria |
-| `PLAN.md` | intended path, tasks, dependencies, acceptance |
-| `STATE.md` | current operational truth |
-| `DECISIONS.md` | durable material decisions and bounded approvals |
-| `HANDOFF.md` | compressed ownership transfer |
-| `LEARNING_CANDIDATE.md` | durable global-learning candidate when warranted |
-
-`STATE.md` is the sole hot operational snapshot. The other artifacts should not become parallel status trackers.
-
-## Claude Code Installation
-
-The repository remains canonical. The installer creates only a thin global runtime under `~/.claude`.
-
-From the repository root:
-
-```bash
-bash install.sh
-bash install.sh --check
-```
-
-Installed layout:
-
-```text
-~/.claude/
-├── methodology-os -> <this checkout>
-├── CLAUDE.md
-│    └── managed import → runtime/CLAUDE.md
-├── agents/
-│    ├── methodology-project-manager.md
-│    ├── methodology-implementer.md
-│    ├── methodology-reviewer.md
-│    └── methodology-debugger.md
-└── skills/
-     ├── methodology-os
-     ├── methodology-planning
-     ├── methodology-handoff
-     └── methodology-retrospective
-```
-
-Global agent names are intentionally namespaced to avoid collisions with project-specific agents. Runtime adapters load the canonical role contracts from this repository instead of duplicating them.
-
-The installer:
-
-- is idempotent in installed state;
-- preserves existing user `CLAUDE.md` content;
-- manages only a clearly marked import block;
-- backs up regular `CLAUDE.md` before editing;
-- refuses to overwrite conflicting agent/skill paths unless `--force` is explicit;
-- removes only paths it owns during `--uninstall`.
-
-Full Methodology OS session:
-
-```bash
-claude --agent methodology-project-manager
-```
-
-Lightweight use from a normal Claude Code session:
-
-```text
-/methodology-os
-```
-
-Detailed runtime documentation: `runtime/README.md`.
-
-## Evals
-
-The V0 eval framework protects behavioral invariants rather than raw coding intelligence.
-
-Static validation requires no Claude model calls:
-
-```bash
-python3 scripts/run_evals.py --static-only
-```
-
-Blocking core behavioral suite:
-
-```bash
-python3 scripts/run_evals.py core-v0
-```
-
-Optional deeper semantic evaluation:
-
-```bash
-python3 scripts/run_evals.py core-v0 --semantic-judge
-```
-
-Targeted suites include `routing-v0` and `learning-v0`; `full-v0` runs all current scenarios.
-
-Behavioral runs use structured JSON, read-only tools, plan permission mode, fresh non-persistent sessions, turn caps, and budget caps. Critical authority/verification/self-modification failures block regardless of aggregate score.
-
-GitHub Actions runs syntax, static-contract, and isolated installer lifecycle checks without consuming Claude tokens.
-
-See `evals/README.md` for the complete eval contract.
-
-## Git Operating Model
-
-```text
-dev
- └── task / feature / fix branch
-          ↓
-      implementation
-          ↓
-      verification / review
-          ↓
-       PR → dev
-          ↓
-         dev
-          ↓
-   prepare promotion
-          ↓
-   EXPLICIT USER APPROVAL
-          ↓
-        main
-```
-
-Routine verified integration into `dev` is autonomous unless repository-specific policy is stricter. Direct development on `main` is prohibited.
+Project-specific learning may stay local. Global Agentic OS behavior changes remain proposals until explicitly promoted by the human and passed through normal eval/review gates.
 
 ## Policy Map
-
-Detailed behavior belongs in canonical policy files, not this README:
 
 | Concern | Canonical source |
 | --- | --- |
 | Requirements | `OS_REQUIREMENTS.md` |
-| Constitutional invariants | `core/PRINCIPLES.md` |
+| Principles | `core/PRINCIPLES.md` |
 | Lifecycle / orchestration | `core/ORCHESTRATION.md` |
 | Model / effort routing | `core/ROUTING.md` |
 | Context | `core/CONTEXT_POLICY.md` |
@@ -330,42 +187,58 @@ Detailed behavior belongs in canonical policy files, not this README:
 | Skills | `core/SKILL_POLICY.md` |
 | Human authority | `core/ESCALATION_POLICY.md` |
 | Learning / promotion | `core/LEARNING_POLICY.md` |
-| Eval framework | `evals/README.md` |
-| Claude Code runtime | `runtime/README.md` |
 
-## Repository Layout
+## Evals
 
-```text
-Agentic-OS/
-├── OS_REQUIREMENTS.md
-├── README.md
-├── CHANGELOG.md
-├── core/
-├── agents/
-├── skills/
-├── templates/
-├── evals/
-│   ├── scenarios/
-│   └── suites/
-├── runtime/
-│   ├── CLAUDE.md
-│   └── agents/
-├── scripts/
-│   └── run_evals.py
-├── install.sh
-└── .github/workflows/methodology-static.yml
+Static validation:
+
+```bash
+python3 scripts/validate_runtime.py
+python3 scripts/run_evals.py --static-only
 ```
 
-## Next: Step 15 — Real Project Trial
+Behavioral suites load the current repository directly as a Claude plugin with `--plugin-dir`:
 
-After pulling the Step 14 changes onto a real Claude Code machine:
+```bash
+python3 scripts/run_evals.py core-v0
+python3 scripts/run_evals.py routing-v0
+python3 scripts/run_evals.py learning-v0
+```
 
-1. install/check the global runtime;
-2. confirm Claude sees the global kernel and namespaced PM;
-3. run static checks;
-4. run `core-v0` and inspect the baseline;
-5. use the OS on one meaningful real project;
-6. record quality, token/context behavior, friction, failures, and any learning candidates;
-7. revise only from observed evidence.
+Optional semantic judging:
 
-The goal of V0 is not maximum ceremony. It is a small, inspectable operating system that can prove when additional complexity is worth adding.
+```bash
+python3 scripts/run_evals.py core-v0 --semantic-judge
+```
+
+## Distribution Model
+
+```text
+GitHub Agentic-OS repo
+        ↓
+private Agentic OS marketplace
+        ↓
+agentic-os plugin
+        ↓
+Claude account
+        ↓
+Claude Code sessions
+        ↓
+any project repository
+```
+
+Updating Agentic OS means publishing/updating the plugin source in this repository, not editing per-machine configuration.
+
+## Development Branch Policy
+
+Normal Agentic OS development happens on feature/fix branches and integrates into `dev`.
+
+Promotion to `main` remains explicitly human-gated. Since the GitHub marketplace is intended to serve stable releases, `main` is the release surface once a plugin version is approved.
+
+## Status
+
+- Core Methodology OS policies: complete
+- Agents and skills: complete
+- Behavioral eval framework: complete
+- Real-project trial: active
+- Plugin-native packaging: in progress

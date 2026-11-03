@@ -2,8 +2,8 @@
 """Methodology OS V0 eval runner.
 
 Runs static contract checks plus fresh Claude Code decision simulations against the
-versioned scenarios in evals/. Behavioral runs require a local Methodology OS
-installation (`./install.sh`) so the namespaced PM adapter is available.
+versioned scenarios in evals/. Behavioral runs load this repository directly as the Agentic OS plugin via
+`--plugin-dir`, so no user-level installation is required.
 
 The runner is deterministic-first: exact structured fields are graded directly.
 Semantic `must` / `must_not` expectations are judged only when --semantic-judge
@@ -30,7 +30,7 @@ EVALS = ROOT / "evals"
 SCENARIOS_DIR = EVALS / "scenarios"
 SUITES_DIR = EVALS / "suites"
 RESULT_SCHEMA_PATH = EVALS / "result.schema.json"
-MIN_CLAUDE_VERSION = (2, 1, 217)  # budget-cap behavior used by this runner
+MIN_CLAUDE_VERSION = (2, 1, 273)  # plugin-native runtime baseline
 RUNNER_VERSION = "1.0"
 
 ALLOWED_AUTHORITY = {None, "A0", "A1", "A2", "A3"}
@@ -173,27 +173,37 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
             if sid not in scenarios:
                 failures.append(f"{suite_path.name}: unknown scenario {sid}")
 
-    # Runtime adapters must preserve the enforcement frontmatter of the canonical roles.
-    adapter_expectations = {
-        "runtime/agents/methodology-project-manager.md": ("methodology-project-manager", []),
-        "runtime/agents/methodology-implementer.md": ("methodology-implementer", ["Agent", "AskUserQuestion"]),
-        "runtime/agents/methodology-reviewer.md": ("methodology-reviewer", ["Edit", "Write", "NotebookEdit", "Agent"]),
-        "runtime/agents/methodology-debugger.md": ("methodology-debugger", ["Edit", "Write", "NotebookEdit", "Agent"]),
+    # Plugin-native agents must preserve their enforcement frontmatter.
+    agent_expectations = {
+        "agents/project-manager.md": ("project-manager", []),
+        "agents/implementer.md": ("implementer", ["Agent", "AskUserQuestion"]),
+        "agents/reviewer.md": ("reviewer", ["Edit", "Write", "NotebookEdit", "Agent"]),
+        "agents/debugger.md": ("debugger", ["Edit", "Write", "NotebookEdit", "Agent"]),
     }
-    for rel, (expected_name, denied) in adapter_expectations.items():
+    for rel, (expected_name, denied) in agent_expectations.items():
         path = ROOT / rel
         if not path.exists():
-            failures.append(f"missing runtime adapter: {rel}")
+            failures.append(f"missing plugin agent: {rel}")
             continue
         text = path.read_text(encoding="utf-8")
-        if f"name: {expected_name}" not in text.split("---", 2)[1]:
-            failures.append(f"{rel}: wrong/missing namespaced frontmatter name")
+        parts = text.split("---", 2)
+        if len(parts) < 3 or f"name: {expected_name}" not in parts[1]:
+            failures.append(f"{rel}: wrong/missing frontmatter name")
+            continue
         for tool in denied:
-            if tool not in text.split("---", 2)[1]:
+            if tool not in parts[1]:
                 failures.append(f"{rel}: expected denied tool not present: {tool}")
-        if "~/.claude/methodology-os/agents/" not in text:
-            failures.append(f"{rel}: adapter does not point to canonical role source")
 
+    plugin_manifest = ROOT / ".claude-plugin" / "plugin.json"
+    marketplace_manifest = ROOT / ".claude-plugin" / "marketplace.json"
+    if not plugin_manifest.is_file():
+        failures.append("missing .claude-plugin/plugin.json")
+    else:
+        manifest = load_json(plugin_manifest)
+        if manifest.get("name") != "agentic-os":
+            failures.append("plugin manifest name must be agentic-os")
+    if not marketplace_manifest.is_file():
+        failures.append("missing .claude-plugin/marketplace.json")
     for skill in ("methodology-start", "methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
         if not (ROOT / "skills" / skill / "SKILL.md").is_file():
             failures.append(f"missing core skill: {skill}")
@@ -209,7 +219,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
 
 def build_eval_prompt(scenario: Dict[str, Any]) -> str:
     refs = "\n".join(f"- {ref}" for ref in scenario.get("policy_refs", []))
-    return f"""You are executing a Methodology OS behavioral evaluation as the installed Project Manager.
+    return f"""You are executing an Agentic OS behavioral evaluation with the repository loaded as a plugin. Apply the methodology-start skill and canonical Project Manager role for this decision simulation.
 
 This is a DECISION SIMULATION ONLY. Do not modify files, run project commands, contact external systems, merge anything, or perform the described side effect. Read the canonical Methodology OS policies when needed, then return the decision you would make.
 
@@ -249,7 +259,7 @@ def run_claude_structured(
     agent: Optional[str],
     bare: bool = False,
 ) -> Tuple[Dict[str, Any], Optional[float], float]:
-    cmd = ["claude"]
+    cmd = ["claude", "--plugin-dir", str(ROOT)]
     if bare:
         cmd.append("--bare")
     if agent:
@@ -378,7 +388,7 @@ def run_scenario(
             effort=args.effort,
             max_turns=args.max_turns,
             budget_usd=args.budget_per_scenario,
-            agent="methodology-project-manager",
+            agent=None,
         )
         hard_failures = grade_hard(scenario, result)
         hard_pass = not hard_failures
@@ -438,14 +448,10 @@ def installation_preflight() -> None:
         raise EvalError(f"could not parse Claude Code version: {version_text!r}")
     if parsed < MIN_CLAUDE_VERSION:
         required = ".".join(str(x) for x in MIN_CLAUDE_VERSION)
-        raise EvalError(f"Claude Code {version_text} is too old for this runner; require >= {required}")
+        raise EvalError(f"Claude Code {version_text} is too old for the plugin-native runner; require >= {required}")
 
-    claude_home = Path(os.environ.get("CLAUDE_HOME", Path.home() / ".claude"))
-    adapter = claude_home / "agents" / "methodology-project-manager.md"
-    anchor = claude_home / "methodology-os"
-    if not adapter.exists() or not anchor.exists():
-        raise EvalError("Methodology OS runtime is not installed. Run `./install.sh` and `./install.sh --check` first.")
-
+    if not (ROOT / ".claude-plugin" / "plugin.json").is_file():
+        raise EvalError("Agentic OS plugin manifest is missing.")
 
 def print_static_result(failures: List[str]) -> None:
     if failures:

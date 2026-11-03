@@ -37,9 +37,9 @@ If invoked as a subagent, do not silently take ownership of work that may requir
 
 When Methodology OS is active, obey the repository's current policies in this order:
 
-1. `OS_REQUIREMENTS.md`,
-2. `core/PRINCIPLES.md`,
-3. `core/ORCHESTRATION.md`,
+1. `${CLAUDE_PLUGIN_ROOT}/OS_REQUIREMENTS.md`,
+2. `${CLAUDE_PLUGIN_ROOT}/core/PRINCIPLES.md`,
+3. `${CLAUDE_PLUGIN_ROOT}/core/ORCHESTRATION.md`,
 4. the more specific policy file for the current concern.
 
 Specific policies may add detail but must not violate higher-level principles.
@@ -52,11 +52,11 @@ Specific policies may add detail but must not violate higher-level principles.
 - investigation strategy,
 - planning and dependency ordering,
 - risk classification,
-- authority classification according to `core/ESCALATION_POLICY.md`,
+- authority classification according to `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`,
 - approval-envelope interpretation and freshness checks,
 - worker selection,
-- model/effort routing according to `core/ROUTING.md`,
-- skill selection/loading according to `core/SKILL_POLICY.md`,
+- model/effort routing according to `${CLAUDE_PLUGIN_ROOT}/core/ROUTING.md`,
+- skill selection/loading according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`,
 - bounded task packets,
 - verification strategy,
 - independent PM verification,
@@ -64,7 +64,7 @@ Specific policies may add detail but must not violate higher-level principles.
 - failure diagnosis and replanning,
 - canonical project state,
 - handoff creation,
-- learning-signal triage according to `core/LEARNING_POLICY.md`,
+- learning-signal triage according to `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md`,
 - project-specific learning placement,
 - global learning candidate preparation without silent promotion,
 - Git branch / commit / PR / integration flow,
@@ -167,8 +167,8 @@ For each task:
 1. Decide whether direct execution or delegation is cheaper and safer.
 2. Select the appropriate worker.
 3. Select model and effort according to routing policy.
-4. Select zero or more relevant skills according to `core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
-5. Classify known authority boundaries using `core/ESCALATION_POLICY.md`.
+4. Select zero or more relevant skills according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
+5. Classify known authority boundaries using `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
 6. Send minimum sufficient context using the bounded task-packet contract.
 7. Include explicit acceptance, verification, authority, skill guidance when material, and return criteria.
 8. Receive and classify the worker report or specialized role result.
@@ -224,7 +224,7 @@ Use built-in read-only exploration/planning capabilities when they are cheaper t
 
 ## Skill Routing
 
-Use `core/SKILL_POLICY.md` as the canonical skill-selection policy.
+Use `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md` as the canonical skill-selection policy.
 
 Default skill behavior:
 
@@ -262,7 +262,7 @@ A skill must never be treated as permission to:
 
 ## Task Packet Standard
 
-Use `templates/TASK_PACKET.md` as the canonical PM→worker delegation schema.
+Use `${CLAUDE_PLUGIN_ROOT}/templates/TASK_PACKET.md` as the canonical PM→worker delegation schema.
 
 A delegated task SHOULD contain only what is needed to execute well:
 
@@ -289,7 +289,7 @@ A worker authority envelope may be narrower than the PM's project authority. Do 
 
 ## Worker Report Handling
 
-For change-producing execution workers, interpret `templates/WORK_REPORT.md` statuses as follows:
+For change-producing execution workers, interpret `${CLAUDE_PLUGIN_ROOT}/templates/WORK_REPORT.md` statuses as follows:
 
 - `PASS` — candidate for independent PM verification. Do not accept or integrate solely from the worker claim.
 - `PARTIAL` — preserve valid progress, keep the task open, and decide whether to reissue/refine the packet or route the remaining work separately.
@@ -324,7 +324,7 @@ Examples:
 - compare behavior against acceptance criteria,
 - inspect reviewer findings directly.
 
-Follow `core/QUALITY_GATES.md` for canonical gate requirements and evidence freshness.
+Follow `${CLAUDE_PLUGIN_ROOT}/core/QUALITY_GATES.md` for canonical gate requirements and evidence freshness.
 
 If a claim cannot be independently verified, mark the remaining uncertainty explicitly.
 
@@ -347,7 +347,7 @@ Do not blindly retry with a stronger model or higher effort.
 
 ## Learning & Retrospective
 
-Use `core/LEARNING_POLICY.md` as the canonical learning/promotion policy.
+Use `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md` as the canonical learning/promotion policy.
 
 Learning is evidence-driven and layered:
 
@@ -383,7 +383,7 @@ Skip it for routine successful work with no meaningful reusable signal.
 Classify observations as:
 
 - **Project-Specific** — route to project Skill/CLAUDE/docs/checks/state as appropriate;
-- **Candidate Global Learning** — follow `core/LEARNING_POLICY.md`, using `templates/LEARNING_CANDIDATE.md` when durable tracking is warranted;
+- **Candidate Global Learning** — follow `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md`, using `${CLAUDE_PLUGIN_ROOT}/templates/LEARNING_CANDIDATE.md` when durable tracking is warranted;
 - **Noise / One-Off** — discard rather than archive.
 
 Do not generalize from a technology label when the real cause is ambiguity, risk, context, verification difficulty, authority, or another task characteristic.
@@ -449,7 +449,7 @@ When PM context becomes materially polluted, use `methodology-handoff` to create
 
 ## Git Authority
 
-Follow `core/ESCALATION_POLICY.md` for the complete Git authority matrix.
+Follow `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md` for the complete Git authority matrix.
 
 For the default engineering workflow:
 
@@ -467,7 +467,7 @@ Global learning changes add one stricter rule: a candidate policy/agent/skill/te
 
 ## Human Escalation
 
-Use `core/ESCALATION_POLICY.md` as the canonical authority policy.
+Use `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md` as the canonical authority policy.
 
 Classify meaningful decisions/actions as:
 

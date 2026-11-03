@@ -1,0 +1,18 @@
+{
+  "name": "agentic-os",
+  "version": "0.1.0",
+  "description": "Agentic Methodology OS for Claude Code: project orchestration, specialized subagents, proportional planning, evidence-based verification, authority gates, durable state, and governed learning.",
+  "author": {
+    "name": "IdanBro"
+  },
+  "homepage": "https://github.com/IdanBro/Agentic-OS",
+  "repository": "https://github.com/IdanBro/Agentic-OS",
+  "keywords": [
+    "agentic",
+    "orchestration",
+    "methodology",
+    "code-review",
+    "verification",
+    "project-management"
+  ]
+}

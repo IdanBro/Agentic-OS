@@ -49,15 +49,15 @@ Do not create a skill when:
 
 Methodology OS recognizes four practical skill scopes.
 
-### 3.1 Personal / Global Skills
+### 3.1 Agentic OS Plugin Skills
 
-Location in Claude Code:
+The Agentic OS core skills are distributed by the `agentic-os` plugin and auto-discovered from:
 
-`~/.claude/skills/<skill-name>/SKILL.md`
+`${CLAUDE_PLUGIN_ROOT}/skills/<skill-name>/SKILL.md`
 
-Use for capabilities that should be available across projects, such as Methodology OS itself or genuinely reusable personal workflows.
+They are account/plugin capabilities rather than files that must be copied into each project or installed under a user home directory.
 
-Global skills should remain curated because their descriptions are part of the discoverable skill set in normal sessions.
+Keep the plugin skill set curated because skill descriptions participate in routing and context discovery across every project where the plugin is enabled.
 
 ### 3.2 Project Skills
 
@@ -79,11 +79,11 @@ Use in monorepos when a capability or convention applies only to one package or 
 
 This is preferable to forcing every worker in the repository to carry package-specific instructions.
 
-### 3.4 Plugin Skills
+### 3.4 Other Plugin Skills
 
-Plugins may package skills with agents, hooks, MCP servers, and other extensions.
+Agentic OS itself is distributed as a Claude plugin. Other installed plugins may provide additional domain skills, agents, hooks, MCP servers, or commands.
 
-V0 does not require Methodology OS to be a plugin. Plugin packaging is a future distribution option if it provides a concrete portability or installation advantage.
+Treat those as optional capability sources. Their presence does not expand Methodology OS authority or justify loading them without a material task reason.
 
 ---
 
@@ -497,7 +497,7 @@ Put information in a skill when:
 - it is only relevant to some tasks;
 - loading it on demand saves recurring context.
 
-The global `~/.claude/CLAUDE.md` Methodology OS kernel should remain small and route complex work toward the `methodology-os` skill rather than embedding the whole OS.
+Agentic OS does not require a global user `CLAUDE.md`. The plugin's SessionStart hook provides a small routing signal, while substantive methodology remains in on-demand skills and policy files under `${CLAUDE_PLUGIN_ROOT}`.
 
 ---
 
@@ -509,7 +509,7 @@ User-facing launcher for starting a full Methodology OS project workflow from th
 
 ### `methodology-os`
 
-Global entrypoint for activating the Methodology OS operating pattern on complex/multi-stage work.
+Plugin-native methodology skill for activating the Methodology OS operating pattern on complex/multi-stage work.
 
 ### `methodology-planning`
 
@@ -566,7 +566,7 @@ refine or remove
 promote broadly only when justified
 ```
 
-Global Methodology OS skill changes are OS changes and remain subject to the human-promotion rule.
+Agentic OS core skill changes are OS changes and remain subject to the human-promotion rule.
 
 The detailed learning/promotion process is defined in Step 12 by `core/LEARNING_POLICY.md`.
 

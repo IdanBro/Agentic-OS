@@ -36,13 +36,13 @@ Inspect available project context before asking questions that can be answered s
 
 Policy map:
 
-- lifecycle / orchestration → `core/ORCHESTRATION.md`
-- model and effort selection → `core/ROUTING.md`
-- context packaging / handoff triggers → `core/CONTEXT_POLICY.md`
-- skill selection / loading → `core/SKILL_POLICY.md`
-- verification / review / integration gates → `core/QUALITY_GATES.md`
-- escalation / autonomy → `core/ESCALATION_POLICY.md`
-- learning / global promotion → `core/LEARNING_POLICY.md`
+- lifecycle / orchestration → `${CLAUDE_PLUGIN_ROOT}/core/ORCHESTRATION.md`
+- model and effort selection → `${CLAUDE_PLUGIN_ROOT}/core/ROUTING.md`
+- context packaging / handoff triggers → `${CLAUDE_PLUGIN_ROOT}/core/CONTEXT_POLICY.md`
+- skill selection / loading → `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`
+- verification / review / integration gates → `${CLAUDE_PLUGIN_ROOT}/core/QUALITY_GATES.md`
+- escalation / autonomy → `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`
+- learning / global promotion → `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md`
 
 The global installation layer should provide access to the canonical Methodology OS source. Do not copy whole policy files into the current prompt merely to be thorough.
 
@@ -70,7 +70,7 @@ Use bounded Task Packets with observable acceptance and verification requirement
 
 ## 6. Load Skills Selectively
 
-Use `core/SKILL_POLICY.md` for skill routing.
+Use `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md` for skill routing.
 
 Default behavior:
 
@@ -113,7 +113,7 @@ When PM context degrades, use `methodology-handoff` rather than carrying an incr
 
 ## 9. Preserve Human Authority
 
-Use `core/ESCALATION_POLICY.md`.
+Use `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
 
 Continue autonomously through routine execution and decisions already inside a valid approval envelope.
 
@@ -125,7 +125,7 @@ Never stretch an approval to a different target/scope/risk, and never merge to `
 
 ## 10. Learn Without Silent Self-Modification
 
-Use `core/LEARNING_POLICY.md` and `methodology-retrospective` only when meaningful reusable signal exists.
+Use `${CLAUDE_PLUGIN_ROOT}/core/LEARNING_POLICY.md` and `methodology-retrospective` only when meaningful reusable signal exists.
 
 Classify learning as:
 
