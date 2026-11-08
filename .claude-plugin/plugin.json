@@ -7,6 +7,7 @@
   },
   "homepage": "https://github.com/IdanBro/Agentic-OS",
   "repository": "https://github.com/IdanBro/Agentic-OS",
+  "license": "MIT",
   "keywords": [
     "agentic",
     "orchestration",

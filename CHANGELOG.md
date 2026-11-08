@@ -1,5 +1,9 @@
 # Changelog
 
+## Public release preparation
+
+- Added the MIT `LICENSE` and declared it in `.claude-plugin/plugin.json`.
+- Updated README and marketplace wording now that the repository is public; installing no longer requires repository access.
 
 ## 0.2.0 — PM delegation enforcement
 

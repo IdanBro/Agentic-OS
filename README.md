@@ -59,7 +59,7 @@ There is no separate local runtime layer.
 
 ## Install from GitHub
 
-Agentic OS is exposed as a private Claude plugin marketplace from this repository.
+Agentic OS is exposed as a public Claude plugin marketplace from this repository.
 
 In Claude Code:
 
@@ -67,8 +67,6 @@ In Claude Code:
 /plugin marketplace add IdanBro/Agentic-OS
 /plugin install agentic-os@idanbro-agentic-os
 ```
-
-Because the repository is private, the environment/account adding the marketplace must have access to `IdanBro/Agentic-OS`.
 
 Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on Claude Code v2.1.273 or later. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
 
@@ -216,7 +214,7 @@ python3 scripts/run_evals.py core-v0 --semantic-judge
 ```text
 GitHub Agentic-OS repo
         ↓
-private Agentic OS marketplace
+public Agentic OS marketplace
         ↓
 agentic-os plugin
         ↓
@@ -242,3 +240,7 @@ Promotion to `main` remains explicitly human-gated. Since the GitHub marketplace
 - Behavioral eval framework: complete
 - Real-project trial: active
 - Plugin-native packaging: in progress
+
+## License
+
+Agentic OS is released under the [MIT License](LICENSE).
