@@ -232,7 +232,7 @@ Optional JSON report:
 python3 scripts/run_evals.py core-v0 --report /tmp/agentic-os-core.json
 ```
 
-The behavioral runner loads this repository directly with `claude --plugin-dir`, so it evaluates the plugin-native skills, agents, hooks, and policies without any user-level installation.
+The behavioral runner loads this repository directly with `claude --plugin-dir`, so it evaluates the plugin-native skills, agents, and policies without any user-level installation.
 
 ## Cost Discipline
 
