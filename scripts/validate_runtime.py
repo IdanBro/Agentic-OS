@@ -51,8 +51,10 @@ def main() -> int:
         return fail("marketplace must expose exactly one root agentic-os plugin")
 
     hook = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
-    if "SessionStart" not in hook:
-        return fail("SessionStart routing hook is required")
+    if set(hook) - {"hooks", "modules"}:
+        return fail("plugin hooks.json must use only supported top-level keys: hooks/modules")
+    if "hooks" not in hook or "SessionStart" not in hook["hooks"]:
+        return fail("SessionStart routing hook is required under top-level hooks")
 
     start = (ROOT / "skills" / "pm-mode" / "SKILL.md").read_text(encoding="utf-8")
     if "${CLAUDE_PLUGIN_ROOT}" not in start:
