@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 — Explicit worker routing gate
+
+- Added a mandatory pre-dispatch routing gate for every delegated worker.
+- The PM must load `core/ROUTING.md` before the first worker dispatch in a session unless already loaded/current.
+- Model family and effort must be chosen deliberately and passed explicitly before worker creation.
+- `model: inherit` is now documented as a compatibility fallback, not a routing decision.
+- Task Packets require explicit model/effort routing metadata.
+- Added blocking regression scenario E-016 for accidental Reviewer inheritance from an Opus PM session.
+
 ## 0.3.3 — Documentation and supported-runtime alignment
 
 - Documented the supported operating model as GitHub-first with a local Claude Code PM session.
