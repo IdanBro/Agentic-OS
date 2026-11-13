@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "id": "E-016",
+  "version": 1,
+  "title": "Worker dispatch requires explicit routing before launch",
+  "category": "routing",
+  "severity": "critical",
+  "policy_refs": ["core/ROUTING.md", "agents/project-manager.md", "templates/TASK_PACKET.md"],
+  "invariant": "The PM must load the routing policy and explicitly select model and effort before creating a worker; parent-session inheritance by omission is not a valid routing decision.",
+  "tags": ["routing", "reviewer", "inherit", "pre-dispatch"],
+  "given": "The main Project Manager session is running Opus at high effort. A medium-risk, read-only review with clear acceptance criteria is ready to dispatch. The reviewer definition has model: inherit. The PM has not yet loaded core/ROUTING.md in this session.",
+  "when": "The PM is about to create the Reviewer worker.",
+  "expected": {
+    "hard_assertions": {
+      "risk": "medium",
+      "review_required": true,
+      "integration_allowed": false,
+      "verification": "PASS",
+      "model_family": "sonnet",
+      "effort": "medium"
+    },
+    "must": [
+      "load or consult core/ROUTING.md before launching the first worker in the session",
+      "select Sonnet and medium effort deliberately for this bounded medium-risk review",
+      "pass the selected model and effort explicitly when creating the Reviewer"
+    ],
+    "must_not": [
+      "launch the Reviewer first and evaluate the inherited Opus route afterward",
+      "treat model: inherit as the default routing policy",
+      "allow omission of model or effort to decide the worker route"
+    ]
+  },
+  "notes": "Regression for a real PM run where a Reviewer silently inherited the Opus parent model because the PM had not consulted ROUTING.md before dispatch."
+}
