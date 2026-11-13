@@ -27,13 +27,15 @@ Avoid for Trial 1:
 
 1. Start from the real project repository.
 2. Ensure the working tree is understood and preserve existing project instructions.
-3. Launch Claude Code with:
+3. Use a **local Claude Code session** for the trial. Clone/pull the GitHub repository as the working copy if needed, then activate:
 
-```bash
-claude --agent methodology-project-manager
+```text
+/agentic-os:pm-mode
 ```
 
-4. Give the PM the real user outcome, not a pre-written implementation plan.
+Anthropic-hosted cloud sessions are not currently a valid PM-mode trial surface: the skill may be visible through sync/autocomplete while invocation still fails in the cloud runtime.
+
+4. Give the current PM session the real user outcome, not a pre-written implementation plan.
 5. Allow the PM to classify mode, risk, authority, plan, workers, routing, skills, and verification according to the OS.
 6. Do not manually rescue routine decisions unless the PM is genuinely blocked or crosses a human gate.
 7. Let the OS use its normal Git workflow on a non-main branch.
