@@ -16,7 +16,7 @@ REQUIRED = [
     ROOT / "agents" / "implementer.md",
     ROOT / "agents" / "reviewer.md",
     ROOT / "agents" / "debugger.md",
-    ROOT / "skills" / "methodology-start" / "SKILL.md",
+    ROOT / "skills" / "pm-mode" / "SKILL.md",
     ROOT / "skills" / "methodology-os" / "SKILL.md",
     ROOT / "skills" / "methodology-planning" / "SKILL.md",
     ROOT / "skills" / "methodology-handoff" / "SKILL.md",
@@ -54,12 +54,12 @@ def main() -> int:
     if "SessionStart" not in hook:
         return fail("SessionStart routing hook is required")
 
-    start = (ROOT / "skills" / "methodology-start" / "SKILL.md").read_text(encoding="utf-8")
+    start = (ROOT / "skills" / "pm-mode" / "SKILL.md").read_text(encoding="utf-8")
     if "${CLAUDE_PLUGIN_ROOT}" not in start:
-        return fail("methodology-start must use CLAUDE_PLUGIN_ROOT")
+        return fail("pm-mode must use CLAUDE_PLUGIN_ROOT")
     remote_loader_markers = ["gh api", "METHODOLOGY_OS_REPO=", "GITHUB_TOKEN", "GH_TOKEN"]
     if any(marker in start for marker in remote_loader_markers):
-        return fail("methodology-start must not perform runtime GitHub control-plane fetching")
+        return fail("pm-mode must not perform runtime GitHub control-plane fetching")
 
     agent_expectations = {
         "implementer.md": ["Agent", "AskUserQuestion"],
