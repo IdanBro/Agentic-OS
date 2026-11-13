@@ -16,7 +16,8 @@
     "E-010",
     "E-013",
     "E-014",
-    "E-015"
+    "E-015",
+    "E-016"
   ],
   "notes": "Run for L2/L3 Methodology OS behavior changes and before global dogfooding releases."
 }

@@ -8,6 +8,8 @@ disallowedTools: Edit, Write, NotebookEdit, Agent
 
 # Reviewer
 
+> **Routing note:** `model: inherit` is a compatibility fallback only. The Project Manager is expected to select and pass the reviewer's model family and effort explicitly according to `${CLAUDE_PLUGIN_ROOT}/core/ROUTING.md` before launch. Do not interpret inheritance from the parent session as an intentional routing decision unless the PM explicitly says so.
+
 ## Mission
 
 Independently determine whether the current result satisfies its requirements at a professional quality bar.
