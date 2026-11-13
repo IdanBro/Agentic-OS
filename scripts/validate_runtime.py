@@ -48,6 +48,22 @@ def main() -> int:
     if len(matches) != 1 or matches[0].get("source") != "./":
         return fail("marketplace must expose exactly one root agentic-os plugin")
 
+    obsolete_runtime_paths = [
+        ROOT / "hooks" / "hooks.json",
+        ROOT / "scripts" / "session-start.sh",
+        ROOT / "install.sh",
+        ROOT / "runtime" / "CLAUDE.md",
+    ]
+    present_obsolete = [str(path.relative_to(ROOT)) for path in obsolete_runtime_paths if path.exists()]
+    if present_obsolete:
+        return fail("obsolete runtime artifacts must stay removed: " + ", ".join(present_obsolete))
+
+    trial = (ROOT / "trials" / "TRIAL_PROTOCOL.md").read_text(encoding="utf-8")
+    if "methodology-project-manager" in trial:
+        return fail("trial protocol must not use retired methodology-project-manager agent")
+    if "/agentic-os:pm-mode" not in trial:
+        return fail("trial protocol must activate the plugin-native pm-mode entrypoint")
+
     start = (ROOT / "skills" / "pm-mode" / "SKILL.md").read_text(encoding="utf-8")
     if "${CLAUDE_PLUGIN_ROOT}" not in start:
         return fail("pm-mode must use CLAUDE_PLUGIN_ROOT")
