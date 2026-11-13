@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.2 — Remove SessionStart hook
+
+- Removed the SessionStart hook and its shell helper.
+- `/agentic-os:pm-mode` is now the sole explicit runtime entrypoint.
+- Skills and agents can load independently of hook configuration.
+- This removes a failure mode where a hook schema/configuration error prevented the whole plugin from becoming active while stale command metadata could still appear in autocomplete.
+
 ## 0.3.0 — PM session mode
 
 - Replaced `methodology-start` with the simpler `pm-mode` entry skill.
