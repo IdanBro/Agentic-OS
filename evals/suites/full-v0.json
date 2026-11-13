@@ -19,7 +19,8 @@
     "E-012",
     "E-013",
     "E-014",
-    "E-015"
+    "E-015",
+    "E-016"
   ],
   "notes": "Run selectively because agentic evals have recurring cost. Step 14 implements the executable runner and baseline capture."
 }
