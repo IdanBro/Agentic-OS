@@ -21,10 +21,10 @@ open Claude Code
 For explicit activation:
 
 ```text
-/agentic-os:methodology-start <objective>
+/agentic-os:pm-mode
 ```
 
-The SessionStart hook also tells Claude when Agentic OS is appropriate, so complex project work can route into the methodology automatically.
+The SessionStart hook advertises Agentic OS capabilities, while `/agentic-os:pm-mode` explicitly makes the current conversation the Project Manager session.
 
 ## Plugin Architecture
 
@@ -39,7 +39,7 @@ Agentic-OS/
 │   ├── reviewer.md
 │   └── debugger.md
 ├── skills/
-│   ├── methodology-start/
+│   ├── pm-mode/
 │   ├── methodology-os/
 │   ├── methodology-planning/
 │   ├── methodology-handoff/
@@ -84,7 +84,12 @@ claude
 Then either give Claude a complex project goal normally, or invoke Agentic OS explicitly:
 
 ```text
-/agentic-os:methodology-start Implement the authentication feature end-to-end
+/agentic-os:pm-mode
+
+Then tell the Project Manager what outcome you want, for example:
+
+```text
+Implement the authentication feature end-to-end
 ```
 
 Agentic OS is responsible for deciding:
