@@ -1,11 +1,11 @@
 # Changelog
 
-## 0.3.1 — Plugin hooks schema fix
+## 0.3.2 — Remove SessionStart hook
 
-- Fixed `hooks/hooks.json` to use the Claude Code plugin schema with top-level `hooks`.
-- Kept the existing `SessionStart` matcher under `hooks.SessionStart`.
-- Strengthened runtime validation so unsupported top-level hook keys fail CI.
-- Resolves plugin load error: `hooks.json must have 'hooks' ... or 'modules' ...`.
+- Removed the SessionStart hook and its shell helper.
+- `/agentic-os:pm-mode` is now the sole explicit runtime entrypoint.
+- Skills and agents can load independently of hook configuration.
+- This removes a failure mode where a hook schema/configuration error prevented the whole plugin from becoming active while stale command metadata could still appear in autocomplete.
 
 ## 0.3.0 — PM session mode
 

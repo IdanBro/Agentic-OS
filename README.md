@@ -24,7 +24,7 @@ For explicit activation:
 /agentic-os:pm-mode
 ```
 
-The SessionStart hook advertises Agentic OS capabilities, while `/agentic-os:pm-mode` explicitly makes the current conversation the Project Manager session.
+`/agentic-os:pm-mode` explicitly makes the current conversation the Project Manager session; no SessionStart hook is required.
 
 ## Plugin Architecture
 
@@ -44,8 +44,6 @@ Agentic-OS/
 │   ├── methodology-planning/
 │   ├── methodology-handoff/
 │   └── methodology-retrospective/
-├── hooks/
-│   └── hooks.json
 ├── core/
 ├── templates/
 ├── evals/
@@ -53,7 +51,7 @@ Agentic-OS/
 └── scripts/
 ```
 
-Claude Code auto-discovers the plugin's agents, skills, and hooks. Canonical policies and templates stay in the same plugin package and are loaded on demand through `${CLAUDE_PLUGIN_ROOT}`.
+Claude Code auto-discovers the plugin's agents and skills. Canonical policies and templates stay in the same plugin package and are loaded on demand through `${CLAUDE_PLUGIN_ROOT}`.
 
 There is no separate local runtime layer.
 
