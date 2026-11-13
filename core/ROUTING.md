@@ -381,7 +381,13 @@ If the PM itself is clearly underpowered for the project's planning/orchestratio
 
 ## 9. Routing Algorithm
 
-For every delegated task, the PM SHOULD follow this sequence.
+For every delegated task, the PM MUST make an explicit routing decision before the worker is created.
+
+Before the **first worker dispatch in a session**, the PM MUST read this file in full unless it is already loaded and current. Subsequent workers may reuse the loaded policy, but each worker still requires a fresh task-specific route.
+
+`model: inherit` in a worker definition is only a fallback for compatibility. It MUST NOT be treated as the default routing policy. If the PM intentionally selects `inherit`, that choice must be explicit and justified; otherwise both model family and effort must be specified directly.
+
+The PM follows this sequence.
 
 ### Step 1 — Define the quality bar
 
@@ -437,7 +443,13 @@ extended agentic → xhigh
 exceptional      → max
 ```
 
-### Step 5 — Check cost and availability constraints
+### Step 5 — Commit the route before dispatch
+
+Record/pass the selected model family and effort in the worker launch and, when a Task Packet is used, in its routing metadata.
+
+The PM MUST NOT create the worker first and decide whether the inherited model was appropriate afterward.
+
+### Step 6 — Check cost and availability constraints
 
 Verify that:
 
@@ -446,13 +458,13 @@ Verify that:
 - the route does not create an unauthorized material charge,
 - an organization/provider restriction has not silently substituted the model.
 
-### Step 6 — Execute once with evidence
+### Step 7 — Execute once with evidence
 
 Do not pre-plan a chain of retries.
 
 The first attempt should be credible enough to succeed.
 
-### Step 7 — If it fails, diagnose the failure class before escalating
+### Step 8 — If it fails, diagnose the failure class before escalating
 
 See the escalation matrix below.
 

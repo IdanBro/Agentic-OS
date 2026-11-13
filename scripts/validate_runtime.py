@@ -99,6 +99,16 @@ def main() -> int:
     if not scenario.is_file():
         return fail("delegation regression scenario E-015 is missing")
 
+    routing_scenario = ROOT / "evals" / "scenarios" / "E-016-explicit-worker-routing-before-dispatch.json"
+    if not routing_scenario.is_file():
+        return fail("routing regression scenario E-016 is missing")
+
+    pm = (ROOT / "agents" / "project-manager.md").read_text(encoding="utf-8")
+    if "Mandatory Pre-Dispatch Routing Gate" not in pm:
+        return fail("PM pre-dispatch routing gate missing")
+    if "compatibility fallback" not in pm:
+        return fail("PM must treat worker model inheritance as fallback, not routing")
+
     print("Plugin runtime sanity: PASS")
     return 0
 
