@@ -14,7 +14,7 @@ The packet is not a mini project brief and not a transcript of PM reasoning.
 - **Parent plan:** `<PLAN.md version / phase>`
 - **Worker role:** `<implementer | reviewer | debugger | other approved role>`
 - **Risk:** `<low | medium | high>`
-- **Model / effort route:** `<optional execution route or inherit>`
+- **Model / effort route:** `<required explicit model family + effort; use inherit only when intentionally chosen and justified>`
 - **Repository / artifact:** `<reference>`
 - **Branch / worktree:** `<reference or n/a>`
 - **Packet version:** `<v1, v2, ... when reissued>`
@@ -283,6 +283,9 @@ Reviewer and Debugger role definitions add specialized verdict/finding/diagnosis
 ## 12. PM Dispatch Checklist
 
 Before sending the packet, the PM should be able to answer `yes` to the relevant items:
+
+- [ ] Has the PM loaded/currently consulted `core/ROUTING.md` before this session's first worker dispatch?
+- [ ] Are model family and effort explicitly selected for this worker, rather than accidentally inherited?
 
 - [ ] Is the objective concrete and bounded?
 - [ ] Can the worker determine success without reconstructing hidden PM intent?
