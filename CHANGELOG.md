@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — PM session mode
+
+- Replaced `methodology-start` with the simpler `pm-mode` entry skill.
+- `/agentic-os:pm-mode` turns the current main Claude Code conversation into the Agentic OS Project Manager for the remainder of the session.
+- The skill is intentionally only a role switch; orchestration behavior remains canonical in `agents/project-manager.md`.
+- Existing conversation context and objective are preserved when PM mode is activated.
+- SessionStart no longer silently activates methodology; it advertises the explicit PM-mode entrypoint instead.
+- Standard/Full implementation continues to be delegated to plugin worker agents under the PM contract.
+
 
 ## 0.2.0 — PM delegation enforcement
 
