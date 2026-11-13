@@ -74,39 +74,38 @@ Plugins added to a Claude account can sync into Claude Code sessions signed in w
 
 ## Normal Usage
 
-Open any project:
+In Claude Code UI:
 
-```bash
-cd ~/projects/my-project
-claude
-```
-
-Then either give Claude a complex project goal normally, or invoke Agentic OS explicitly:
+1. Open a new Code session.
+2. Connect/open the project repository.
+3. Invoke:
 
 ```text
 /agentic-os:pm-mode
-
-Then tell the Project Manager what outcome you want, for example:
-
-```text
-Implement the authentication feature end-to-end
 ```
 
-Agentic OS is responsible for deciding:
+4. From that point on, talk to the current session as your Project Manager. Give it the project outcome normally, for example:
+
+```text
+Build the application described in README.md.
+```
+
+The skill does not run a separate workflow or create another PM agent. It changes the operating role of the **current main session** for the remainder of that session by loading the canonical Project Manager contract.
+
+The Project Manager is then responsible for:
 
 - Lite / Standard / Full workflow depth;
-- repository investigation depth;
+- repository investigation;
 - planning and decomposition;
-- Implementer / Reviewer / Debugger use;
+- bounded delegation to Implementer / Reviewer / Debugger agents;
 - model and effort routing;
 - skill selection;
 - state artifacts;
-- verification depth;
-- independent review requirements;
+- independent verification and review;
 - Git workflow;
 - human escalation.
 
-The user should not have to manually orchestrate those pieces.
+For Standard/Full work, the main session remains the PM rather than becoming the primary implementation worker.
 
 ## Architecture
 
