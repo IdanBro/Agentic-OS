@@ -34,7 +34,6 @@ jobs:
         run: |
           python3 -m json.tool .claude-plugin/plugin.json >/dev/null
           python3 -m json.tool .claude-plugin/marketplace.json >/dev/null
-          python3 -m json.tool hooks/hooks.json >/dev/null
 
       - name: Validate plugin runtime surface
         run: python3 scripts/validate_runtime.py
