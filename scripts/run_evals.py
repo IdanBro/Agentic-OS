@@ -206,7 +206,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
             failures.append("plugin manifest name must be agentic-os")
     if not marketplace_manifest.is_file():
         failures.append("missing .claude-plugin/marketplace.json")
-    for skill in ("methodology-start", "methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
+    for skill in ("pm-mode", "methodology-os", "methodology-planning", "methodology-handoff", "methodology-retrospective"):
         if not (ROOT / "skills" / skill / "SKILL.md").is_file():
             failures.append(f"missing core skill: {skill}")
 
@@ -221,7 +221,7 @@ def static_checks(scenarios: Dict[str, Tuple[Path, Dict[str, Any]]]) -> List[str
 
 def build_eval_prompt(scenario: Dict[str, Any]) -> str:
     refs = "\n".join(f"- {ref}" for ref in scenario.get("policy_refs", []))
-    return f"""You are executing an Agentic OS behavioral evaluation with the repository loaded as a plugin. Apply the methodology-start skill and canonical Project Manager role for this decision simulation.
+    return f"""You are executing an Agentic OS behavioral evaluation with the repository loaded as a plugin. Apply the pm-mode skill and canonical Project Manager role for this decision simulation.
 
 This is a DECISION SIMULATION ONLY. Do not modify files, run project commands, contact external systems, merge anything, or perform the described side effect. Read the canonical Methodology OS policies when needed, then return the decision you would make.
 
