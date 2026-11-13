@@ -169,23 +169,26 @@ Before a consequential operation, verify that any approval being relied on still
 
 ### 6. Execute the Task Loop
 
+Before dispatching the **first worker in a session**, the PM MUST read `${CLAUDE_PLUGIN_ROOT}/core/ROUTING.md` in full unless it is already loaded and current in the session. Do not rely on remembered defaults or the worker definition's `model: inherit` fallback.
+
 For each task:
 
 1. Determine whether the task is substantive implementation.
 2. If mode is Standard/Full and implementation is substantive, assign it to a worker; direct PM execution is not an option.
 3. Select the appropriate worker.
-4. Select model and effort according to routing policy.
-5. Select zero or more relevant skills according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
-6. Classify known authority boundaries using `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
-7. Send minimum sufficient context using the bounded task-packet contract.
-8. Include explicit acceptance, verification, authority, skill guidance when material, and return criteria.
-9. Receive and classify the worker report or specialized role result.
-10. Resolve worker-raised decisions at PM level when they are A0/A1; escalate only when they are genuinely A2 or become A3 blocked.
-11. Independently inspect the resulting state and verification evidence when the result is eligible for acceptance.
-12. If verification fails, diagnose before retrying.
-13. Invoke independent review when risk policy requires it.
-14. Update canonical state and durable decisions/approval state when material.
-15. Commit/integrate only after the task passes its required gates.
+4. Deliberately select **both model family and effort** according to `${CLAUDE_PLUGIN_ROOT}/core/ROUTING.md` **before creating the worker**.
+5. Pass the selected model and effort explicitly in the worker launch/Task Packet. `inherit` is valid only when the PM intentionally chooses it for a documented reason; omission must never silently become the route.
+6. Select zero or more relevant skills according to `${CLAUDE_PLUGIN_ROOT}/core/SKILL_POLICY.md`; prefer on-demand invocation over static preload.
+7. Classify known authority boundaries using `${CLAUDE_PLUGIN_ROOT}/core/ESCALATION_POLICY.md`.
+8. Send minimum sufficient context using the bounded task-packet contract.
+9. Include explicit acceptance, verification, authority, skill guidance when material, and return criteria.
+10. Receive and classify the worker report or specialized role result.
+11. Resolve worker-raised decisions at PM level when they are A0/A1; escalate only when they are genuinely A2 or become A3 blocked.
+12. Independently inspect the resulting state and verification evidence when the result is eligible for acceptance.
+13. If verification fails, diagnose before retrying.
+14. Invoke independent review when risk policy requires it.
+15. Update canonical state and durable decisions/approval state when material.
+16. Commit/integrate only after the task passes its required gates.
 
 ### 7. Integrate
 
@@ -207,6 +210,19 @@ If promotion to `main` is appropriate, prepare the promotion and stop at the exp
 After a meaningful project/phase, consider whether there is enough reusable signal to justify `methodology-retrospective`. Do not run a retrospective merely because completion occurred.
 
 ## Worker Routing
+
+### Mandatory Pre-Dispatch Routing Gate
+
+Before any Implementer, Reviewer, Debugger, or other delegated worker is launched:
+
+1. confirm `core/ROUTING.md` is loaded/current;
+2. classify the task using its routing dimensions, not the parent PM model;
+3. choose model family explicitly;
+4. choose effort explicitly;
+5. include both choices in the launch/Task Packet;
+6. if choosing `inherit`, record why inheriting the PM configuration is actually the right route.
+
+A worker definition's `model: inherit` is a compatibility fallback, **not a routing decision**. The PM MUST NOT let omission decide worker cost/capability.
 
 ### Implementer
 
