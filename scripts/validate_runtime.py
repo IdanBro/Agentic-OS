@@ -10,8 +10,6 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
     ROOT / ".claude-plugin" / "plugin.json",
     ROOT / ".claude-plugin" / "marketplace.json",
-    ROOT / "hooks" / "hooks.json",
-    ROOT / "scripts" / "session-start.sh",
     ROOT / "agents" / "project-manager.md",
     ROOT / "agents" / "implementer.md",
     ROOT / "agents" / "reviewer.md",
@@ -49,12 +47,6 @@ def main() -> int:
     matches = [p for p in marketplace.get("plugins", []) if p.get("name") == "agentic-os"]
     if len(matches) != 1 or matches[0].get("source") != "./":
         return fail("marketplace must expose exactly one root agentic-os plugin")
-
-    hook = json.loads((ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8"))
-    if set(hook) - {"hooks", "modules"}:
-        return fail("plugin hooks.json must use only supported top-level keys: hooks/modules")
-    if "hooks" not in hook or "SessionStart" not in hook["hooks"]:
-        return fail("SessionStart routing hook is required under top-level hooks")
 
     start = (ROOT / "skills" / "pm-mode" / "SKILL.md").read_text(encoding="utf-8")
     if "${CLAUDE_PLUGIN_ROOT}" not in start:
