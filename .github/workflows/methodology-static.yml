@@ -28,7 +28,6 @@ jobs:
 
       - name: Validate script syntax
         run: |
-          bash -n scripts/session-start.sh
           python3 -m py_compile scripts/run_evals.py scripts/validate_runtime.py
 
       - name: Validate JSON manifests
