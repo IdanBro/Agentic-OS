@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "idanbro-agentic-os",
-  "version": "1.1.0",
-  "description": "Marketplace for the Agentic OS Claude Code plugin.",
+  "version": "1.2.0",
+  "description": "Private marketplace for the Agentic OS Claude Code plugin.",
   "owner": {
     "name": "IdanBro"
   },

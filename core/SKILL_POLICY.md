@@ -93,7 +93,7 @@ Global Methodology OS skills MUST use distinctive names so they do not accidenta
 
 V0 core names:
 
-- `methodology-start`
+- `pm-mode`
 - `methodology-os`
 - `methodology-planning`
 - `methodology-handoff`
@@ -503,9 +503,9 @@ Agentic OS does not require a global user `CLAUDE.md`. The plugin's SessionStart
 
 ## 20. V0 Core Skill Set
 
-### `methodology-start`
+### `pm-mode`
 
-User-facing launcher for starting a full Methodology OS project workflow from the current repository. It bootstraps local context, establishes the objective, then routes execution through the PM operating model without requiring the user to choose agents, workflow depth, routing, or verification strategy manually.
+User-facing session-role switch. It turns the current main Claude Code session into the Agentic OS Project Manager for the remainder of the session by loading the canonical PM contract. It does not duplicate orchestration logic; the PM role owns intake, planning, delegation, verification, review, integration, and human gates.
 
 ### `methodology-os`
 

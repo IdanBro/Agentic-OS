@@ -21,10 +21,10 @@ open Claude Code
 For explicit activation:
 
 ```text
-/agentic-os:methodology-start <objective>
+/agentic-os:pm-mode
 ```
 
-The SessionStart hook also tells Claude when Agentic OS is appropriate, so complex project work can route into the methodology automatically.
+The SessionStart hook advertises Agentic OS capabilities, while `/agentic-os:pm-mode` explicitly makes the current conversation the Project Manager session.
 
 ## Plugin Architecture
 
@@ -39,7 +39,7 @@ Agentic-OS/
 │   ├── reviewer.md
 │   └── debugger.md
 ├── skills/
-│   ├── methodology-start/
+│   ├── pm-mode/
 │   ├── methodology-os/
 │   ├── methodology-planning/
 │   ├── methodology-handoff/
@@ -59,7 +59,7 @@ There is no separate local runtime layer.
 
 ## Install from GitHub
 
-Agentic OS is exposed as a public Claude plugin marketplace from this repository.
+Agentic OS is exposed as a private Claude plugin marketplace from this repository.
 
 In Claude Code:
 
@@ -68,38 +68,44 @@ In Claude Code:
 /plugin install agentic-os@idanbro-agentic-os
 ```
 
+Because the repository is private, the environment/account adding the marketplace must have access to `IdanBro/Agentic-OS`.
+
 Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on Claude Code v2.1.273 or later. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
 
 ## Normal Usage
 
-Open any project:
+In Claude Code UI:
 
-```bash
-cd ~/projects/my-project
-claude
-```
-
-Then either give Claude a complex project goal normally, or invoke Agentic OS explicitly:
+1. Open a new Code session.
+2. Connect/open the project repository.
+3. Invoke:
 
 ```text
-/agentic-os:methodology-start Implement the authentication feature end-to-end
+/agentic-os:pm-mode
 ```
 
-Agentic OS is responsible for deciding:
+4. From that point on, talk to the current session as your Project Manager. Give it the project outcome normally, for example:
+
+```text
+Build the application described in README.md.
+```
+
+The skill does not run a separate workflow or create another PM agent. It changes the operating role of the **current main session** for the remainder of that session by loading the canonical Project Manager contract.
+
+The Project Manager is then responsible for:
 
 - Lite / Standard / Full workflow depth;
-- repository investigation depth;
+- repository investigation;
 - planning and decomposition;
-- Implementer / Reviewer / Debugger use;
+- bounded delegation to Implementer / Reviewer / Debugger agents;
 - model and effort routing;
 - skill selection;
 - state artifacts;
-- verification depth;
-- independent review requirements;
+- independent verification and review;
 - Git workflow;
 - human escalation.
 
-The user should not have to manually orchestrate those pieces.
+For Standard/Full work, the main session remains the PM rather than becoming the primary implementation worker.
 
 ## Architecture
 
@@ -214,7 +220,7 @@ python3 scripts/run_evals.py core-v0 --semantic-judge
 ```text
 GitHub Agentic-OS repo
         ↓
-public Agentic OS marketplace
+private Agentic OS marketplace
         ↓
 agentic-os plugin
         ↓
@@ -240,7 +246,3 @@ Promotion to `main` remains explicitly human-gated. Since the GitHub marketplace
 - Behavioral eval framework: complete
 - Real-project trial: active
 - Plugin-native packaging: in progress
-
-## License
-
-Agentic OS is released under the [MIT License](LICENSE).
