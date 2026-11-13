@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 — Plugin hooks schema fix
+
+- Fixed `hooks/hooks.json` to use the Claude Code plugin schema with top-level `hooks`.
+- Kept the existing `SessionStart` matcher under `hooks.SessionStart`.
+- Strengthened runtime validation so unsupported top-level hook keys fail CI.
+- Resolves plugin load error: `hooks.json must have 'hooks' ... or 'modules' ...`.
+
 ## 0.3.0 — PM session mode
 
 - Replaced `methodology-start` with the simpler `pm-mode` entry skill.
