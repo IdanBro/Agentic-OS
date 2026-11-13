@@ -497,7 +497,7 @@ Put information in a skill when:
 - it is only relevant to some tasks;
 - loading it on demand saves recurring context.
 
-Agentic OS does not require a global user `CLAUDE.md`. The plugin's SessionStart hook provides a small routing signal, while substantive methodology remains in on-demand skills and policy files under `${CLAUDE_PLUGIN_ROOT}`.
+Agentic OS does not require a global user `CLAUDE.md` or a SessionStart hook. The explicit `pm-mode` skill is the user-facing entrypoint, while substantive methodology remains in the canonical Project Manager role and on-demand policy files under `${CLAUDE_PLUGIN_ROOT}`.
 
 ---
 
