@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.3 — Documentation and supported-runtime alignment
+
+- Documented the supported operating model as GitHub-first with a local Claude Code PM session.
+- Added User-scope installation, update, and verification instructions.
+- Documented the current Anthropic-hosted cloud limitation: a synced skill may appear in `/skills`/autocomplete while invocation still fails.
+- Updated the real-project trial to activate `/agentic-os:pm-mode` instead of the retired `methodology-project-manager` runtime agent.
+- Removed stale hook references from CI/eval documentation.
+- Clarified that GitHub remains the source of truth and local clones are disposable working copies.
+
 ## 0.3.2 — Remove SessionStart hook
 
 - Removed the SessionStart hook and its shell helper.
@@ -26,7 +35,7 @@
 - Added blocking eval E-015 to catch monolithic PM implementation of a full application.
 - SessionStart routing now reinforces PM/worker separation.
 
-## Plugin-native distribution
+## Plugin-native distribution (historical; hook detail superseded by 0.3.2)
 
 Replaced the local symlink/runtime installation model with a native Claude Code plugin:
 
@@ -42,7 +51,9 @@ Replaced the local symlink/runtime installation model with a native Claude Code 
 
 Notable Methodology OS changes are recorded here by development milestone. Detailed behavior belongs in the canonical policy, agent, skill, template, eval, and runtime files rather than in duplicated changelog prose.
 
-## Unreleased
+## Historical pre-plugin milestones
+
+> The runtime installation model below is retained as history only. It was superseded by native plugin distribution and is not current installation guidance.
 
 ### Step 14 — Claude Code Integration
 
