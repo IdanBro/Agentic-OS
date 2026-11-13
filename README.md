@@ -2,29 +2,49 @@
 
 Agentic OS is a Claude Code plugin for running complex project work with high autonomy, professional-quality output, bounded delegation, independent verification, durable state, efficient context use, and explicit human authority over consequential decisions.
 
-The repository itself is the plugin source of truth.
+The repository is the plugin source of truth.
 
-## Goal
+## Supported Workflow
 
-Install Agentic OS once, then use it from any Claude Code project without relying on local `~/.claude` configuration, symlinks, copied prompts, or runtime GitHub fetching.
+Agentic OS is currently designed for **local Claude Code sessions**: Claude Desktop local Code sessions, the Claude Code terminal, or supported local IDE integrations.
 
-The intended user experience is:
+The recommended operating model is:
 
 ```text
-open Claude Code
-→ Agentic OS plugin is already available
-→ open/connect any project repository
-→ give Claude the outcome you want
-→ Agentic OS automatically selects the workflow, skills, agents, verification, and review strategy
+GitHub repository = source of truth
+        ↓ clone / pull
+local working copy
+        ↓
+local Claude Code session
+        ↓
+/agentic-os:pm-mode
+        ↓
+Project Manager → workers → verification → review
+        ↓
+push branch / PR
+        ↓
+GitHub
 ```
 
-For explicit activation:
+A local clone is only a working copy. The project remains GitHub-first and can be deleted locally after committed work is pushed.
+
+### Cloud sessions
+
+Do **not** rely on Agentic OS PM mode in Anthropic-hosted Claude Code cloud sessions at this time.
+
+Observed behavior: the synced skill can appear in `/skills` or autocomplete while invocation still fails in the cloud runtime. Local sessions execute the skill correctly.
+
+Use cloud sessions for bounded standalone execution tasks when useful, but use a **local session as the Agentic OS Project Manager** until cloud plugin/skill execution is verified end-to-end.
+
+## Entry Point
+
+Activate Agentic OS explicitly in a local Claude Code session:
 
 ```text
 /agentic-os:pm-mode
 ```
 
-`/agentic-os:pm-mode` explicitly makes the current conversation the Project Manager session; no SessionStart hook is required.
+This turns the **current main session** into the Agentic OS Project Manager for the remainder of that session. No SessionStart hook or startup script is required.
 
 ## Plugin Architecture
 
@@ -51,51 +71,88 @@ Agentic-OS/
 └── scripts/
 ```
 
-Claude Code auto-discovers the plugin's agents and skills. Canonical policies and templates stay in the same plugin package and are loaded on demand through `${CLAUDE_PLUGIN_ROOT}`.
+Claude Code auto-discovers the plugin's agents and skills. Canonical policies and templates remain in the plugin package and are loaded on demand through `${CLAUDE_PLUGIN_ROOT}`.
 
-There is no separate local runtime layer.
+There is no separate local runtime layer and no runtime GitHub fetching.
 
-## Install from GitHub
+## Installation
 
-Agentic OS is exposed as a private Claude plugin marketplace from this repository.
+### Recommended: install once at User scope
 
-In Claude Code:
+In a **local Claude Code** session:
 
 ```text
 /plugin marketplace add IdanBro/Agentic-OS
 /plugin install agentic-os@idanbro-agentic-os
 ```
 
-Because the repository is private, the environment/account adding the marketplace must have access to `IdanBro/Agentic-OS`.
+When Claude asks for installation scope, choose **User**.
 
-Plugins added to a Claude account can sync into Claude Code sessions signed in with the same Claude account on Claude Code v2.1.273 or later. The plugin then runs natively with its skills, subagents, and hooks; the project itself does not need Agentic OS files.
+User scope makes the plugin available to your local Claude Code sessions across projects on that machine.
+
+Because the marketplace repository is private, the machine/account must have GitHub access to `IdanBro/Agentic-OS`.
+
+If private-repository access fails, authenticate GitHub first, for example:
+
+```bash
+gh auth login
+gh repo view IdanBro/Agentic-OS
+```
+
+If the plugin is already present through Claude account sync, do not reinstall it unnecessarily; verify that it is enabled and available in the local session.
+
+### Update
+
+Refresh the marketplace and plugin:
+
+```text
+/plugin marketplace update idanbro-agentic-os
+/plugin update agentic-os@idanbro-agentic-os
+```
+
+Then open a **new local Code session**.
+
+### Verify installation
+
+In the new local session:
+
+1. Run `/skills` and confirm `pm-mode` is listed.
+2. Invoke:
+
+```text
+/agentic-os:pm-mode
+```
+
+3. Confirm the session reports that it is operating as the Agentic OS Project Manager and can access the plugin agents: Implementer, Reviewer, and Debugger.
+
+If the skill is listed but invocation fails, check whether the session is cloud-hosted. Re-test in a local session before changing the plugin installation.
+
+For installation/configuration diagnostics, use `/doctor` or `claude doctor`.
 
 ## Normal Usage
 
-In Claude Code UI:
-
-1. Open a new Code session.
-2. Connect/open the project repository.
+1. Clone or pull the GitHub repository you want to work on.
+2. Open that working copy in a **local** Claude Code session.
 3. Invoke:
 
 ```text
 /agentic-os:pm-mode
 ```
 
-4. From that point on, talk to the current session as your Project Manager. Give it the project outcome normally, for example:
+4. Give the current session the project outcome, for example:
 
 ```text
 Build the application described in README.md.
 ```
 
-The skill does not run a separate workflow or create another PM agent. It changes the operating role of the **current main session** for the remainder of that session by loading the canonical Project Manager contract.
+The skill is a role switch, not a separate workflow and not another PM agent. It loads the canonical Project Manager contract into the **current main session**.
 
-The Project Manager is then responsible for:
+The Project Manager owns:
 
 - Lite / Standard / Full workflow depth;
 - repository investigation;
 - planning and decomposition;
-- bounded delegation to Implementer / Reviewer / Debugger agents;
+- bounded delegation to Implementer / Reviewer / Debugger;
 - model and effort routing;
 - skill selection;
 - state artifacts;
@@ -104,6 +161,22 @@ The Project Manager is then responsible for:
 - human escalation.
 
 For Standard/Full work, the main session remains the PM rather than becoming the primary implementation worker.
+
+## GitHub-First Working Model
+
+Agentic OS does not require projects to live permanently on the local machine.
+
+A practical workflow is:
+
+```bash
+git clone git@github.com:OWNER/REPO.git
+cd REPO
+claude
+```
+
+Activate `/agentic-os:pm-mode`, complete the work on a non-main branch, push the branch / PR, then delete the local clone whenever you no longer need it.
+
+Project-specific Claude instructions may live in the project repository, for example `.claude/CLAUDE.md` or project skills. Do not copy Agentic OS itself into each project.
 
 ## Architecture
 
@@ -222,20 +295,20 @@ private Agentic OS marketplace
         ↓
 agentic-os plugin
         ↓
-Claude account
+User-scope local installation / Claude account sync
         ↓
-Claude Code sessions
+local Claude Code sessions
         ↓
-any project repository
+GitHub project working copies
 ```
 
-Updating Agentic OS means publishing/updating the plugin source in this repository, not editing per-machine configuration.
+Updating Agentic OS means updating the plugin source in this repository and then updating the installed plugin. Projects do not carry copies of Agentic OS.
 
 ## Development Branch Policy
 
 Normal Agentic OS development happens on feature/fix branches and integrates into `dev`.
 
-Promotion to `main` remains explicitly human-gated. Since the GitHub marketplace is intended to serve stable releases, `main` is the release surface once a plugin version is approved.
+Promotion to `main` remains explicitly human-gated. `main` is the stable marketplace/release surface.
 
 ## Status
 
@@ -243,4 +316,6 @@ Promotion to `main` remains explicitly human-gated. Since the GitHub marketplace
 - Agents and skills: complete
 - Behavioral eval framework: complete
 - Real-project trial: active
-- Plugin-native packaging: in progress
+- Plugin-native packaging: complete
+- Local PM-mode workflow: supported
+- Anthropic-hosted cloud PM-mode workflow: not currently supported
